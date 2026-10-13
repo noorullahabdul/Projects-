@@ -1,0 +1,58 @@
+[
+  {
+    "criterion": "Simulation Stability and Solver Convergence",
+    "score": 12,
+    "validation_type": "in_application_check",
+    "assessment_process": "Execute the transient simulation (.tran 0 40u 0 10n) using the updated tight 10ns maximum time-step command block. Verify that the simulation executes to 100% completion without halting or throwing matrix convergence errors during high-frequency floating gate commutation.",
+    "justification": "Tightening the time step is critical for capturing the true peak ringing frequencies across the new 2-pole filters and dual snubbers without causing numerical instability."
+  },
+  {
+    "criterion": "2-Pole Filter Attenuation Verification",
+    "score": 12,
+    "validation_type": "in_application_check",
+    "assessment_process": "Probe nodes AFE1+ and AFE2+ relative to AGND. Verify that the peak-to-peak switching noise injected into the AFE module remains below the calculated limits, validating that the new 1.44 kHz corner frequency corner sufficiently attenuates the 100 kHz switching carrier.",
+    "justification": "Ensures the 2-pole filter structure satisfies ASIL-D telemetry signal integrity requirements by blocking balancing transients from corrupting cell voltage diagnostic registers."
+  },
+  {
+    "criterion": "Telemetry Settling Time Programmatic Verification",
+    "score": 10,
+    "validation_type": "other_programmatic_check",
+    "assessment_process": "Check the LTspice error log (Ctrl+L) after execution to verify the output of the '.meas tran Settling1' and 'Settling2' commands. Confirm that the elapsed time for the differential error to drop below 10mV falls within the specified system window.",
+    "justification": "Programmatic verification of settling times ensures objective, repeatable compliance checks that can be directly mapped to the AFE's diagnostic sampling window."
+  },
+  {
+    "criterion": "Dual MOSFET Snubber Clamping Performance",
+    "score": 12,
+    "validation_type": "in_application_check",
+    "assessment_process": "Measure the differential voltage directly across V(Drain_Q1, Source_Q1) and V(Drain_Q2, Source_Q2) during turn-off events. Confirm that the independent RC snubbers (100R + 2.2nF) successfully suppress inductive leakage spikes safely below the 55V absolute maximum rating of the IRF3205.",
+    "justification": "Validates that the primary-side and secondary-side protection structures successfully absorb the energy of the 1% transformer leakage inductance, preventing avalanche breakdown of the switches."
+  },
+  {
+    "criterion": "Floating Gate Driver Vgs Commutation Integrity",
+    "score": 10,
+    "validation_type": "in_application_check",
+    "assessment_process": "Probe the differential gate-to-source voltage V(G1, Source_Q1) and V(G2, Source_Q2). Verify that the waveform shows a clean, square 0V to 10V transition without degradation, scaling artifacts, or clipping relative to the shifting source nodes.",
+    "justification": "Confirms that the low-side driven, floating-reference architecture maintains adequate overdrive voltage throughout the entire transient cycle, preventing the MOSFETs from entering an unsafe linear conduction region."
+  },
+  {
+    "criterion": "Fault-Switch Injection Matrix Analysis",
+    "score": 12,
+    "validation_type": "in_application_check",
+    "assessment_process": "Toggle the 'Fault_Sw1' parameter to 1 (shorted state) to engage the 1mOhm stuck-on MOSFET fault profile. Run the simulation and verify that the transient currents tracking through 'I(Rmeas1)' are captured, confirming that the circuit safely models single-point safety failures.",
+    "justification": "ASIL-D compliance mandates detailed failure mode propagation analysis. This ensures the model behaves predictably during structural fault conditions for diagnostic coverage reviews."
+  },
+  {
+    "criterion": "Balancing Current Channel Separation",
+    "score": 10,
+    "validation_type": "in_application_check",
+    "assessment_process": "Compare the current outputs of 'I(Rmeas1)' and 'I(Rmeas2)' during opposing pulse phases. Verify that current flows strictly within the active targeted transfer path and that cross-conduction or parasitic leakage across the transformer matrix is tightly managed.",
+    "justification": "Prevents uncoordinated energy transfer or cross-channel leakage that would directly undermine the safety and state-of-charge calculation metrics of the battery pack controller."
+  },
+  {
+    "criterion": "Technical Reporting and Cursor Annotation Rigor",
+    "score": 10,
+    "validation_type": "visual_check",
+    "assessment_process": "Examine the submitted report and waveform captures. Ensure that separate differential plots are explicitly generated for the Vds stresses, AFE sense lines, and settling durations, complete with gridlines, legends, and visible measurement cursors.",
+    "justification": "Ensures that verification documentation meets the rigorous auditing and traceability standards required under ISO 26262 work product guidelines."
+  }
+]
