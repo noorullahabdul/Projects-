@@ -1,0 +1,140 @@
+* =============================================================================
+* 800 V DC-link component-level models for LTspice XVII / 24.x
+* Model ID: EV-DCL-LTS-005, revision A
+* =============================================================================
+* These are engineering proxy models assembled from primitive electrical
+* components. They are not encrypted or supplier-correlated vendor models.
+* No B-source and no time-dependent R=if() contact model is used.
+*
+* The contactors have:
+*   - an R-L electromagnetic coil;
+*   - a zero-volt current-sense element;
+*   - coil-current-to-force transduction (H source);
+*   - an R-C armature delay;
+*   - pickup/dropout hysteresis;
+*   - a separate auxiliary contact;
+*   - contact resistance and path inductance.
+*
+* Electrical contacts in every SPICE implementation require a switching
+* primitive. Here the S element represents the mechanical contact boundary;
+* it is driven only by the simulated coil/armature state, never directly by
+* a command voltage.
+
+* ----- Semiconductor primitives --------------------------------------------
+.model NDRV60 VDMOS(Rg=2 Vto=2.5 Rd=6m Rs=5m Rb=20m Kp=40
++ Cgdmax=350p Cgdmin=35p Cgs=1.5n Cjo=900p Is=1n Vds=60 Ron=20m)
+
+.model NLOGIC VDMOS(Rg=5 Vto=2.5 Rd=1 Rs=1 Rb=5 Kp=.25
++ Cgdmax=30p Cgdmin=5p Cgs=60p Cjo=30p Is=1n Vds=60 Ron=4)
+
+.model SIC1200_DISCHARGE VDMOS(Rg=4 Vto=3.6 Rd=70m Rs=35m Rb=.2 Kp=12
++ Cgdmax=500p Cgdmin=25p Cgs=2.2n Cjo=1.1n Is=1n Vds=1200 Ron=120m)
+
+.model QNPN NPN(Is=1e-14 Bf=160 Vaf=100 Ikf=.2 Rc=.5 Re=.2 Rb=20
++ Cje=12p Cjc=4p Tf=.45n Tr=25n)
+.model QPNP PNP(Is=1e-14 Bf=120 Vaf=80 Ikf=.1 Rc=.8 Re=.3 Rb=25
++ Cje=14p Cjc=5p Tf=.7n Tr=35n)
+.model DFLY D(Is=1n Rs=35m N=1.15 Cjo=220p M=.35 Tt=450n Bv=100 Ibv=10u)
+.model DLOGIC D(Is=2n Rs=.5 N=1.5 Cjo=5p Tt=8n Bv=75 Ibv=10u)
+.model DZGATE D(Is=1n Rs=.5 N=1.3 Bv=18 Ibv=1m Cjo=120p)
+.model DZCLAMP33 D(Is=1n Rs=.15 N=1.2 Bv=33 Ibv=1m Cjo=350p)
+
+* ----- Contact switching primitives ----------------------------------------
+* Nominal total main-path resistance is about 0.50 mOhm:
+* 0.20 mOhm switch Ron + 0.30 mOhm explicit conductor resistance.
+.model EV200_MAIN_CONTACT SW(Ron=.2m Roff=1T Vt=5 Vh=1)
+.model EV200_AUX_CONTACT  SW(Ron=.1 Roff=1G Vt=5 Vh=1)
+.model PRE_MAIN_CONTACT   SW(Ron=2m Roff=1T Vt=5 Vh=1)
+.model PRE_AUX_CONTACT    SW(Ron=.15 Roff=1G Vt=5 Vh=1)
+.model FAULT_CONTACT      SW(Ron=.1m Roff=1T Vt=2.5 Vh=.25)
+
+* ----- EV200-class normally-open main contactor proxy ----------------------
+* Pin order: HV_IN HV_OUT COIL+ COIL- AUX_IN AUX_OUT MECH_STATE
+* Default winding data are engineering assumptions for an uneconomized
+* 12 V / 1 A coil. Replace RCOIL and LCOIL with measured supplier values.
+.subckt EV200_COIL_CONTACTOR HVIN HVOUT CP CM AIN AOUT STATE
++ params: RCOIL=12 LCOIL=80m RPATH=.3m LPATH=80n
++ KFORCE=12 RMECH=10k CMECH=.8u
+RCOIL CP C1 {RCOIL}
+LCOIL C1 C2 {LCOIL}
+VCOIL_SENSE C2 CM 0
+HFORCE FORCE 0 VCOIL_SENSE {KFORCE}
+RARM FORCE STATE {RMECH}
+CARM STATE 0 {CMECH} ic=0
+SMAIN HVIN CMAIN STATE 0 EV200_MAIN_CONTACT
+RMAIN CMAIN LMID {RPATH}
+LMAIN LMID HVOUT {LPATH}
+SAUX AIN AOUT STATE 0 EV200_AUX_CONTACT
+RSTATE STATE 0 100Meg
+.ends EV200_COIL_CONTACTOR
+
+* ----- Normally-open precharge contactor proxy -----------------------------
+* Pin order: HV_IN HV_OUT COIL+ COIL- AUX_IN AUX_OUT MECH_STATE
+* Default winding: 12 V / 0.5 A engineering proxy.
+.subckt PRECHARGE_COIL_CONTACTOR HVIN HVOUT CP CM AIN AOUT STATE
++ params: RCOIL=24 LCOIL=60m RPATH=3m LPATH=120n
++ KFORCE=24 RMECH=10k CMECH=.35u
+RCOIL CP C1 {RCOIL}
+LCOIL C1 C2 {LCOIL}
+VCOIL_SENSE C2 CM 0
+HFORCE FORCE 0 VCOIL_SENSE {KFORCE}
+RARM FORCE STATE {RMECH}
+CARM STATE 0 {CMECH} ic=0
+SMAIN HVIN CMAIN STATE 0 PRE_MAIN_CONTACT
+RMAIN CMAIN LMID {RPATH}
+LMAIN LMID HVOUT {LPATH}
+SAUX AIN AOUT STATE 0 PRE_AUX_CONTACT
+RSTATE STATE 0 100Meg
+.ends PRECHARGE_COIL_CONTACTOR
+
+* ----- Protected low-side contactor coil driver ----------------------------
+* Pin order: COIL_LOW COMMAND CONTROL_GND
+* The MOSFET, gate impedance, pulldown and 18 V Vgs clamp are explicit.
+* The winding flyback diode is placed outside this subcircuit so clamp type
+* can be selected independently for each contactor.
+.subckt COIL_LOW_SIDE_DRIVER DRAIN COMMAND GND
+RGATE COMMAND GATE 100
+RPD GATE GND 10k
+DZGS GND GATE DZGATE
+MDRV DRAIN GATE GND GND NDRV60
+.ends COIL_LOW_SIDE_DRIVER
+
+* ----- Transistor-level differential threshold comparator -----------------
+* Pin order: NONINV INV OUT VCC GND
+* OUT is high when NONINV > INV. This is intentionally transparent and
+* replaceable by an automotive comparator macro-model during supplier design.
+.subckt DISCRETE_COMPARATOR NONINV INV OUT VCC GND
+RPD1 C1 GND 4.7k
+RPD2 OUT GND 4.7k
+Q1 C1 NONINV ET QPNP
+Q2 OUT INV ET QPNP
+RTAIL VCC ET 330
+CCOMP C1 OUT 22p
+RBIAS1 NONINV GND 100Meg
+RBIAS2 INV GND 100Meg
+.ends DISCRETE_COMPARATOR
+
+* ----- Isolated active-discharge branch ------------------------------------
+* Pin order: DC+ DC- ENABLE CONTROL_GND STATE
+* A floating 15 V source represents the isolated bias rail. VLED/RLED and the
+* current-controlled F source form an optocoupler proxy with galvanically
+* separated input/output nodes. The power path is a 1200 V VDMOS plus a
+* physical discharge resistor.
+.subckt ACTIVE_DISCHARGE DCPLUS DCMINUS ENABLE CGND STATE
++ params: RDIS=1k
+VISO15 VISO DCMINUS 15
+VLED ENABLE LED_A 0
+RLED LED_A CGND 1k
+FPHOTO NDRV DCMINUS VLED 1
+RISO VISO NDRV 10k
+DISOCLAMP DCMINUS NDRV DLOGIC
+RQG NDRV QB 10k
+RQB QB DCMINUS 100k
+QGATE STATE QB DCMINUS QNPN
+RGUP VISO STATE 1k
+RGDN STATE DCMINUS 100k
+DZDIS DCMINUS STATE DZGATE
+RDIS DCPLUS DIS_D {RDIS}
+MDIS DIS_D STATE DCMINUS DCMINUS SIC1200_DISCHARGE
+.ends ACTIVE_DISCHARGE
+

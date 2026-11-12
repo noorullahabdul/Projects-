@@ -1,0 +1,10 @@
+id,item_function,failure_mode,local_effect,vehicle_effect,severity,cause,occurrence,current_control,detection,rpn,recommended_action,linked_requirement
+DF-001,Limit inrush,Precharge resistor open,DC-link does not charge,Vehicle cannot enter ready,6,Open resistor or connection,3,Precharge timeout,2,36,Add dV/dt diagnostic and service code,DCL-SYS-006
+DF-002,Limit inrush,Precharge resistor short,High inrush and contactor stress,Possible contactor weld or fuse operation,9,Internal short or assembly error,2,Current and dV/dt monitoring,4,72,Independent current limit and assembly test,DCL-SYS-006
+DF-003,Connect pack positive,Positive contactor welded,HV remains connected after shutdown,Electric shock or uncontrolled HV exposure,10,Contact erosion or overcurrent,2,Aux contact and voltage decay,3,60,Add redundant weld diagnostic and active discharge,DCL-SYS-007
+DF-004,Connect pack negative,Negative contactor fails open,No HV energy transfer,Loss of propulsion,7,Coil or driver open,3,Auxiliary contact feedback,2,42,Driver readback and diagnostic,DCL-HW-004
+DF-005,Measure DC-link voltage,Sensor biased high,Premature main closure possible,Inrush and contactor damage,9,Divider or ADC fault,3,Range check only,6,162,Add redundant channel and dV/dt correlation,DCL-SYS-011
+DF-006,Measure DC-link voltage,Sensor biased low,Precharge timeout,Vehicle unavailable,5,Divider or ADC fault,3,Timeout and correlation,3,45,Add channel comparison,DCL-SYS-011
+DF-007,Discharge DC-link,Discharge path open,Hazardous voltage persists,Electric shock during service,10,Open resistor or switch,2,Voltage decay monitor,3,60,Active discharge redundancy and service warning,DCL-SYS-008
+DF-008,Supervise HVIL,HVIL stuck closed,Open connector not detected,Potential HV exposure,10,Input short or harness fault,2,Static level check,6,120,Use current-coded loop and rationality test,DCL-SYS-009
+

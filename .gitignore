@@ -1,0 +1,8 @@
+.git-credentials
+.env
+.env.*
+*.log
+*.raw
+AppData/
+OneDrive/
+.git-full-backup/

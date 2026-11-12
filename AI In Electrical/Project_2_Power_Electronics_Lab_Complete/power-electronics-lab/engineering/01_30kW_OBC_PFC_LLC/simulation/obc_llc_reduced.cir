@@ -1,0 +1,16 @@
+* Reduced-order LLC resonant stage — portfolio model
+* 800 V DC link, full-bridge square-wave excitation, ideal transformer approximation
+.param VBUS=800 FSW=120k LR=25u CR=70n LM=150u RLOAD=16.667
+Vbus bus 0 {VBUS}
+Vdrive sw 0 PULSE(-400 400 0 50n 50n {0.5/FSW} {1/FSW})
+Lr sw nres {LR}
+Cr nres pri {CR}
+Lm pri 0 {LM}
+* Transformer and rectifier represented by reflected resistive load for first-pass tank study
+Rref pri 0 {RLOAD}
+.tran 0 2m 0 50n
+.meas tran IIN_RMS RMS I(Vdrive) FROM 1m TO 2m
+.meas tran PIN AVG PARAM '-V(sw)*I(Vdrive)' FROM 1m TO 2m
+.step param FSW list 80k 100k 120k 140k 160k
+.end
+

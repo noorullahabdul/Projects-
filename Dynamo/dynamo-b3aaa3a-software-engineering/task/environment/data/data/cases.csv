@@ -1,0 +1,3 @@
+case_id,raw_path,case_type,analysis_start_s,analysis_end_s,event_time_s,time_var,vout_var,gate_var,inductor_current_var,load_current_var
+startup_nominal,/app/data/startup_nominal.raw,startup,0.000000,0.023900,,time,v(vout),v(gate),i(l1),i(load)
+load_step_2a_8a,/app/data/load_step.raw,step,0.006000,0.019900,0.010000,time,v(vout),v(gate),i(l1),i(load)

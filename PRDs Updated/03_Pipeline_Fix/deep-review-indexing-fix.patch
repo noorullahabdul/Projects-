@@ -1,0 +1,13 @@
+diff --git a/task/environment/data/spec/diagnostic-rules.md b/task/environment/data/spec/diagnostic-rules.md
+index 81bd4d7..1eba2be 100644
+--- a/task/environment/data/spec/diagnostic-rules.md
++++ b/task/environment/data/spec/diagnostic-rules.md
+@@ -24,7 +24,7 @@ Capture columns:
+ 
+ `t_ms,pack_v,link_v,pack_a,pre_cmd,pre_aux,pos_cmd,pos_aux,neg_cmd,neg_aux,iso_kohm,crash`
+ 
+-Values are finite; digital values exactly `0|1`. Resolve captures from the index directory. Sort by time, keep the last duplicate, require three unique times, and isolate invalid cases. Missing ID: `invalid_case_<NNNN>` by position. Digital channels start at `0`; first retained `1` is a rise. Interpolate linearly without extrapolation.
++Values are finite; digital values exactly `0|1`. Resolve captures from the index directory. Sort by time, keep the last duplicate, require three unique times, and isolate invalid cases. Missing ID: `invalid_case_<NNNN>` by 1-based input position; the first case is `invalid_case_0001`. Digital channels start at `0`; first retained `1` is a rise. Interpolate linearly without extrapolation.
+ 
+ ## Metrics
+ 

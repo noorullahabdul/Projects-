@@ -1,0 +1,42 @@
+* =============================================================================
+* 800 V DC-link targeted worst-case campaign, component-level model
+* Twelve design corners avoid a blind Cartesian run while covering the
+* independent maximum-stress and maximum-time combinations.
+* =============================================================================
+.step param CASE 0 11 1
+
+* Case map: 0 nominal; 1 max inrush; 2 slow charge; 3 low coil/cold copper;
+* 4 low coil/hot copper; 5 high coil/cold; 6 DC sensor high; 7 DC sensor low;
+* 8 high capacitor ESR; 9 low pack; 10 high pack; 11 combined slow corner.
+.param VPACK=table(CASE,0,800,1,850,2,600,3,800,4,800,5,850,6,800,7,800,8,800,9,600,10,850,11,600)
+.param VCOIL=table(CASE,0,12,1,16,2,9,3,9,4,9,5,16,6,12,7,12,8,12,9,12,10,12,11,9)
+.param TEMPAMB=table(CASE,0,25,1,-40,2,105,3,-40,4,105,5,-40,6,25,7,25,8,105,9,25,10,25,11,105)
+.param CDC=table(CASE,0,1m,1,.9m,2,1.1m,3,1m,4,1m,5,.9m,6,1m,7,1m,8,1.1m,9,1.1m,10,.9m,11,1.1m)
+.param RPRE25=table(CASE,0,92,1,89.24,2,94.76,3,92,4,92,5,89.24,6,92,7,92,8,94.76,9,94.76,10,89.24,11,94.76)
+.param EPACK=table(CASE,0,0,1,-.015,2,.015,3,0,4,0,5,-.015,6,-.015,7,.015,8,0,9,.015,10,-.015,11,.015)
+.param ELINK=table(CASE,0,0,1,.015,2,-.015,3,0,4,0,5,.015,6,.015,7,-.015,8,0,9,-.015,10,.015,11,-.015)
+.param CESR=table(CASE,0,8m,1,6m,2,12m,3,8m,4,12m,5,6m,6,8m,7,8m,8,80m,9,12m,10,6m,11,12m)
+
+.param VLOGIC=5 RBAT=25m LBAT=1u RHAR=22m LHAR=2u
+.param TCRPRE=100u RPRE_EFFECTIVE={RPRE25*(1+TCRPRE*(TEMPAMB-25))}
+.param LPRE=250n CESL=100n RLEAK=100k RDIS=1k
+.param RCOIL_MAIN={12*(1+.00393*(TEMPAMB-25))} LCOIL_MAIN=80m
+.param RCOIL_PRE={24*(1+.00393*(TEMPAMB-25))} LCOIL_PRE=60m
+.param RNEG_COIL_FAULT=10m RPOS_COIL_FAULT=10m RPRE_COIL_FAULT=10m
+.param RPOS_PATH_FAULT=10u RDIS_PATH_FAULT=10u
+.param F_POS_WELD=0 F_PRE_WELD=0
+
+.include DCLINK_PHYSICAL_PLANT.inc
+
+.tran 0 6 0 10u uic
+.options plotwinsize=0 reltol=.002 abstol=200n vntol=200u method=gear
+.meas tran I_PRE_PEAK MAX abs(I(RPRE_PATH)) FROM=2m TO=400m
+.meas tran T_MAIN_CONTACT WHEN V(POS_MECH)=6 RISE=1
+.meas tran VDC_AT_CLOSE FIND V(DCPLUS,DCMINUS) WHEN V(POS_MECH)=6 RISE=1
+.meas tran VPACK_AT_CLOSE FIND V(HVP_BUS) WHEN V(POS_MECH)=6 RISE=1
+.meas tran V_RATIO_CLOSE PARAM VDC_AT_CLOSE/VPACK_AT_CLOSE
+.meas tran E_PRE INTEG I(RPRE_PATH)*I(RPRE_PATH)*RPRE_EFFECTIVE FROM=2m TO=400m
+.meas tran T_TO_60 TRIG V(DIS_REQ) VAL=2.5 RISE=1
++ TARG V(DCPLUS,DCMINUS) VAL=60 FALL=1
+.end
+

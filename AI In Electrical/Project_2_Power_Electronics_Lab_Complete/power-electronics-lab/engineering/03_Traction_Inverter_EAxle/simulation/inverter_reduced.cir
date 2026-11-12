@@ -1,0 +1,20 @@
+* Reduced three-phase two-level inverter with resistive-inductive phase load
+.param VDC=800 FSW=10k FOUT=200 DEAD=1u
+Vdc bus 0 {VDC}
+* Behavioral phase sources represent averaged PWM pole voltages for a portable starter model
+Bva a 0 V={0.45*VDC*sin(2*pi*FOUT*time)}
+Bvb b 0 V={0.45*VDC*sin(2*pi*FOUT*time-2*pi/3)}
+Bvc c 0 V={0.45*VDC*sin(2*pi*FOUT*time+2*pi/3)}
+Ra a na 50m
+La na n 300u
+Rb b nb 50m
+Lb nb n 300u
+Rc c nc 50m
+Lc nc n 300u
+Rn n 0 1G
+.tran 0 50m 0 1u
+.meas tran IA_RMS RMS I(La) FROM=25m TO=50m
+.meas tran IB_RMS RMS I(Lb) FROM=25m TO=50m
+.meas tran IC_RMS RMS I(Lc) FROM=25m TO=50m
+.end
+

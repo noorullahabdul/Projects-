@@ -1,0 +1,109 @@
+Subject: Task Assignment: Multiphase VRM Transient Response Verification under High-Slew Load Steps (vrm_transient_core.asc)
+
+To: Power Integrity & Hardware Validation Engineering Team
+
+You are assigned to perform a rigorous transient response evaluation and voltage stability assessment on the existing multiphase Voltage Regulator Module (VRM) circuit model file vrm_transient_core.asc. 
+You must complete this verification task to identify power rail deviations before this power stage configuration is deployed to drive our next-generation AI accelerator hardware architectures.
+
+Your primary objective is to evaluate the circuit layout under strict load step stress, quantify the transient voltage excursions, and verify that our decoupling matrix can maintain voltage rail integrity.
+
+Your Scope of Work & Essential Simulation Constraints:
+
+Dynamic Load Step Parameters: You must program the output load current block using the exact mandatory configuration parameter string: PULSE(10 100 1m 1.8u 1.8u 2m 5m). This replicates a rapid step from a 10 A baseline load up to a peak demand of 100 A with a transition time of exactly 1.8mus (enforcing the minimum 50 A/mus slew rate threshold across the 90 A delta).
+Pre-Load Settling Window: The load step event must be delayed by exactly 1ms to allow the VRM switching loops to reach stable, steady-state regulation at the nominal core voltage target of 1.85 V.
+Simulation Timestep Bounding: You must configure the active transient analysis command line with an explicit maximum timestep constraint matching the string: .tran 0 5m 0 10n to capture sub-microsecond voltage reflections.
+Automated Metrics Extraction: You are required to embed automated tracking directives onto the schematic canvas using the exact syntax: .meas tran max_droop MIN(V(Vout)).meas tran max_overshoot MAX(V(Vout)).meas tran recovery_time WHEN V(Vout)=1.85
+Operational Boundary: Your role is strictly limited to performance characterization. 
+
+You are not authorized to alter component values, add decoupling capacitors, tune loop networks, or modify circuit topologies in vrm_transient_core.asc.
+
+Your Required Deliverables:
+vrm_report.pdf (Transient Performance Report): A structured technical document detailing the measured peak-to-peak voltage excursions, exact current step parameter values, automated settling times, and a compliance declaration against core voltage tolerances.vrm_transient_core.log (SPICE Log File): The raw, unedited simulator output log file containing the compiled numerical results of your automated .meas directives.vrm_waveform_plot.png 
+(Annotated Waveform Plot): A clean graphic export of the time-domain waveform capturing the current step overlaid with the resulting voltage rail response, with definitive measurement cursors explicitly placed on the minimum droop point and maximum peak overshoot.
+
+[
+  {
+    "criterion": "Target Simulation Asset Verification",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Verify that the simulation environment is executing the exact filename 'vrm_transient_core.asc' and that this asset serves as the exclusive source deck for all subsequent netlist extractions.",
+    "justification": "Evaluating the designated 'vrm_transient_core.asc' asset is a prerequisite to verify the baseline configuration. This ensures the engineering validation team characterizes the unmodified master template rather than evaluating an unvetted circuit variation."
+  },
+  {
+    "criterion": "Dynamic Current Step Configuration Check",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Scan the netlist text of vrm_transient_core.asc to confirm that the output load block is explicitly configured as a dynamic current source matching the mandatory parameter string 'PULSE(10 100 1m 1.8u 1.8u 2m 5m)'.",
+    "justification": "To evaluate or verify the AI accelerator power delivery network under stress, the netlist source parameter must be explicitly audited. This check confirms that the model actually transitions from a 10A baseline up to a 100A peak demand to replicate authentic execution cycle load steps."
+  },
+  {
+    "criterion": "High-Slew Edge Slew Rate Alignment Verification",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Verify that the transition rise time (Tr) and fall time (Tf) parameters within the active load current block are hardcoded to exactly 1.8us or less.",
+    "justification": "Reviewing the edge transition parameter is critical because a 1.8us rise/fall time over a 90A delta mathematically forces the mandatory 50A/us slew rate constraint. This allows the system to verify decoupling capacitor performance against severe high-frequency inductive stress."
+  },
+  {
+    "criterion": "Steady-State Pre-Load Window Verification",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Verify that the initial delay parameter (Tdelay) of the current step is set to exactly 1ms, separating the transient load event from the regulator's initial soft-start sequence.",
+    "justification": "Verifying an intentional 1ms delay ensures that power stage initialization anomalies and startup inrush currents are completely settled. This isolates the load step event to prevent the corruption of downstream recovery metrics."
+  },
+  {
+    "criterion": "Simulation Timestep Truncation Control",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Verify the presence of a hardcoded transient command string on the schematic canvas matching the exact syntax '.tran 0 5m 0 10n'. Confirm that the maximum timestep parameter is bounded at 10ns or less.",
+    "justification": "Verifying a hard restriction on the simulator's maximum timestep prevents the SPICE solver's adaptive step routine from widening during stable periods. This forces the system to resolve sub-microsecond voltage reflections and capture true peak deviations."
+  },
+  {
+    "criterion": "Output Rail Voltage Droop Measurement Integration",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Search the netlist text for the exact automated measurement statement syntax: '.meas tran max_droop MIN(V(Vout))'. Confirm this directive is actively processed during execution.",
+    "justification": "Reviewing the log for an embedded '.meas' statement enables an objective verification of the absolute voltage nadir. This eliminates the human error associated with visually inspecting compressed waveforms to evaluate core voltage sag."
+  },
+  {
+    "criterion": "Transient Overvoltage Overshoot Tracking Integration",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Search the netlist text for the exact automated peak measurement statement syntax: '.meas tran max_overshoot MAX(V(Vout))'. Confirm this directive is actively processed during execution.",
+    "justification": "An automated verification check for the 'max_overshoot' measurement directive guarantees the capture of inductive voltage spikes during the load step-down phase. This confirms whether the rail risks exceeding the absolute maximum processor ratings."
+  },
+  {
+    "criterion": "Automated Rail Settling Window Calculation Integration",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Search the netlist text for the exact automated recovery tracking statement syntax: '.meas tran recovery_time WHEN V(Vout)=1.85'. Confirm this directive is actively processed during execution.",
+    "justification": "Evaluating the recovery timeline against a fixed 1.85V target provides an automated metric for power delivery network damping efficiency. This removes visual interpretation errors when checking compliance against the strict +/-1% tolerance window."
+  },
+  {
+    "criterion": "Capacitor High-Frequency Parasitic Statement Audit",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Scan the netlist component definitions for all decoupling capacitors on the output rail network. Verify that every active capacitor model contains non-zero parameter expressions explicitly assigned for Equivalent Series Resistance (ESR) and Equivalent Series Inductance (ESL).",
+    "justification": "Auditing the netlist text for explicit ESR and ESL entries is mandatory because ideal components absorb fast transients perfectly. This verification confirms that the simulation accounts for authentic high-frequency layout limitations without requiring the engineer to alter the underlying model cards."
+  },
+  {
+    "criterion": "Power Path Interconnect Trace Inductance Modeling",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Verify the presence of discrete parasitic inductors ranging from 100pH to 10nH inserted along the interconnect layout path between the VRM phases, the decoupling matrix, and the load block.",
+    "justification": "To evaluate a high-speed core power plane accurately, the layout must be verified to contain trace parasitics. At a突发 slew rate of 50A/us, physical copper planes act as inductors, and omitting them leads to over-optimistic power integrity calculations."
+  },
+  {
+    "criterion": "Multiphase Inductor DCR Parameter Audit",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Scan the netlist properties of the primary buck stage inductors. Confirm that the series direct current resistance (DCR) parameter is explicitly hardcoded above 0 Ohms matching manufacturer component datasheets.",
+    "justification": "Reviewing the inductor DCR attributes ensures the model accounts for true physical winding losses and phase damping behaviors. This is necessary to verify localized thermal and conduction losses during heavy 100A power-soak phases."
+  },
+  {
+    "criterion": "Task Constraints and Redesign Prohibition Compliance",
+    "score": 8,
+    "validation_type": "in_application_check",
+    "assessment_process": "Compare the component layout structures and component values of the final submitted schematic against the reference project master template. Confirm that zero components were added, removed, or re-valued.",
+    "justification": "Verifying absolute structural identity between the submitted netlist and the master template ensures complete compliance with role boundaries. This confirms that the validation team restricted operations strictly to characterization and did not modify the topology to mask layout flaws."
+  }
+]

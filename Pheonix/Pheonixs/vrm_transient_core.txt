@@ -1,0 +1,213 @@
+  Design Note – 4-Phase AI Accelerator Core VRM Using LTC7851
+
+ 1. Design Overview
+
+This design implements a high-current, multiphase synchronous buck voltage regulator module (VRM) intended for AI accelerator core power delivery. The converter uses the Analog Devices LTC7851 multiphase controller with four external LTC4449 high-speed gate drivers to drive a 4-phase discrete MOSFET power stage. The design targets a tightly regulated low-voltage rail of 1.85 V from a nominal 12 V input source, with support for fast load transients representative of AI/ML compute workloads.
+
+The architecture was selected to meet the following objectives:
+
+ High output current capability (up to 100 A transient load)
+ Fast transient response under high slew current steps
+ Low output ripple
+ Good current sharing across phases
+ Reduced thermal stress by phase interleaving
+ Production-representative AI accelerator power delivery topology
+
+The converter consists of:
+
+ 1 × LTC7851 multiphase controller
+ 4 × LTC4449 half-bridge gate drivers
+ 8 × NXP PH2625L MOSFETs (high-side + low-side pairs)
+ 4 × 250 nH inductors
+ Bulk output capacitor bank (15 × 220 µF)
+ Type-II/Type-III compensation and feedback network
+
+The controller generates four interleaved PWM signals operating at fixed switching frequency with 90° phase shift between phases. Interleaving reduces effective ripple frequency and improves transient response.
+
+---
+
+ 2. Power Stage Design and Component Selection
+
+ Input Stage
+
+The VRM operates from a 12 V DC bus, representative of server or accelerator board power architecture. Input decoupling capacitors (C1, C6, C8, C10) suppress switching noise and reduce input ripple current seen by the upstream supply.
+
+ Switching Devices
+
+The power stage uses NXP PH2625L MOSFETs arranged as four synchronous buck half-bridges:
+
+ Phase 1: M1–M2
+ Phase 2: M3–M4
+ Phase 3: M5–M6
+ Phase 4: M7–M8
+
+The low RDS(on) MOSFETs reduce conduction losses at high current while supporting high switching frequency.
+
+ Gate Drivers
+
+Each phase uses one LTC4449 high-speed gate driver. These drivers provide:
+
+ Fast gate charge/discharge
+ Reduced switching loss
+ High peak gate current
+ Robust high-side bootstrap operation
+
+Bootstrap networks include:
+
+ D1–D4: CMDSH2-3 diodes
+ C7, C12, C13, C14: bootstrap capacitors
+
+These provide floating supply for high-side MOSFET gate drive.
+
+ Inductor Selection
+
+Each phase uses a 250 nH inductor:
+
+ L1 = L2 = L3 = L4 = 250 nH
+
+Low inductance improves transient response and allows rapid current ramp during load steps.
+
+Approximate inductor current ripple is:
+
+ΔI = ((Vin − Vout) × D) / (L × fs)
+
+With:
+
+ Vin = 12 V
+ Vout = 1.85 V
+ D ≈ 0.154
+ L = 250 nH
+
+The selected inductance supports high-bandwidth current response required for AI accelerator loads.
+
+ Output Capacitor Bank
+
+The output bulk capacitance consists of:
+
+ C2 = 220 µF × 15
+ Total capacitance ≈ 3300 µF
+
+Large output capacitance helps absorb transient load current during controller response delay and minimizes output voltage droop.
+
+Compensation capacitors:
+
+ C3 = 3.3 nF
+ C4 = 2.2 nF
+ C5 = 100 pF
+
+These shape loop response and stabilize the control system.
+
+2.1 Output Node Stabilization and Bleed Resistor (Simulation Support)
+
+A high-value bleed resistor (Rbleed) was added between the output rail (VOUT) and ground in the LTspice model to prevent floating-node convergence issues during transient simulation startup.
+
+Configuration:
+
+ Rbleed = 1 MΩ
+ Connection: VOUT → Rbleed → GND
+
+Purpose of Rbleed:
+
+1. Prevents floating-node errors
+   During DC operating-point calculation, LTspice requires every major node to have a valid DC path. Since the output node primarily consists of:
+
+    large output capacitor bank (C2 × 15),
+    ideal current source transient load (Iload),
+    switching MOSFET network,
+
+   the VOUT node can become electrically floating during initialization, especially before PWM switching begins.
+
+2. Improves convergence
+   The resistor provides a very small DC leakage path that helps LTspice solve the operating point and avoids errors such as:
+
+    `Node VOUT is floating`
+    `Singular matrix`
+    `Timestep too small`
+
+3. Negligible electrical impact
+   Because the resistor value is very large (1 MΩ), it does not materially affect converter performance.
+
+Bleed current at nominal output voltage:
+
+I_bleed = VOUT / Rbleed
+I_bleed = 1.85 / 1,000,000
+I_bleed = 1.85 µA
+
+Power dissipation:
+
+P = V² / R
+P = 1.85² / 1,000,000
+P ≈ 3.42 µW
+
+This current and power are negligible compared to the converter load current (10–100 A), so Rbleed is treated purely as a simulation stabilization element rather than a functional load component.
+
+---
+
+ 3. Feedback and Voltage Regulation
+
+Output voltage is regulated using the LTC7851 feedback loop.
+
+Feedback network:
+
+ R9 = 31.3 kΩ
+ R5 = 15 kΩ
+
+The effective feedback reference in the LTspice macro-model is observed as approximately 0.6 V.
+
+Output voltage is set by:
+
+Vout = Vref × (1 + Rtop / Rbottom)
+
+Substituting:
+
+Vout = 0.6 × (1 + 31.3 / 15)
+
+Vout ≈ 1.852 V
+
+This matches the target output voltage of 1.85 V.
+
+Additional compensation network includes:
+
+ R1 = 30.9 kΩ
+ R8 = 42.2 kΩ
+ R2, R6, R10, R11 = 3.57 kΩ
+
+These resistors support loop compensation, frequency shaping, and current balancing across phases.
+
+---
+
+4. Transient Verification for AI Workloads
+
+To evaluate VRM transient performance, the output load current is stepped from 10 A to 100 A using:
+
+PULSE(10 100 1m 1.8u 1.8u 2m 5m)
+
+This corresponds to:
+
+ Load increase = 90 A
+ Rise time = 1.8 µs
+
+Current slew rate:
+
+Slew = 90 A / 1.8 µs = 50 A/µs
+
+This emulates aggressive AI accelerator compute bursts.
+
+Transient simulation directive:
+
+.tran 0 5m 0 10n
+
+Automated measurements:
+
+ max_droop
+ max_overshoot
+ recovery_time
+ ±1% recovery window
+
+Voltage regulation window:
+
+ Lower limit = 1.8315 V
+ Upper limit = 1.8685 V
+
+This design note concludes that the LTC7851-based 4-phase VRM provides a production-grade architecture suitable for AI accelerator core power delivery, with strong current capability, fast transient response, and realistic multiphase operation.
+

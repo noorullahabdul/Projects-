@@ -1,0 +1,20 @@
+Test_ID,Deck,Measure_or_waveform,Acceptance,Expected_nominal_or_fault_response,Gate_status
+LTS-NOM-001,DCLINK_PHYSICAL_NOMINAL.cir,I_PRE_PEAK,<10 A,Approximately 8.69 A,Open until executed
+LTS-NOM-002,DCLINK_PHYSICAL_NOMINAL.cir,T_MAIN_CONTACT,<0.350 s from time zero,Approximately 0.28 to 0.31 s,Open until executed
+LTS-NOM-003,DCLINK_PHYSICAL_NOMINAL.cir,V_RATIO_CLOSE,>=0.90,Approximately 0.93 or higher,Open until executed
+LTS-NOM-004,DCLINK_PHYSICAL_NOMINAL.cir,T_TO_60,<5 s after DIS_REQ,Approximately 2.59 s,Open until executed
+LTS-NOM-005,DCLINK_PHYSICAL_NOMINAL.cir,VDC_5S,<60 V,Expected below 60 V,Open until executed
+LTS-NOM-006,DCLINK_PHYSICAL_NOMINAL.cir,T_RUN_OK,Assert only after both main auxiliaries and ratio are valid,Expected after positive mechanical closure,Open until executed
+LTS-COR-001,DCLINK_PHYSICAL_CORNERS.cir,I_PRE_PEAK,<10 A for every case,Worst analytical target approximately 9.52 A,Open until executed
+LTS-COR-002,DCLINK_PHYSICAL_CORNERS.cir,T_MAIN_CONTACT,<0.350 s for valid supply cases,Slow corner close before timeout,Open until executed
+LTS-COR-003,DCLINK_PHYSICAL_CORNERS.cir,V_RATIO_CLOSE,>=0.90 for every closing case,Sensing corners retain margin,Open until executed
+LTS-FLT-001,DCLINK_PHYSICAL_FAULTS.cir,VDC_350M for FAULT=1,No successful precharge,Precharge-open blocks rise,Open until executed
+LTS-FLT-002,DCLINK_PHYSICAL_FAULTS.cir,I_PRE_PEAK for FAULT=2,Fault detected or current exceeds normal envelope,Precharge-short produces unsafe inrush,Open until executed
+LTS-FLT-003,DCLINK_PHYSICAL_FAULTS.cir,VDC before wake for FAULT=3,Weld detectable,Positive weld couples pack to DC link,Open until executed
+LTS-FLT-004,DCLINK_PHYSICAL_FAULTS.cir,I_POS_COIL_PK for FAULT=4,Approximately zero,Positive coil open prevents main closure,Open until executed
+LTS-FLT-005,DCLINK_PHYSICAL_FAULTS.cir,I_NEG_COIL_PK for FAULT=5,Approximately zero,Negative coil open prevents defined precharge return,Open until executed
+LTS-FLT-006,DCLINK_PHYSICAL_FAULTS.cir,VDC_350M for FAULT=6,No successful precharge,Precharge coil open blocks rise,Open until executed
+LTS-FLT-007,DCLINK_PHYSICAL_FAULTS.cir,VDC_5S for FAULT=7,Discharge requirement intentionally fails,Active-discharge open leaves passive decay,Open until executed
+LTS-FLT-008,DCLINK_PHYSICAL_FAULTS.cir,POS_GATE for FAULT=8,Early closure shall be detected,Sensor bias advances threshold,Open until executed
+LTS-FLT-009,DCLINK_PHYSICAL_FAULTS.cir,I_PRE_PEAK after main closure for FAULT=9,Weld detectable,Precharge contact remains closed,Open until executed
+

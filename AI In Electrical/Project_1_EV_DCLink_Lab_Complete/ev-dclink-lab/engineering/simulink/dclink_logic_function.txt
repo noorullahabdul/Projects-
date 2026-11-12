@@ -1,0 +1,59 @@
+function [negCmd,posCmd,preCmd,dischargeCmd,torqueEnable,state,dtc] = ...
+    hvController(wake,shutdown,hvilOK,isolationOK,negAux,posAux,preAux,vpack,vdc,reset)
+%#codegen
+% States: 0 OFF, 1 SELF_TEST, 2 NEG_CLOSE, 3 PRECHARGE,
+% 4 MAIN_CLOSE, 5 RUN, 6 DISCHARGE, 7 SAFE, 8 FAULT.
+persistent s timer lastVdc latchedDtc
+Ts = 0.001;
+if isempty(s) || reset
+    s=uint8(0); timer=0; lastVdc=0; latchedDtc=uint16(0);
+end
+timer=timer+Ts;
+dvdt=(vdc-lastVdc)/Ts; lastVdc=vdc;
+negCmd=false; posCmd=false; preCmd=false;
+dischargeCmd=false; torqueEnable=false;
+
+if s~=0 && s~=6 && s~=7 && (~hvilOK || ~isolationOK)
+    s=uint8(8); latchedDtc=uint16(101); timer=0;
+end
+
+switch s
+    case 0 % OFF
+        if wake, s=uint8(1); timer=0; end
+    case 1 % SELF_TEST
+        if hvilOK && isolationOK && vpack>=500 && vpack<=900 && vdc<60
+            s=uint8(2); timer=0;
+        elseif timer>0.020
+            s=uint8(8); latchedDtc=uint16(102);
+        end
+    case 2 % NEG_CLOSE
+        negCmd=true;
+        if negAux, s=uint8(3); timer=0;
+        elseif timer>0.050, s=uint8(8); latchedDtc=uint16(103); end
+    case 3 % PRECHARGE
+        negCmd=true; preCmd=true;
+        % 0.93 command threshold preserves >=0.90 actual ratio with the
+        % allocated pack/link measurement error budget.
+        if vpack>0 && vdc/vpack>=0.93 && dvdt>=0
+            s=uint8(4); timer=0;
+        elseif timer>0.350
+            s=uint8(8); latchedDtc=uint16(104);
+        end
+    case 4 % MAIN_CLOSE
+        negCmd=true; preCmd=true; posCmd=true;
+        if posAux, s=uint8(5); timer=0;
+        elseif timer>0.050, s=uint8(8); latchedDtc=uint16(105); end
+    case 5 % RUN
+        negCmd=true; posCmd=true; torqueEnable=true;
+        if shutdown, s=uint8(6); timer=0; end
+    case 6 % DISCHARGE
+        dischargeCmd=vdc>=60;
+        if vdc<60, s=uint8(7); timer=0; end
+    case 7 % SAFE
+        if wake, s=uint8(1); timer=0; end
+    otherwise % FAULT
+        dischargeCmd=vdc>=60;
+end
+state=s; dtc=latchedDtc;
+end
+

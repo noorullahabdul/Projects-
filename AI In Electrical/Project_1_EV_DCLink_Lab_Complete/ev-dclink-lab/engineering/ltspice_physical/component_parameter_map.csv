@@ -1,0 +1,21 @@
+Parameter,Nominal,Units,Implementation,Source_class,Confidence,Release_action
+Pack voltage,800,V,VBAT,System requirement,Controlled,Sweep 600 to 850 V
+Battery and harness resistance,47,mOhm,RBAT plus RHAR,Engineering allocation,Medium,Correlate with pack and harness measurements
+Battery and harness inductance,3,uH,LBAT plus LHAR,Engineering assumption,Low,Extract from layout and impedance measurement
+Precharge resistance,92,Ohm,RPRE_PATH,Calculated candidate,Medium,Nominate pulse-rated resistor bank and validate thermal SOA
+DC-link capacitance,1.0,mF,CDC,System candidate,Medium,Replace with production capacitor stack and tolerance model
+DC-link ESR,8,mOhm,RESR,Engineering assumption,Low,Measure over temperature and frequency
+DC-link ESL,100,nH,LESL,Engineering assumption,Low,Extract from busbar and capacitor layout
+Main contactor class,EV200-class,-,XKNEG and XKPOS,TE public envelope,Medium,Select exact ordering code and supplier model
+Main coil resistance at 25 C,12,Ohm,EV200 proxy,Engineering assumption,Low,Replace with measured/supplier value
+Main coil inductance,80,mH,EV200 proxy,Engineering assumption,Low,Replace with measured pickup and release data
+Main contact path,0.5,mOhm,EV200 proxy,Engineering assumption,Low,Correlate over current temperature and life
+Precharge coil resistance at 25 C,24,Ohm,Precharge proxy,Engineering assumption,Low,Select exact contactor and replace
+Precharge coil inductance,60,mH,Precharge proxy,Engineering assumption,Low,Select exact contactor and replace
+Coil driver,Generic 60 V VDMOS,-,NDRV60,Portable LTspice proxy,Low,Replace with selected protected automotive driver
+Comparator,Discrete PNP differential pair,-,DISCRETE_COMPARATOR,Transparent transistor proxy,Low,Replace with selected automotive comparator
+Voltage-divider transfer,0.00485135,V/V,RP1 to RPL and RD1 to RDL,Calculated,High,Add resistor voltage rating and creepage allocation
+Closure threshold,0.93012,V/V,RT1 to RTL versus DC channel,Calculated,High,Validate total sensing tolerance and diagnostics
+Discharge resistance,1000,Ohm,RDIS,Calculated candidate,Medium,Nominate pulse/continuous rated part and thermal model
+Discharge switch,1200 V VDMOS proxy,-,SIC1200_DISCHARGE,Portable LTspice proxy,Low,Replace with vendor SiC model
+

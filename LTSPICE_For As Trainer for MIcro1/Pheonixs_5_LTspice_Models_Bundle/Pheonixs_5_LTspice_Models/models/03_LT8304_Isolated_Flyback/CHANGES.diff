@@ -1,0 +1,10 @@
+--- original/Draft1.asc
++++ working/Model.asc
+@@ -147,3 +147,7 @@
+ TEXT 360 -136 Left 2 !K1 L1 L2 L3 0.98
+ TEXT 600 56 Left 2 ;.tran 0 100m 0 1m startup
+ TEXT 560 352 Left 2 !.tran 0 10m 0 20n startup\n.options reltol=0.005 vntol=100u chgtol=10p method=gear plotwinsize=0
++FLAG 208 -96 VOUT_MAIN
++FLAG 672 112 VOUT_AUX
++TEXT 32 1664 Left 2 !.include components.lib
++TEXT 32 1728 Left 1 ;Prepared working copy; originals and changes are documented. New LTspice execution has not been performed here.

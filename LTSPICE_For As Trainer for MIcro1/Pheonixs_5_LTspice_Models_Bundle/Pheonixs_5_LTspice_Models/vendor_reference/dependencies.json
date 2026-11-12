@@ -1,0 +1,290 @@
+[
+  {
+    "source_in_installer_library": "lib/sym/PowerProducts/LT8584.asy",
+    "source_sha256": "84be2c92708bb405b246487498e9363f7fbd10b5d48a69f33a80a52c05d66d54",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/LT8584.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/cap.asy",
+    "source_sha256": "fcc7190ea1110f612453b86c02facc3ac46441a06f04274054ed021746e79fac",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/cap.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/diode.asy",
+    "source_sha256": "a7177f6cc9730376390e2b0f0a67de1050b6452aba3049351dcd64a68dfd0d70",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/diode.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/ind2.asy",
+    "source_sha256": "16783ab07595afcae0cbbc37285a23ac19f3a6ead2fc49e6c62ce47c2d532a38",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/ind2.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/res.asy",
+    "source_sha256": "228e75e841b1b239fbe8cea04c9ae86e84eac492faf88501fa21bbee88d7eb96",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/res.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/voltage.asy",
+    "source_sha256": "940d0db25631013b23b4fcac00f5d55815616d853036fa1b810c47b7556f36c2",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/voltage.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sub/LT8584.sub",
+    "source_sha256": "97610094ec3e97b8fabadd1fae5550e6e4773560da635783e0555ec1b1a17579",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/LT8584.sub",
+    "modified": false,
+    "protected_model": true
+  },
+  {
+    "source_in_installer_library": "lib/cmp/standard.dio",
+    "part": "MMSD4148",
+    "source_file_sha256": "696d34dfe538966c80cfe1da259c1043f408777be79f59e4f1c47d82f3af320a",
+    "packaged_path": "models/01_LT8584_Cell_Balancer/components.lib",
+    "extraction": "Selected .model definition; unchanged definition text."
+  },
+  {
+    "source_in_installer_library": "lib/sym/PowerProducts/LTC3300-1.asy",
+    "source_sha256": "a01d0c848be4cc0b869758d2be5d68ce1a4c213e53b2f720c5d6798670e84f21",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/LTC3300-1.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/cap.asy",
+    "source_sha256": "fcc7190ea1110f612453b86c02facc3ac46441a06f04274054ed021746e79fac",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/cap.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/ind2.asy",
+    "source_sha256": "16783ab07595afcae0cbbc37285a23ac19f3a6ead2fc49e6c62ce47c2d532a38",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/ind2.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/nmos.asy",
+    "source_sha256": "690fe354544ae6a4024a9ae37ea7a1bea24edcb0b170014267486bda0bad7f9c",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/nmos.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/res.asy",
+    "source_sha256": "228e75e841b1b239fbe8cea04c9ae86e84eac492faf88501fa21bbee88d7eb96",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/res.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/schottky.asy",
+    "source_sha256": "08852523b7f8950defaa881bbfa2a446c26cb817953ad2ba34bdd0ac073a6803",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/schottky.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/voltage.asy",
+    "source_sha256": "940d0db25631013b23b4fcac00f5d55815616d853036fa1b810c47b7556f36c2",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/voltage.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sub/LTC3300-1.sub",
+    "source_sha256": "43aef073ecbd1900ba90940132457f6404c2c154f0e2b0b1127feb925ae56b44",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/LTC3300-1.sub",
+    "modified": false,
+    "protected_model": true
+  },
+  {
+    "source_in_installer_library": "lib/cmp/standard.dio",
+    "part": "1N5817",
+    "source_file_sha256": "696d34dfe538966c80cfe1da259c1043f408777be79f59e4f1c47d82f3af320a",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/components.lib",
+    "extraction": "Selected .model definition; unchanged definition text."
+  },
+  {
+    "source_in_installer_library": "lib/cmp/standard.mos",
+    "part": "Si7368DP",
+    "source_file_sha256": "f39c5119538391e01130560f9e303c260a8fd05e882a0518b261ad00431d0d5c",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/components.lib",
+    "extraction": "Selected .model definition; unchanged definition text."
+  },
+  {
+    "source_in_installer_library": "lib/cmp/standard.mos",
+    "part": "Si7370DP",
+    "source_file_sha256": "f39c5119538391e01130560f9e303c260a8fd05e882a0518b261ad00431d0d5c",
+    "packaged_path": "models/02_LTC3300_6Cell_Balancer/components.lib",
+    "extraction": "Selected .model definition; unchanged definition text."
+  },
+  {
+    "source_in_installer_library": "lib/sym/PowerProducts/LT8304.asy",
+    "source_sha256": "9b7b272428fd6383fd7a789f7ee70816f9538f7e8fbc76a6177eb489aca14cb8",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/LT8304.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/cap.asy",
+    "source_sha256": "fcc7190ea1110f612453b86c02facc3ac46441a06f04274054ed021746e79fac",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/cap.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/ind.asy",
+    "source_sha256": "9f8b83724e9b7147cef39529ec31da234ed0427d870bb3e5b42004afc23f63f2",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/ind.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/ind2.asy",
+    "source_sha256": "16783ab07595afcae0cbbc37285a23ac19f3a6ead2fc49e6c62ce47c2d532a38",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/ind2.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/res.asy",
+    "source_sha256": "228e75e841b1b239fbe8cea04c9ae86e84eac492faf88501fa21bbee88d7eb96",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/res.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/schottky.asy",
+    "source_sha256": "08852523b7f8950defaa881bbfa2a446c26cb817953ad2ba34bdd0ac073a6803",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/schottky.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/voltage.asy",
+    "source_sha256": "940d0db25631013b23b4fcac00f5d55815616d853036fa1b810c47b7556f36c2",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/voltage.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sub/LT8304.sub",
+    "source_sha256": "14237521cd852ed9382460e239633905319f8736fbdd8e05b6022fa093eff9eb",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/LT8304.sub",
+    "modified": false,
+    "protected_model": true
+  },
+  {
+    "source_in_installer_library": "lib/cmp/standard.dio",
+    "part": "1N5819",
+    "source_file_sha256": "696d34dfe538966c80cfe1da259c1043f408777be79f59e4f1c47d82f3af320a",
+    "packaged_path": "models/03_LT8304_Isolated_Flyback/components.lib",
+    "extraction": "Selected .model definition; unchanged definition text."
+  },
+  {
+    "source_in_installer_library": "lib/sym/PowerProducts/LTC4449.asy",
+    "source_sha256": "009576f095e213ebc4883267668ce65776a87bfcf193169173290054802d29e3",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/LTC4449.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/PowerProducts/LTC7851.asy",
+    "source_sha256": "d6f240962b8c25a9db3cb1b92fc81c3f54956eb818993c04d88f322a4198b265",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/LTC7851.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/cap.asy",
+    "source_sha256": "fcc7190ea1110f612453b86c02facc3ac46441a06f04274054ed021746e79fac",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/cap.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/current.asy",
+    "source_sha256": "d36a9bf0f6b504326a64ac0011986cf7484a57f5499d7ca6faca049076dab74c",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/current.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/ind.asy",
+    "source_sha256": "9f8b83724e9b7147cef39529ec31da234ed0427d870bb3e5b42004afc23f63f2",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/ind.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/nmos.asy",
+    "source_sha256": "690fe354544ae6a4024a9ae37ea7a1bea24edcb0b170014267486bda0bad7f9c",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/nmos.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/res.asy",
+    "source_sha256": "228e75e841b1b239fbe8cea04c9ae86e84eac492faf88501fa21bbee88d7eb96",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/res.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/schottky.asy",
+    "source_sha256": "08852523b7f8950defaa881bbfa2a446c26cb817953ad2ba34bdd0ac073a6803",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/schottky.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/voltage.asy",
+    "source_sha256": "940d0db25631013b23b4fcac00f5d55815616d853036fa1b810c47b7556f36c2",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/voltage.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sub/LTC7851.sub",
+    "source_sha256": "596c657fe100a1fcf6d1fb72695509ca08d4a4558fd6f4c645e1821588106e11",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/LTC7851.sub",
+    "modified": false,
+    "protected_model": true
+  },
+  {
+    "source_in_installer_library": "lib/sub/LTC4449.sub",
+    "source_sha256": "5a196bfac29e466324a49f7cf51b73f4ef5322763bc081910fac8d5caf55b667",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/LTC4449.sub",
+    "modified": false,
+    "protected_model": true
+  },
+  {
+    "source_in_installer_library": "lib/cmp/standard.dio",
+    "part": "CMDSH2-3",
+    "source_file_sha256": "696d34dfe538966c80cfe1da259c1043f408777be79f59e4f1c47d82f3af320a",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/components.lib",
+    "extraction": "Selected .model definition; unchanged definition text."
+  },
+  {
+    "source_in_installer_library": "lib/cmp/standard.mos",
+    "part": "PH2625L",
+    "source_file_sha256": "f39c5119538391e01130560f9e303c260a8fd05e882a0518b261ad00431d0d5c",
+    "packaged_path": "models/04_LTC7851_4Phase_VRM/components.lib",
+    "extraction": "Selected .model definition; unchanged definition text."
+  },
+  {
+    "source_in_installer_library": "lib/sym/bv.asy",
+    "source_sha256": "3c75ba247ec6f9470613dbf764eade610b0846daa97e9569ee6616aaf54a8a1c",
+    "packaged_path": "models/05_12bit_ADC_Sampling/bv.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/cap.asy",
+    "source_sha256": "fcc7190ea1110f612453b86c02facc3ac46441a06f04274054ed021746e79fac",
+    "packaged_path": "models/05_12bit_ADC_Sampling/cap.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/res.asy",
+    "source_sha256": "228e75e841b1b239fbe8cea04c9ae86e84eac492faf88501fa21bbee88d7eb96",
+    "packaged_path": "models/05_12bit_ADC_Sampling/res.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/sw.asy",
+    "source_sha256": "bed13f2485c02b4f99682aa966a45b9ca72f0386a130c2bc5ed64e1bf3101c5c",
+    "packaged_path": "models/05_12bit_ADC_Sampling/sw.asy",
+    "modified": true
+  },
+  {
+    "source_in_installer_library": "lib/sym/voltage.asy",
+    "source_sha256": "940d0db25631013b23b4fcac00f5d55815616d853036fa1b810c47b7556f36c2",
+    "packaged_path": "models/05_12bit_ADC_Sampling/voltage.asy",
+    "modified": true
+  }
+]

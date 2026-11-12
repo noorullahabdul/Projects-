@@ -1,0 +1,4 @@
+V(VIN)
+V(SH_OUT)
+V(DGTL_OUT)
+V(CLK)

@@ -1,0 +1,4 @@
+V(IN)
+V(VOUT_MAIN)
+V(VOUT_AUX)
+I(L1)

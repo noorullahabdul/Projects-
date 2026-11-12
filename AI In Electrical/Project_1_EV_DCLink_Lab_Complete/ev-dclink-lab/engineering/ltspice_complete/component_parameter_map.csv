@@ -1,0 +1,12 @@
+reference,model_value,physical_meaning,prototype_selection_requirement,status
+VBAT,600 to 850 V,HV battery simulator or pack,Programmable current limit emergency isolation and recorded source impedance,TO_BE_SELECTED
+RSOURCE,25 to 150 milliohm,Pack fuse busbar harness and connection resistance,Correlate with measured vehicle path,MODELLED
+LBAT plus LHAR,3 uH total,Source and harness inductance,Measure representative fixture and update model,ASSUMED
+RPOS and RNEG contact paths,0.85 milliohm plus switch on resistance,Main contactor conduction path,900 V class with make break carry and auxiliary ratings,TO_BE_SELECTED
+RPRE,92 ohm plus or minus 3 percent,Precharge pulse resistor bank,Low TCR and at least 397 J system-energy review using supplier pulse curve,CR004_CANDIDATE
+CDC,0.9 to 1.1 mF effective,Inverter DC-link capacitance,900 V class with ESR ripple current temperature and life derating,TO_BE_SELECTED
+CESR,8 milliohm nominal,Capacitor bank ESR,Replace with supplier or measured frequency and temperature data,ASSUMED
+CESL,100 nH nominal,Capacitor and busbar loop ESL,Correlate with layout and impedance measurement,ASSUMED
+RACTIVE,900 to 1100 ohm,Active discharge resistor path,Pulse rated for approximately 803 W initial power and stored energy,TO_BE_SELECTED
+RLEAK,100 kohm,Passive bleeder and insulation-equivalent leakage,Coordinate with quiescent loss and insulation monitoring,ASSUMED
+Pack and link sensing,Plus or minus 1.5 percent per channel,Isolated voltage-measurement chain,Include divider isolation ADC reference temperature and ageing error,ALLOCATION

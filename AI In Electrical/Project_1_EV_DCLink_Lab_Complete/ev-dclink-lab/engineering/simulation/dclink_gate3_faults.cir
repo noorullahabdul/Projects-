@@ -1,0 +1,31 @@
+* 800 V DC-link fault campaign: FAULT 0 nominal; 1 precharge open;
+* 2 precharge short; 3 positive welded; 4 discharge open;
+* 5 capacitor ESR high; 6 source/harness impedance high.
+.param FAULT=0 VPACK=800 CDC=1000u RPRE_NOM=92
+.param RPRE={if(FAULT==1,1G,if(FAULT==2,0.05,RPRE_NOM))}
+.param RPOS_OFF={if(FAULT==3,0.5m,1G)}
+.param RDIS={if(FAULT==4,1G,1000)}
+.param CESR={if(FAULT==5,80m,8m)}
+.param RSRC={if(FAULT==6,250m,47m)}
+Vbat batt 0 {VPACK}
+Rsrc batt hv {RSRC}
+Vpre cpre 0 PWL(0 0 10m 5 330m 5 330.05m 0)
+Vmain cmain 0 PWL(0 0 330m 5 1 5 1.00005 0)
+Vdis cdis 0 PWL(0 0 1.002 0 1.00205 5 8 5)
+Spre hv npre cpre 0 SWC
+Rpre npre dc {RPRE}
+Smain hv dc cmain 0 SWC
+Rweld hv dc {RPOS_OFF}
+Resr dc cap {CESR}
+Cdc cap 0 {CDC} IC=0
+Sdis dc ndis cdis 0 SWD
+Rdis ndis 0 {RDIS}
+.model SWC SW(Ron=1m Roff=1G Vt=2.5 Vh=.2)
+.model SWD SW(Ron=.2 Roff=1G Vt=2.5 Vh=.2)
+.tran 0 6 0 5u UIC
+.meas tran I_PRE_PK MAX abs(I(Rpre)) FROM=10m TO=330m
+.meas tran V_MAIN FIND V(dc) AT=330m
+.meas tran V_AFTER_OFF FIND V(dc) AT=1.1
+.meas tran V_5S FIND V(dc) AT=5
+.step param FAULT list 0 1 2 3 4 5 6
+.end

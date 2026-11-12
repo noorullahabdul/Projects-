@@ -1,0 +1,19 @@
+* 800 V DC-link precharge/discharge transient — generic switches only
+.param VPACK=800 RPRE=100 CDC=1000u RDIS=10k TMAIN=250m TOFF=1
+Vpack pack 0 {VPACK}
+Vprectl prectl 0 PULSE(0 5 1m 1u 1u {TMAIN-1m} 5)
+Vmainctl mainctl 0 PULSE(0 5 {TMAIN} 1u 1u {TOFF-TMAIN} 5)
+Vdisctl disctl 0 PULSE(0 5 {TOFF} 1u 1u 5 10)
+Spre pack npre prectl 0 SWMOD
+Rpre npre dc {RPRE}
+Smain pack dc mainctl 0 SWMOD
+Cdc dc 0 {CDC} IC=0
+Sdis dc ndis disctl 0 SWMOD
+Rdis ndis 0 {RDIS}
+.model SWMOD SW(Ron=10m Roff=1G Vt=2.5 Vh=0.1)
+.tran 0 35 0 100u UIC
+.meas tran V_AT_MAIN FIND V(dc) AT={TMAIN}
+.meas tran I_PRE_PEAK MAX I(Rpre) FROM=1m TO={TMAIN}
+.meas tran T_SAFE WHEN V(dc)=60 FALL=1
+.end
+

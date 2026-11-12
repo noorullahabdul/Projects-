@@ -1,0 +1,28 @@
+PHEONIXS — FIVE SELECTED LTSPICE MODELS
+
+1. Extract the entire ZIP. Keep each model folder intact.
+2. On your Windows LTspice computer, double-click OPEN_MODELS.bat.
+3. Select a model, then press Run in LTspice. Load Model.plt if needed.
+4. Each model folder contains Model.asc, Model.plt, local symbols/libraries,
+   README.md, a trace list and preserved original source files.
+
+SELECTED MODELS
+01 — LT8584 active cell balancer
+02 — LTC3300-1 six-cell bidirectional balancer
+03 — LT8304 isolated dual-secondary flyback
+04 — LTC7851 four-phase VRM load transient
+05 — 12-bit sample-and-hold / behavioral quantizer
+
+VERIFICATION
+All five pass local dependency checks. Targeted ADC/VRM connection checks pass.
+The corrected generic ADC was executed in ngspice and passed its stated checks.
+Fresh LTspice execution and GUI plot import were NOT performed here.
+Protected manufacturer IC models require LTspice; they were not substituted
+with ideal ngspice components or described as newly verified circuits.
+
+Read README.md and VALIDATION.md for the exact status of each model.
+The old flyback RAW reaches 100 ms while the selected source now requests
+10 ms. That historical data does not validate the current schematic revision.
+
+The LTspice installer and unrelated images/caches were excluded from this ZIP.
+Vendor model licences and original source attribution are retained.

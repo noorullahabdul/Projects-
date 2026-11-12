@@ -1,0 +1,37 @@
+{
+  "title": "C:\\Noor\\SRS_!.net",
+  "date_in_header": "Sat Jun 13 00:44:00 2026",
+  "plot": "Transient Analysis",
+  "flags": [
+    "real",
+    "forward"
+  ],
+  "variables": [
+    "time",
+    "V(dgtl_out)",
+    "V(n001)",
+    "V(n002)",
+    "V(sh_out)",
+    "V(vin)",
+    "V(vref)",
+    "I(B1)",
+    "I(C1)",
+    "I(R1)",
+    "I(R2)",
+    "I(S1)",
+    "I(V1)",
+    "I(VCLK)",
+    "I(VREF)"
+  ],
+  "samples": 1001355,
+  "first_time_s": 0.0,
+  "last_time_s": 0.001,
+  "negative_time_samples": 0,
+  "sha256": "bc5fb3819fb479294474447efe2481f3dcc7878898ce5254ffc9ed4a0f5bd20d",
+  "source": "USER_UPLOADED_HISTORICAL_LTSPICE_SIMULATION",
+  "measured_hardware": false,
+  "preview_decimation_stride": 333,
+  "preview_samples": 3009,
+  "original_archive_path": "Pheonixs/SRS_!.raw",
+  "full_raw_retained": false
+}

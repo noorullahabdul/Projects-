@@ -1,0 +1,12 @@
+test_id,requirement_id,level,test_method,stimulus,measurement,acceptance,automation,status
+DCL-T-001,DCL-SYS-003,Model,Transient sweep,"Vpack 600/800/850 V; Rpre tolerance","Peak precharge current","<=10 A",Python and SPICE,Implemented
+DCL-T-002,DCL-SYS-004,Model,Transient sweep,"Cdc and Rpre tolerance; temperature proxy","Vdc/Vpack and time","Ratio >=0.90 by 350 ms",Python and SPICE,Implemented
+DCL-T-003,DCL-SYS-005,HIL,State transition,"Invalid auxiliary-contact combinations","Torque-enable output","Always false",Python test harness,Specified
+DCL-T-004,DCL-SYS-006,HIL,Fault injection,"Rpre open and short","Diagnostic ID and latency","Correct DTC within 20 ms after criterion",HIL script,Specified
+DCL-T-005,DCL-SYS-007,HIL and bench,Fault injection,"Main contact welded at shutdown","Aux contact; Vdc decay; DTC","Weld detected and latched",HIL script,Specified
+DCL-T-006,DCL-SYS-008,Model and bench,Decay test,"Rdis/Cdc worst case; Vpack maximum","Time to 60 V","<30 s",Python and scope capture,Partially implemented
+DCL-T-007,DCL-SYS-009,HIL,Fault injection,"HVIL open in every active state","Contactor and torque commands","Safe output within FTTI",HIL script,Specified
+DCL-T-008,DCL-SYS-010,HIL,Fault injection,"Isolation invalid before and during run","State and outputs","No activation; controlled shutdown",HIL script,Specified
+DCL-T-009,DCL-SYS-011,HIL,Sensor fault injection,"Bias/open/short/stuck/ramp","Diagnostic and state response","All safety-relevant faults detected",HIL script,Specified
+DCL-T-010,DCL-SYS-012,Process,Evidence audit,"Execute regression suite","Metadata and results","Complete versioned evidence",Python,Implemented
+

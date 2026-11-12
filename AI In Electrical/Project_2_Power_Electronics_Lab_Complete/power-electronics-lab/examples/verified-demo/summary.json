@@ -1,0 +1,193 @@
+{
+  "source": "synthetic analytical models",
+  "buck_spec": {
+    "vin_v": 48.0,
+    "vout_v": 12.0,
+    "power_w": 1000.0,
+    "switching_hz": 100000.0,
+    "inductance_h": 4e-05,
+    "capacitance_f": 0.0022,
+    "capacitor_esr_ohm": 0.012,
+    "inductor_dcr_ohm": 0.001,
+    "high_rds_ohm": 0.001,
+    "low_rds_ohm": 0.001,
+    "rise_s": 2e-08,
+    "fall_s": 2e-08,
+    "deadtime_s": 1e-07,
+    "diode_v": 0.8,
+    "gate_charge_c": 1e-07,
+    "gate_drive_v": 12.0,
+    "core_loss_w": 2.0,
+    "ambient_c": 55.0,
+    "theta_junction_k_w": 2.0,
+    "junction_limit_c": 150.0,
+    "peak_current_limit_a": 110.0,
+    "regulation_fraction": 0.02,
+    "ripple_fraction": 0.01,
+    "proportional_gain": 0.3,
+    "integral_gain": 8.0
+  },
+  "inverter_spec": {
+    "rated_power_w": 150000.0,
+    "maximum_torque_nm": 360.0,
+    "maximum_speed_rpm": 12000.0,
+    "pole_pairs": 4,
+    "flux_wb": 0.16,
+    "phase_resistance_ohm": 0.01,
+    "phase_inductance_h": 0.00018,
+    "switch_rds_ohm": 0.0016,
+    "switching_hz": 10000.0,
+    "switching_energy_j": 0.0025,
+    "energy_reference_current_a": 400.0,
+    "energy_reference_voltage_v": 800.0,
+    "phase_rms_limit_a": 300.0,
+    "dc_current_limit_a": 300.0,
+    "coolant_c": 65.0,
+    "theta_junction_k_w": 0.25,
+    "derate_start_c": 125.0,
+    "shutdown_c": 170.0,
+    "minimum_bus_v": 600.0,
+    "maximum_bus_v": 850.0
+  },
+  "obc_spec": {
+    "rated_power_w": 30000.0,
+    "dc_bus_v": 800.0,
+    "turns_ratio": 1.0,
+    "resonant_l_h": 2.5e-05,
+    "resonant_c_f": 7e-08,
+    "magnetizing_l_h": 0.000125,
+    "minimum_hz": 80000.0,
+    "maximum_hz": 160000.0,
+    "power_factor": 0.99,
+    "line_current_limit_a": 52.0,
+    "pfc_resistance_ohm": 0.015,
+    "primary_resistance_ohm": 0.015,
+    "secondary_resistance_ohm": 0.02,
+    "fixed_loss_w": 50.0,
+    "switching_loss_reference_w": 200.0,
+    "minimum_efficiency": 0.94
+  },
+  "buck_transient": {
+    "verdict": "PASS",
+    "checks": [
+      {
+        "requirement": "BUCK-001 sampling and coverage",
+        "status": "PASS",
+        "observed": {
+          "duration_s": 0.08,
+          "maximum_gap_s": 1.0000000000010001e-05
+        },
+        "limit": "2 ms pre-step; 20 ms post-step; gap <=50 us"
+      },
+      {
+        "requirement": "BUCK-002 steady regulation",
+        "status": "PASS",
+        "observed": 11.999309163086764,
+        "limit": "12.0 V +/- 2%"
+      },
+      {
+        "requirement": "BUCK-003 rated load observed",
+        "status": "PASS",
+        "observed": 999.8848638458751,
+        "limit": "1000.0 W +/-5% in final plateau"
+      },
+      {
+        "requirement": "BUCK-004 transient voltage envelope",
+        "status": "PASS",
+        "observed": {
+          "minimum_v": 10.998923884294646,
+          "maximum_v": 12.391423578994338
+        },
+        "limit": "within +/-10% during load step"
+      },
+      {
+        "requirement": "BUCK-005 current peak",
+        "status": "PASS",
+        "observed": 100.8068719416899,
+        "limit": "<= 110.0 A"
+      },
+      {
+        "requirement": "BUCK-006 settling",
+        "status": "PASS",
+        "observed": 0.00042000000000000023,
+        "limit": "2% band within 20 ms, held >=5 ms"
+      },
+      {
+        "requirement": "BUCK-007 input observed",
+        "status": "PASS",
+        "observed": 48.0,
+        "limit": "48.0 V +/-5%"
+      }
+    ],
+    "samples": 8001,
+    "steady_low_frequency_pp_v": 0.00017218336693503034,
+    "waveform_model": "averaged CCM; switching ripple is estimated separately"
+  },
+  "buck_nominal_point": {
+    "vin_v": 48.0,
+    "vout_v": 12.0,
+    "power_w": 1000.0,
+    "duty": 0.2534722222222222,
+    "output_current_a": 83.33333333333333,
+    "ripple_current_pp_a": 2.2706886574074074,
+    "peak_current_a": 84.46867766203704,
+    "output_ripple_pp_v": 0.028538427898779462,
+    "total_loss_w": 25.468237587030913,
+    "efficiency": 0.9751642843205376,
+    "high_junction_c": 74.76066534913356,
+    "low_junction_c": 68.27574954425181,
+    "high_conduction_w": 1.7603326745667798,
+    "low_conduction_w": 5.184541438792571,
+    "inductor_w": 6.944874113359351,
+    "switching_w": 8.0,
+    "deadtime_w": 1.3333333333333333,
+    "gate_w": 0.24,
+    "capacitor_w": 0.0051560269788786545,
+    "core_w": 2.0,
+    "status": "PASS",
+    "violations": ""
+  },
+  "fault_injections": [
+    {
+      "fault": "sensor_bias",
+      "observed": "FAIL",
+      "fault_detected": true,
+      "failed_checks": [
+        "BUCK-002 steady regulation",
+        "BUCK-003 rated load observed",
+        "BUCK-004 transient voltage envelope",
+        "BUCK-006 settling"
+      ]
+    },
+    {
+      "fault": "duty_drop",
+      "observed": "FAIL",
+      "fault_detected": true,
+      "failed_checks": [
+        "BUCK-002 steady regulation",
+        "BUCK-003 rated load observed",
+        "BUCK-004 transient voltage envelope",
+        "BUCK-006 settling"
+      ]
+    }
+  ],
+  "input_sha256": "2c308243e916ed926a30a3fb8402030ad3847975877fd81ed3572f34fb80cb44",
+  "screening": {
+    "buck": {
+      "cases": 81,
+      "pass": 81,
+      "fail": 0
+    },
+    "inverter": {
+      "cases": 240,
+      "pass": 108,
+      "fail": 132
+    },
+    "obc": {
+      "cases": 27,
+      "pass": 15,
+      "fail": 12
+    }
+  },
+  "software_demo_verified": true
+}

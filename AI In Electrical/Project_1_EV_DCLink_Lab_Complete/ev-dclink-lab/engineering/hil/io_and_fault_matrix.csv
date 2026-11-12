@@ -1,0 +1,14 @@
+signal,direction,nominal_range,sample_or_update,fault_injection,expected_response
+V_PACK,Analog input,0-1000 V,1 ms,"open; short; +/-15% bias; stuck; ramp","Plausibility DTC; inhibit or controlled shutdown"
+V_DC_LINK,Analog input,0-1000 V,1 ms,"open; short; +/-15% bias; stuck; noise","Plausibility DTC; inhibit main closure"
+HVIL,Digital input,Coded closed/open,1 ms,"open; short to supply/ground","Immediate torque inhibit; controlled HV isolation"
+IMD_STATUS,Digital/CAN input,valid/invalid,10 ms,"invalid; timeout; implausible","Inhibit activation or controlled shutdown"
+K_NEG_AUX,Digital input,open/closed,1 ms,"stuck; delayed; chatter","Contactor DTC; abort sequence"
+K_POS_AUX,Digital input,open/closed,1 ms,"stuck; delayed; chatter","Contactor DTC; abort or weld detection"
+K_PRE_AUX,Digital input,open/closed,1 ms,"stuck; delayed; chatter","Precharge DTC; abort sequence"
+K_NEG_CMD,Digital output,open/close,1 ms,Load emulation,"Must follow legal state only"
+K_POS_CMD,Digital output,open/close,1 ms,Load emulation,"Must follow legal state only"
+K_PRE_CMD,Digital output,open/close,1 ms,Load emulation,"Open after positive main confirmation"
+ACTIVE_DISCHARGE_CMD,Digital output,off/on,1 ms,Load emulation,"Enabled after contactors open until safe voltage"
+TORQUE_ENABLE,Digital/CAN output,false/true,10 ms,State manipulation,"True only in valid RUN state"
+

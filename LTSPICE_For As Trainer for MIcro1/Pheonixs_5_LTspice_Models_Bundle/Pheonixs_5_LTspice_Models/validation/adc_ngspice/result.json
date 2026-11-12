@@ -1,0 +1,55 @@
+{
+  "engine": {
+    "dataset_type": "SIMULATED_NGSPICE_EXECUTED",
+    "measured_hardware": false,
+    "engine_version": "******\n** ngspice-44.2 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2024, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Sun Jan 12 08:19:15 UTC 2025\n******",
+    "engine_executable_sha256": "5854f6506e3e54e0553b687401a5d82aec82229c2c28a93b7eb37b6e079dda84",
+    "command": [
+      "ngspice",
+      "-n",
+      "-b",
+      "-o",
+      "ngspice.log",
+      "circuit.cir"
+    ],
+    "executed_utc": "2026-11-11T08:23:18.400623+00:00",
+    "exit_code": 0,
+    "samples": 240001,
+    "stop_time_s": 0.01199999999995587,
+    "requested_stop_s": 0.012,
+    "measurements": {
+      "vmax": 4.998779,
+      "vmin": 0.0
+    },
+    "netlist_sha256": "cee01ff180bee433bcf163c7e38647d61d35db33d6601c3ba68d1e6b63b0626e",
+    "log_sha256": "943a2453a13c06a4d2d17afd0777b28902c0b1b041fb51d698dab9c57b601be6",
+    "waveform_sha256": "5c3661ba39cbcdc1f7586138d5f3ce7cea122070cec986921d3489adf119c630",
+    "warnings": [
+      "Warning: can't find the initialization file spinit."
+    ]
+  },
+  "dataset_type": "EXECUTED_NGSPICE_BEHAVIORAL_ADC_FROM_WORKING_ASC",
+  "native_ltspice_executed_here": false,
+  "measured_hardware": false,
+  "lsb_v": 0.001220703125,
+  "quantization_error_min_lsb": 0.00019103797394564025,
+  "quantization_error_max_lsb": 0.9997060940506344,
+  "max_2us_hold_change_v": 1.0129109107026579e-07,
+  "code_min": 0,
+  "code_max": 4095,
+  "quantizer_consistency_pass": true,
+  "code_range_pass": true,
+  "input_signal_transfer_pass": true,
+  "hold_change_below_0_01_lsb": true,
+  "spectrum": {
+    "method": "Rectangular DFT of 1000 uniformly strobed held codes; DC omitted; coherent bin 99.",
+    "sample_rate_hz": 100000,
+    "input_frequency_hz": 9900,
+    "samples": 1000,
+    "sinad_db": 73.92950547438414,
+    "derived_enob_bits": 11.988289945910987,
+    "sfdr_db": 89.16686843267088,
+    "scope": "Ideal behavioral model simulation; not ADC hardware or a physical SAR conversion result."
+  },
+  "all_behavioral_checks_pass": true
+}

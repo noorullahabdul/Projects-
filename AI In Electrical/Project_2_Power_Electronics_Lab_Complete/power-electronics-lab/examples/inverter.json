@@ -1,0 +1,22 @@
+{
+  "rated_power_w": 150000.0,
+  "maximum_torque_nm": 360.0,
+  "maximum_speed_rpm": 12000.0,
+  "pole_pairs": 4,
+  "flux_wb": 0.16,
+  "phase_resistance_ohm": 0.01,
+  "phase_inductance_h": 0.00018,
+  "switch_rds_ohm": 0.0016,
+  "switching_hz": 10000.0,
+  "switching_energy_j": 0.0025,
+  "energy_reference_current_a": 400.0,
+  "energy_reference_voltage_v": 800.0,
+  "phase_rms_limit_a": 300.0,
+  "dc_current_limit_a": 300.0,
+  "coolant_c": 65.0,
+  "theta_junction_k_w": 0.25,
+  "derate_start_c": 125.0,
+  "shutdown_c": 170.0,
+  "minimum_bus_v": 600.0,
+  "maximum_bus_v": 850.0
+}

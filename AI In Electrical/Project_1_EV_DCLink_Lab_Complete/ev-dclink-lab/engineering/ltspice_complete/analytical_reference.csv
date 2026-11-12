@@ -1,0 +1,6 @@
+metric,analytical_reference,acceptance,status,note
+Maximum initial precharge current,9.584 A,Less than or equal to 10 A,PASS_REFERENCE,Compare against LTspice I_PRE_PEAK
+Maximum main command time,339.424 ms,Less than or equal to 350 ms,PASS_REFERENCE,Includes worst allocated 5 ms control delay
+Minimum actual voltage ratio at closure,90.251 percent,Greater than or equal to 90 percent,PASS_REFERENCE,Opposing sensor errors
+Maximum active-discharge time to 60 V,3.336 s,Less than or equal to 5 s,PASS_REFERENCE,850 V maximum C and R corner
+Maximum stored energy,397.4 J,Component and system allocation,OPEN_HARDWARE,Verify resistor capacitor and discharge SOA

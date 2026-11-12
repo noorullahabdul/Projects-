@@ -1,0 +1,15 @@
+{
+  "data_path": "/app/data/train.npz",
+  "seed": 7321,
+  "epochs": 3,
+  "microbatch_size": 4,
+  "accum_steps": 3,
+  "dropout_p": 0.25,
+  "base_lr": 0.035,
+  "warmup_updates": 2,
+  "clip_norm": 0.45,
+  "beta1": 0.83,
+  "beta2": 0.94,
+  "adam_eps": 1e-08,
+  "weight_decay": 0.012
+}

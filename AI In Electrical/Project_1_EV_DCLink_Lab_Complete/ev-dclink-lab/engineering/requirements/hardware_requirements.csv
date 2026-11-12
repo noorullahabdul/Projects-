@@ -1,0 +1,11 @@
+id,parent_id,asil,requirement,verification_method,acceptance,status
+DCL-HW-001,DCL-SYS-001,D,"HV components shall have voltage rating with approved transient margin above 850 V.",Design review,"Rating and derating calculation approved",Draft
+DCL-HW-002,DCL-SYS-003,C,"The precharge resistor shall withstand initial pulse power and absorbed energy for defined repetitions.",Calculation and bench,"Peak pulse and energy remain within supplier SOA",Draft
+DCL-HW-003,DCL-SYS-004,C,"Effective DC-link capacitance shall include tolerance, bias, ageing and temperature.",Analysis,"Worst-case capacitance used in timing verification",Draft
+DCL-HW-004,DCL-SYS-007,D,"Each contactor driver shall support command readback and auxiliary-contact feedback.",Inspection and fault injection,"Open, short and welded conditions diagnosable",Draft
+DCL-HW-005,DCL-SYS-008,C,"The discharge network shall meet touch-safe timing at maximum R and C tolerance.",Analysis and test,"Vdc <60 V within 30 s",Draft
+DCL-HW-006,DCL-SYS-011,D,"Pack and DC-link voltage channels shall support independent plausibility or redundant comparison.",Design review,"Single-channel bias cannot cause unsafe main closure",Draft
+DCL-HW-007,DCL-SYS-009,D,"HVIL input shall detect open circuit and out-of-range conditions.",HIL and bench,"All defined faults detected within FTTI",Draft
+DCL-HW-008,DCL-SYS-002,D,"Control-to-HV measurement isolation shall satisfy the product insulation coordination plan.",Review and dielectric test,"Creepage, clearance and dielectric withstand pass",Draft
+DCL-HW-009,DCL-SYS-006,D,"The precharge path shall provide current observation or an equivalent validated voltage-response estimator.",Analysis HIL and bench,"Precharge short producing >15 A or excessive dV/dt is detected within 20 ms",Draft
+

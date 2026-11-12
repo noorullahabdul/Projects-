@@ -1,0 +1,51 @@
+{
+  "format": "hv-powerup/1",
+  "cases": [
+    {
+      "case_id": "public_ok",
+      "capture": "public_ok.csv",
+      "capacitance_uf": 1000.0,
+      "precharge_ohm": 30.0,
+      "limits": {
+        "ready_ratio": 0.9,
+        "max_precharge_ms": 1000.0,
+        "aux_delay_ms": 80.0,
+        "weld_dwell_ms": 100.0,
+        "bounce_interval_ms": 15.0,
+        "open_check_ms": 250.0,
+        "open_min_rise_ratio": 0.03,
+        "short_tau_factor": 0.35,
+        "isolation_min_kohm": 500.0,
+        "residual_abs_v": 60.0,
+        "residual_ratio": 0.1,
+        "safe_close_ratio": 0.85,
+        "sensor_bias_abs_v": 15.0,
+        "sensor_bias_ratio": 0.03,
+        "sensor_bias_dwell_ms": 100.0
+      }
+    },
+    {
+      "case_id": "public_open",
+      "capture": "public_open.csv",
+      "capacitance_uf": 5000.0,
+      "precharge_ohm": 200.0,
+      "limits": {
+        "ready_ratio": 0.9,
+        "max_precharge_ms": 1000.0,
+        "aux_delay_ms": 80.0,
+        "weld_dwell_ms": 100.0,
+        "bounce_interval_ms": 15.0,
+        "open_check_ms": 250.0,
+        "open_min_rise_ratio": 0.03,
+        "short_tau_factor": 0.35,
+        "isolation_min_kohm": 500.0,
+        "residual_abs_v": 60.0,
+        "residual_ratio": 0.1,
+        "safe_close_ratio": 0.85,
+        "sensor_bias_abs_v": 15.0,
+        "sensor_bias_ratio": 0.03,
+        "sensor_bias_dwell_ms": 100.0
+      }
+    }
+  ]
+}

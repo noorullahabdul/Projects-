@@ -1,0 +1,42 @@
+artifacts = [
+  "/app/powerup/__init__.py",
+  "/app/powerup/io.py",
+  "/app/powerup/evaluate.py",
+  "/app/powerup/cli.py",
+  "/app/result/report.json",
+  "/app/result/events.csv",
+]
+
+[task]
+name = "dynamo/hv-powerup"
+description = "Build a deterministic EV high-voltage power-up telemetry inspector that validates captures, computes precharge metrics, applies ordered safety-fault rules, and emits canonical JSON and CSV reports."
+
+[metadata]
+# --- Pre-seeded for you when this repo was created — DO NOT EDIT ---
+category = "Software Engineering"
+subcategory = "Feature Implementation"
+# --- Fixed for this dataset — LEAVE AS-IS ---
+model_tested = "Opus-4.8"
+agent_tested = "Terminus-2"
+# --- You fill these in ---
+task_objective = ["implement", "analyze", "validate"]
+artifact_type = ["codebase", "dataset_or_tabular_file", "document_or_report"]
+expert_time_estimate_hours = 5
+difficulty_explanation = "The agent must normalize irregular fixed-seed 800 V-class EV telemetry, resolve duplicate timestamps deterministically, interpolate voltage crossings, estimate an RC time constant, correlate commands with auxiliary contacts, reject stale pre-command feedback, and apply overlapping capture-local safety rules with explicit precedence. It must then perform a second stateful pass across optional retry sessions, ordering attempts deterministically, counting precharge-path failures from the complete evidence list rather than only the primary verdict, resetting streaks on successful session attempts, and merging a repeated-failure code back into final precedence without changing metrics. Hidden captures vary pack voltage from 600 to 920 V, capacitance from 500 to 5000 uF, resistance from 20 to 200 ohm, sample cadence, opaque identifiers, threshold equality, corrupt records, voltage-sensor bias, simultaneous faults, retry order, and reset conditions. Correctness also requires exact JSON/CSV schemas, full event-ledger generation, stable serialization, input immutability, and fatal-versus-case-local error handling."
+solution_explanation = "Parse and validate the index and each capture, retain the last physical duplicate, reconstruct digital transitions, interpolate readiness and RC crossings, compute timing/current/slew metrics, and evaluate all capture-local rules. Preserve per-case session metadata internally, group valid session cases by session_id, order them by attempt/case_id/input position, apply the consecutive precharge-failure streak from full local evidence, re-order final evidence by global precedence, update the single verdict event when needed, and serialize canonical report and event artifacts."
+verification_explanation = "The verifier builds fixed-seed hidden captures with an independent generator, runs only the public CLI, and checks exact report and event-ledger schemas, all digital transitions, ready and verdict rows, varied 600-920 V/R/C cases, stale pre-command auxiliary feedback, simultaneous-fault precedence, exact boundaries, interpolation, duplicate semantics, deterministic bytes, input hashes, invalid-case isolation, fatal paths, dense runtime, and optional session sequencing. Session tests deliberately shuffle input/case-id order, require source faults to be discovered from flags as well as verdicts, verify success resets a streak, validate partial session metadata as BAD_INPUT, and require the repeated-failure code to merge into final precedence without extra CSV rows. Time, voltage, current, ratio, tau, and slew tolerances are disclosed in instruction.md and bracket only sampling, bounded noise, rounding, and valid estimator variation. The verifier never imports the submitted implementation."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 2
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+allow_internet = true
+mcp_servers = []

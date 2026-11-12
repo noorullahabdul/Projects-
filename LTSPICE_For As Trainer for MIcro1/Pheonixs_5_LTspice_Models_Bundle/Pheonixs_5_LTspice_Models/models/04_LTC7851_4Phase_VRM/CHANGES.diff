@@ -1,0 +1,81 @@
+--- original/vrm_transient_core.asc
++++ working/Model.asc
+@@ -252,7 +252,7 @@
+ FLAG -1776 -832 IN
+ FLAG 1056 -576 OUT
+ FLAG 1184 -288 0
+-SYMBOL PowerProducts\\LTC7851 -384 320 R0
++SYMBOL LTC7851 -384 320 R0
+ SYMATTR InstName U1
+ SYMBOL res 224 -608 R90
+ WINDOW 0 0 56 VBottom 2
+@@ -262,7 +262,7 @@
+ SYMBOL voltage -240 -784 R0
+ SYMATTR InstName V1
+ SYMATTR Value 5
+-SYMBOL PowerProducts\\LTC4449 448 -576 R0
++SYMBOL LTC4449 448 -576 R0
+ SYMATTR InstName U2
+ SYMBOL schottky 336 -768 R270
+ WINDOW 3 0 32 VBottom 2
+@@ -290,9 +290,8 @@
+ SYMATTR Value2 Rser=.3m
+ SYMBOL cap 1040 -544 R0
+ WINDOW 123 26 89 Left 2
+-SYMATTR Value2 X15
+ SYMATTR InstName C2
+-SYMATTR Value 100µ
++SYMATTR Value 1500u
+ SYMATTR SpiceLine V=6.3 Rser=1m Lser=1n
+ SYMBOL res 976 -112 R0
+ SYMATTR InstName R5
+@@ -311,7 +310,7 @@
+ WINDOW 3 24 8 Left 2
+ SYMATTR InstName C5
+ SYMATTR Value 100p
+-SYMBOL PowerProducts\\LTC4449 -1152 -576 M0
++SYMBOL LTC4449 -1152 -576 M0
+ SYMATTR InstName U3
+ SYMBOL schottky -1040 -768 M270
+ WINDOW 3 0 32 VBottom 2
+@@ -335,7 +334,7 @@
+ WINDOW 3 32 32 VTop 2
+ SYMATTR InstName C6
+ SYMATTR Value .1µ
+-SYMBOL PowerProducts\\LTC4449 -1152 384 M0
++SYMBOL LTC4449 -1152 384 M0
+ SYMATTR InstName U4
+ SYMBOL schottky -1040 192 M270
+ WINDOW 3 0 32 VBottom 2
+@@ -359,7 +358,7 @@
+ WINDOW 3 32 32 VTop 2
+ SYMATTR InstName C8
+ SYMATTR Value .1µ
+-SYMBOL PowerProducts\\LTC4449 448 384 R0
++SYMBOL LTC4449 448 384 R0
+ SYMATTR InstName U5
+ SYMBOL schottky 336 192 R270
+ WINDOW 3 0 32 VBottom 2
+@@ -446,7 +445,7 @@
+ WINDOW 3 36 40 Left 2
+ SYMATTR InstName R2
+ SYMATTR Value 3.57K
+-SYMBOL lib\\sym\\current 1264 -544 R0
++SYMBOL current 1264 -544 R0
+ WINDOW 123 0 0 Left 0
+ WINDOW 39 0 0 Left 0
+ SYMATTR InstName I1
+@@ -454,7 +453,9 @@
+ SYMBOL res 1168 -464 R0
+ SYMATTR InstName RBleed
+ SYMATTR Value 1Meg
+-TEXT 448 1336 Left 2 !.tran 0 5m 0 10n startup
+-TEXT 1752 -232 Left 2 !.param ILOAD=100\n \nIload Vout 0 PULSE(10 {ILOAD} 1m 1.8u 1.8u 2m 5m)\n \n*.step param ILOAD list 20 40 60 80 100
+-TEXT 1800 0 Left 2 !.meas tran poststep_recovery WHEN V(OUT)=1.85 RISE=2\n.meas tran recover_low WHEN V(OUT)=1.8315 RISE=2\n.meas tran recover_high WHEN V(OUT)=1.8685 FALL=2
+-TEXT 1808 96 Left 2 !.meas tran max_droop MIN(V(OUT))\n.meas tran max_overshoot MAX(V(OUT)) FROM 1m TO 5m\n.meas tran recovery_time WHEN V(OUT)=1.85
++TEXT 448 1336 Left 2 !.tran 0 5m 0 100n startup
++TEXT 1752 -232 Left 2 !.param ILOAD=100
++TEXT 1740 -128 Left 2 !.meas tran VPRE AVG V(OUT) FROM 800u TO 990u\n.meas tran VMIN MIN V(OUT) FROM 1m TO 3m\n.meas tran VMAX MAX V(OUT) FROM 1m TO 3m\n.meas tran VEND AVG V(OUT) FROM 4.5m TO 5m\n.meas tran DROOP PARAM VPRE-VMIN
++TEXT 32 1664 Left 2 !.include components.lib
++TEXT 32 1728 Left 1 ;Prepared working copy; originals and changes are documented. New LTspice execution has not been performed here.
++TEXT 1752 160 Left 2 !.save V(OUT) I(L1) I(L2) I(L3) I(L4) I(I1)

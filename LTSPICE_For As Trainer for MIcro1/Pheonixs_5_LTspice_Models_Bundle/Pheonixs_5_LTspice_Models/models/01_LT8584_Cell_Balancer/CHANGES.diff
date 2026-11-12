@@ -1,0 +1,10 @@
+--- original/LT8584.asc
++++ working/Model.asc
+@@ -97,4 +97,6 @@
+ SYMBOL LT8584 240 240 R0
+ SYMATTR InstName U1
+ TEXT 296 -120 Bottom 2 !K1 L1 L2 .99
+-TEXT 464 448 Left 2 !.tran 1.5m startup
++TEXT 464 448 Left 2 !.tran 0 1.5m 0 100n startup
++TEXT 32 1664 Left 2 !.include components.lib
++TEXT 32 1728 Left 1 ;Prepared working copy; originals and changes are documented. New LTspice execution has not been performed here.

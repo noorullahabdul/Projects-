@@ -1,0 +1,4 @@
+V(Vbatt)
+V(Vpack)
+I(L1)
+I(L2)

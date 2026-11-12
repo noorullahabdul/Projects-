@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+outputs/
+*.sqlite3
+*.sqlite3-*
+*.egg-info/
+build/
+dist/
+recovered_sources/
+BUNDLE_MANIFEST.json
+.DS_Store
+Thumbs.db

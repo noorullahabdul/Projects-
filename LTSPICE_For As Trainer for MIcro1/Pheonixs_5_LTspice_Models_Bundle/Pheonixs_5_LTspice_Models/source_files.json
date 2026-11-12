@@ -1,0 +1,57 @@
+[
+  {
+    "archive_path": "Pheonixs/BMS/LT8584.asc",
+    "retained_path": "models/01_LT8584_Cell_Balancer/source/LT8584.asc",
+    "sha256": "d0ca102bedc0a448f3ebf714730bb1a23c87ff222e43da95b9b87a9da8e65c24"
+  },
+  {
+    "archive_path": "Pheonixs/BMS/LT8584.log",
+    "retained_path": "models/01_LT8584_Cell_Balancer/source/LT8584.log",
+    "sha256": "8f31bfa0eabcc1c4edc82e5c5430aa2707e732a33c4d8fb78ad09931cf60261b"
+  },
+  {
+    "archive_path": "Pheonixs/BMS/3300-1.asc",
+    "retained_path": "models/02_LTC3300_6Cell_Balancer/source/3300-1.asc",
+    "sha256": "a5ed73b2e8531d13225fa2594da45f70dfff6ed4e2a405bca888ef8c8696a44a"
+  },
+  {
+    "archive_path": "Pheonixs/Draft1.asc",
+    "retained_path": "models/03_LT8304_Isolated_Flyback/source/Draft1.asc",
+    "sha256": "11380c6e0f395801cb51e38d85baad31a4fd4b993a7a0c4567eb869aa477528f"
+  },
+  {
+    "archive_path": "Pheonixs/Draft1.log",
+    "retained_path": "models/03_LT8304_Isolated_Flyback/source/Draft1.log",
+    "sha256": "0deac069eaf6b01d1c86548690fde77a80a92b45c5b38c648389390dcda29039"
+  },
+  {
+    "archive_path": "Pheonixs/vrm_transient_core.asc",
+    "retained_path": "models/04_LTC7851_4Phase_VRM/source/vrm_transient_core.asc",
+    "sha256": "527f819daf12299f9127a1c227229f8bfeea37058a3c2fb09c047804f5f2b6b0"
+  },
+  {
+    "archive_path": "Pheonixs/vrm_transient_core.log",
+    "retained_path": "models/04_LTC7851_4Phase_VRM/source/vrm_transient_core.log",
+    "sha256": "5745aabd18d29bc8b22bbb1c8df78307ee4266a56c3ea8edc68131b573ec498e"
+  },
+  {
+    "archive_path": "Pheonixs/SRS_!.asc",
+    "retained_path": "models/05_12bit_ADC_Sampling/source/SRS_!.asc",
+    "sha256": "0a135ea55a7e60d45a1e546a88642bacbf1da55005fb7672aa66bc8e822aa663"
+  },
+  {
+    "archive_path": "Pheonixs/SRS_!.log",
+    "retained_path": "models/05_12bit_ADC_Sampling/source/SRS_!.log",
+    "sha256": "ddc6e437b4e7e46765f89b7f5806523264cf75c5db24fbf0c4f333e1e65fcb58"
+  },
+  {
+    "archive_path": "Pheonixs/BMS/LT8584.raw",
+    "retained_path": "models/01_LT8584_Cell_Balancer/source/LT8584.raw",
+    "sha256": "130013c2b04c2c82d05b9be5a251b17dc53bca5f6b5cd645958ace2c10d8c70b"
+  },
+  {
+    "archive_path": "Pheonixs/Draft1.raw",
+    "retained_path": "models/03_LT8304_Isolated_Flyback/source/Draft1.raw",
+    "sha256": "c87b56a3788ff9597dcb9cc8ec28253d965312559008e2004e00cd53515056c4"
+  }
+]

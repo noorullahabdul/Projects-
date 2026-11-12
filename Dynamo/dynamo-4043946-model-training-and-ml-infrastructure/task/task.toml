@@ -1,0 +1,32 @@
+artifacts = ["/app/trainer.py", "/app/out/final_state.npz", "/app/out/train_trace.jsonl", "/app/out/summary.json"]
+
+[task]
+name = "dynamo/resume-training-loop"
+description = "Repair a deterministic checkpoint-resumable training loop with correct accumulation and optimizer-update semantics."
+
+[metadata]
+category = "Model Training and ML Infrastructure"
+subcategory = "Training loops"
+model_tested = "Opus-4.8"
+agent_tested = "Terminus-2"
+task_objective = ["fix", "analyze", "debug", "validate"]
+artifact_type = ["codebase", "model_or_checkpoint", "generated_output_artifact"]
+expert_time_estimate_hours = 5
+difficulty_explanation = "The task combines masked token-normalized gradient accumulation, partial accumulation groups, global clipping, update-index learning-rate scheduling, AdamW state, stochastic dropout, shuffled epochs, and exact checkpoint/resume semantics. The supplied train.npz is a synthetic, deterministic training fixture constructed to stress variable mask densities, partial groups, clipping-boundary behavior, RNG/dropout restoration, and interruption/resume transitions; hidden verifier datasets vary shapes, masks, seeds, and interruption points so visible outputs cannot be hardcoded. This mirrors production work for ML-infrastructure and training-loop engineers who must make long-running jobs reproducible and ensure resumed training is numerically equivalent to uninterrupted training without replaying or skipping updates."
+solution_explanation = "Repair the existing trainer around a single deterministic PCG64 state machine. Accumulate loss and gradient sums plus valid-token counts until an optimizer boundary, normalize once, clip the combined gradient, step the update-index schedule and bias-corrected AdamW once, and flush partial epoch groups. Checkpoints preserve model and optimizer moments, RNG state, current epoch permutation/cursor, global counters, and any pending accumulation state so resume begins at the exact next microbatch."
+verification_explanation = "Behavioral pytest checks validate exact artifact schemas, the pre-existing visible artifacts against both a fresh trainer execution and an independent numerical oracle, canonical SHA-256 identities for the visible config/data/spec before and after execution, deterministic fresh runs, hidden configurations, partial groups, valid-token normalization, learning-rate update granularity, clipping behavior including the strict equality boundary, invalid-input rejection, and two pause/resume boundaries including a checkpoint inside an unfinished accumulation group. Hidden tests also require masked-out labels to be ignored, arbitrary nonzero mask values to count as valid, the exact dropout >= threshold boundary, numerically stable softmax under large common logits, extra config/dataset fields to remain harmless, y/mask dtype and shape rules to be enforced, zero/negative stop targets to fail, a resumed run to honor a later global stop target, and verifier-supplied hidden config/data bytes to remain unchanged. Final-state arrays are checked for exact keys, contract shapes, finiteness, and numeric values; completed summary counters and final_loss are cross-checked against the trace. Hidden data shapes and seeds prevent hard-coded visible outputs. Boundary cases explicitly exercise every documented hyperparameter domain, warmup_updates=0, warmup_updates==U rejection, strict clipping equality, and paused-summary semantics. Numeric comparisons use rtol/atol of 1e-12 to 3e-12 only to absorb ordinary IEEE-754 roundoff between the independent deterministic oracle and the implementation; no statistical or stochastic slack is accepted. The untouched starter fails multiple independent tests while the reference implementation passes all tests."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+gpus = 0
+allow_internet = true
+mcp_servers = []

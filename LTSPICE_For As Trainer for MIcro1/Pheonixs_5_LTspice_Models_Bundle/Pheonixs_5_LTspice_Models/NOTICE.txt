@@ -1,0 +1,11 @@
+This bundle combines user-uploaded circuit designs, prepared working copies and
+manufacturer symbols/models recovered from the user's LTspice installer.
+Manufacturer models remain under their original licences and are not claimed
+as original user or assistant code. See vendor_reference/License.txt.
+
+No blanket open-source licence is applied to the uploaded designs or vendor
+models. Their publication/redistribution rights were not independently verified.
+Keep vendor attribution and review applicable project agreements before sharing.
+
+Static checks and an ideal behavioral ADC simulation do not establish hardware
+performance or production/safety acceptance of the five circuits.

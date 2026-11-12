@@ -1,0 +1,14 @@
+ADC working schematic connectivity export; no SAR bit trial modeled
+V1 N006 0 SINE(2.5 2.5 9.9k)
+R1 VIN N006 100
+S1 SH_OUT VIN CLK 0 SW
+C1 SH_OUT 0 100p
+R2 SH_OUT 0 1T
+VCLK CLK 0 PULSE(0 5 0 1n 1n 5u 10u)
+VREF VREF 0 5
+B1 DGTL_OUT 0 V=min(max(floor((V(SH_OUT)/V(VREF))*4096),0),4095)*(V(VREF)/4096)
+.tran 0 12m 0 50n
+.model SW SW(Ron=1 Roff=1e12 Vt=2.5 Vh=0.1)
+.meas TRAN VMAX MAX V(DGTL_OUT)
+.meas TRAN VMIN MIN V(DGTL_OUT)
+.end

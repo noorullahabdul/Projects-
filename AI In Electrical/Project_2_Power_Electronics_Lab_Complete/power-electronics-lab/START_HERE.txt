@@ -1,0 +1,19 @@
+POWER ELECTRONICS LAB — COMPLETE SOURCE BUNDLE
+
+1. Extract the entire ZIP into a normal folder.
+2. Install Python 3.10 or later if it is not already installed.
+3. On Windows, double-click RUN_DEMO.bat.
+4. The converter/inverter report opens after the demo finishes.
+5. Double-click RUN_TESTS.bat to run the regression suite.
+6. Read README.md and docs/GITHUB_SETUP.md.
+
+Terminal alternative:
+    python -m powerlab demo --out outputs/demo
+    python -m unittest discover -s tests -v
+
+An already generated report is under examples/verified-demo/report.html.
+The original engineering archive is in recovered_sources.
+
+The tool evaluates a 48 V-to-12 V buck, a 30 kW OBC, and a 150 kW
+traction-inverter model. Model results are synthetic; hardware/vendor-tool
+validation is a separate activity.

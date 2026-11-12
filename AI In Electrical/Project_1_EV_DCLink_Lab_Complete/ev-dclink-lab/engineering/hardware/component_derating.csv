@@ -1,0 +1,14 @@
+item,stress_parameter,worst_case_stress,required_rating_or_margin,gate2_disposition,evidence_required
+Main contactors,Working voltage,850 V plus undefined transient,1000 VDC minimum pending transient definition,Conditional pass,Supplier datasheet and transient specification
+Main contactors,Continuous current,250 A at 600 V and 150 kW,300 A at validated ambient/cooling,Conditional pass,Thermal test and supplier curve
+Main contactors,Overload current,Peak profile not frozen,450 A for 10 s preliminary,Open,Vehicle torque-power profile
+Precharge resistor,Initial current,9.44 A,>=10 A pulse,Pass by calculation,Pulse SOA test
+Precharge resistor,Initial pulse power,8.03 kW,>=8.5 kW at defined pulse duration,Conditional pass,Supplier pulse curve and bench capture
+Precharge resistor,Absorbed energy,397 J,>=500 J single event,Conditional pass,Three-attempt thermal test
+Active discharge resistor,Initial pulse power,803 W,>=1 kW pulse,Conditional pass,Pulse SOA and temperature test
+Active discharge resistor,Absorbed energy,397 J,>=500 J event,Conditional pass,Thermal test
+Active discharge switch,Blocking voltage,850 V plus transient,>=1200 V preliminary,Conditional pass,Switching and avalanche/short-circuit review
+DC-link capacitor,Steady voltage,850 V,>=1000 VDC plus transient validation,Conditional pass,Supplier lifetime model
+Voltage sensors,Input voltage,1000 V measurement range,>=1000 V continuous input,Conditional pass,Accuracy and insulation qualification
+HV divider resistors,Per-element voltage,Depends on series count,<=50% of rated working voltage target,Open,PCB stack and resistor selection
+

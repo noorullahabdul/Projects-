@@ -1,0 +1,42 @@
+* =============================================================================
+* 800 V DC-link injected fault campaign, component-level nominal plant
+* =============================================================================
+.step param FAULT 0 9 1
+* 0 nominal
+* 1 precharge resistor open
+* 2 precharge resistor short
+* 3 positive main welded
+* 4 positive contactor coil open
+* 5 negative contactor coil open
+* 6 precharge contactor coil open
+* 7 active discharge open
+* 8 DC-link sensor +15 percent
+* 9 precharge contact welded
+
+.param VPACK=800 VCOIL=12 VLOGIC=5 TEMPAMB=25
+.param RBAT=25m LBAT=1u RHAR=22m LHAR=2u
+.param RPRE25=92 TCRPRE=100u
+.param RPRE_NOM={RPRE25*(1+TCRPRE*(TEMPAMB-25))}
+.param RPRE_EFFECTIVE=table(FAULT,0,RPRE_NOM,1,1G,2,.1,3,RPRE_NOM,4,RPRE_NOM,5,RPRE_NOM,6,RPRE_NOM,7,RPRE_NOM,8,RPRE_NOM,9,RPRE_NOM)
+.param LPRE=250n CDC=1m CESR=8m CESL=100n RLEAK=100k RDIS=1k
+.param RCOIL_MAIN=12 LCOIL_MAIN=80m RCOIL_PRE=24 LCOIL_PRE=60m
+.param EPACK=0 ELINK=table(FAULT,0,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,.15,9,0)
+.param RNEG_COIL_FAULT=table(FAULT,0,10m,1,10m,2,10m,3,10m,4,10m,5,1G,6,10m,7,10m,8,10m,9,10m)
+.param RPOS_COIL_FAULT=table(FAULT,0,10m,1,10m,2,10m,3,10m,4,1G,5,10m,6,10m,7,10m,8,10m,9,10m)
+.param RPRE_COIL_FAULT=table(FAULT,0,10m,1,10m,2,10m,3,10m,4,10m,5,10m,6,1G,7,10m,8,10m,9,10m)
+.param RPOS_PATH_FAULT=10u
+.param RDIS_PATH_FAULT=table(FAULT,0,10u,1,10u,2,10u,3,10u,4,10u,5,10u,6,10u,7,1G,8,10u,9,10u)
+.param F_POS_WELD=table(FAULT,0,0,1,0,2,0,3,1,4,0,5,0,6,0,7,0,8,0,9,0)
+.param F_PRE_WELD=table(FAULT,0,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,1)
+
+.include DCLINK_PHYSICAL_PLANT.inc
+
+.tran 0 6 0 10u uic
+.options plotwinsize=0 reltol=.002 abstol=200n vntol=200u method=gear
+.meas tran I_PRE_PEAK MAX abs(I(RPRE_PATH)) FROM=2m TO=400m
+.meas tran VDC_350M FIND V(DCPLUS,DCMINUS) AT=350m
+.meas tran VDC_5S FIND V(DCPLUS,DCMINUS) AT=5
+.meas tran I_POS_COIL_PK MAX abs(I(RPOS_COIL_FAULT)) FROM=0 TO=1
+.meas tran I_NEG_COIL_PK MAX abs(I(RNEG_COIL_FAULT)) FROM=0 TO=1
+.end
+

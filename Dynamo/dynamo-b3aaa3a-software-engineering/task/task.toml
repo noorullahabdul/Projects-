@@ -1,0 +1,42 @@
+artifacts = [
+  "/app/buckvalidate/__init__.py",
+  "/app/buckvalidate/raw.py",
+  "/app/buckvalidate/metrics.py",
+  "/app/buckvalidate/cli.py",
+  "/app/output/measurements.csv",
+  "/app/output/validation_report.json",
+]
+
+[task]
+name = "dynamo/buck-validator"
+description = "Implement a robust ngspice waveform validation feature for closed-loop buck converters"
+
+[metadata]
+# --- Pre-seeded for you when this repo was created — DO NOT EDIT ---
+category = "Software Engineering"
+subcategory = "Feature Implementation"
+# --- Fixed for this dataset — LEAVE AS-IS ---
+model_tested = "Opus-4.8"
+agent_tested = "Terminus-2"
+# --- You fill these in ---
+task_objective = ["implement", "analyze", "validate"]
+artifact_type = ["codebase", "dataset_or_tabular_file", "document_or_report"]
+expert_time_estimate_hours = 4
+difficulty_explanation = "The agent must implement a production-style parser and metrics pipeline rather than a one-off calculation. Ngspice ASCII raw files can contain multiple plots, variable reordering, wrapped records, irregular sampling, and repeated timestamps. Correct converter metrics also require interpolated edge detection, cycle-based windows, time-weighted integration, sustained settling and recovery logic, per-case fault isolation, and schema-consistent reporting. Public examples are insufficient for hard-coding because the verifier generates withheld traces with different frequencies, signal ordering, sampling patterns, case identifiers, and requirements. A power-electronics validation engineer or scientific-software engineer would normally perform this work."
+solution_explanation = "Implement a strict multi-plot raw reader that selects the final transient plot, validates counts and finite values, and returns named columns. Normalize timestamps and use interpolation helpers for arbitrary interval boundaries. Derive switching periods from robust gate thresholds, use the last complete cycles for steady-state measurements, and implement startup and step-specific sustained-band calculations. The CLI reads each case independently, records invalid cases without aborting, evaluates limits from the supplied JSON, and writes deterministic CSV and JSON outputs."
+verification_explanation = "The verifier first checks the required public CSV and JSON artifacts and confirms their exact schema, row accounting, checks, and independent physical measurements. It then generates withheld ngspice-style files with multiple plots, shuffled and case-varied signal names, mixed wrapped and single-line records, irregular sampling, duplicate timestamps, different switching frequencies, startup dynamics, and load steps. Adversarial cases independently exercise the documented 5th/95th-percentile threshold, median-period frequency estimate, exact final-cycle steady-state window, negative-current absolute peak, inclusive band and requirement equalities, zero-time settling/recovery, input-file preservation, malformed-case isolation, and exact sample boundaries. Frequency tolerance is 1%; voltage and ripple tolerances are 20 mV, current tolerance is 50 mA, and ordinary time tolerance is 0.2 ms. Exact semantic boundary cases use exact assertions where the specification requires equality. Changed requirements must change pass/fail decisions, defeating copied public outputs and unconditional-pass reports."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 3600.0
+
+[environment]
+build_timeout_sec = 600.0
+cpus = 2
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+allow_internet = true
+mcp_servers = []

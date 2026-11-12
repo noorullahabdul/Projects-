@@ -1,0 +1,19 @@
+EV DC-LINK LAB — COMPLETE SOURCE BUNDLE
+
+1. Extract the entire ZIP into a normal folder.
+2. Install Python 3.10 or later if it is not already installed.
+3. On Windows, double-click RUN_DEMO.bat.
+4. The computed report opens after the demo finishes.
+5. Double-click RUN_TESTS.bat to run the regression suite.
+6. Read README.md for commands and docs/GITHUB_SETUP.md for repository setup.
+
+Terminal alternative:
+    python -m dclink_lab demo --out outputs/demo
+    python -m unittest discover -s tests -v
+
+An already generated report is under examples/verified-demo/report.html.
+The original engineering archives are in recovered_sources.
+Current computed software evidence is separate from historical archive claims.
+
+This is runnable engineering analysis software. It is not an executable
+hardware controller, production automotive design, or completed bench validation.

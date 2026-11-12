@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "power-electronics-lab"
+version = "1.0.0"
+description = "Buck transient validation, LLC FHA screening and signed traction power maps"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+powerlab = "powerlab.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["powerlab*"]

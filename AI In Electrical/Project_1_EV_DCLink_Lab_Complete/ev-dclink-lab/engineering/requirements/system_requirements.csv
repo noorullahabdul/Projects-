@@ -1,0 +1,14 @@
+id,parent_id,asil,requirement,verification_method,acceptance,status
+DCL-SYS-001,,D,"The subsystem shall operate from 600 V to 850 V pack voltage.",Analysis and test,"All required functions pass at 600, 800 and 850 V",Draft
+DCL-SYS-002,,D,"The subsystem shall prevent unintended HV energization.",Inspection and fault injection,"No single monitored fault produces torque enable",Draft
+DCL-SYS-003,,D,"The initial nominal precharge current shall not exceed 10 A.",Analysis and simulation,"Peak current <=10 A at all specified nominal corners",Draft
+DCL-SYS-004,,C,"The DC-link shall reach at least 90% of pack voltage within 0.35 s.",Simulation and HIL,"Vdc/Vpack >=0.90 by 350 ms",Draft
+DCL-SYS-005,,D,"Torque enable shall remain false until both main contactors are confirmed closed and precharge is open.",HIL fault injection,"No torque-enable assertion in invalid state",Draft
+DCL-SYS-006,,D,"The subsystem shall detect precharge open, short and timeout faults.",Simulation and HIL,"Fault detected within 20 ms after diagnostic criterion",Draft
+DCL-SYS-007,,D,"The subsystem shall detect welded main contactors during shutdown.",HIL and bench test,"Weld fault latched when command, auxiliary contact and voltage disagree",Draft
+DCL-SYS-008,,C,"The DC-link shall discharge below 60 V within 30 s after shutdown.",Analysis and test,"Vdc <60 V at 30 s worst case",Draft
+DCL-SYS-009,,D,"HVIL open shall inhibit contactor closure and torque enable.",HIL fault injection,"Outputs remain safe for all HVIL open cases",Draft
+DCL-SYS-010,,D,"Invalid isolation status shall inhibit HV activation.",HIL fault injection,"No precharge command while isolation invalid",Draft
+DCL-SYS-011,,C,"Voltage sensing shall include range, correlation and rate plausibility diagnostics.",Analysis and HIL,"Specified sensor bias/open/short faults are detected",Draft
+DCL-SYS-012,,QM,"All test evidence shall identify model version, parameter set and execution timestamp.",Inspection,"Evidence record is complete and reproducible",Draft
+

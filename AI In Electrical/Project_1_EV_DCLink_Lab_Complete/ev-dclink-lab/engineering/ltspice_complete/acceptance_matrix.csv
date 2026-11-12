@@ -1,0 +1,9 @@
+measurement,requirement,acceptance,applies_to,review_note
+I_PRE_PEAK,DCL-SYS-003,Less than or equal to 10 A,Nominal and corners,Review short-fault case separately
+T_MAIN,DCL-SYS-004,Less than or equal to 0.350 s from wake,Nominal and corners,Undefined is fail unless transition intentionally inhibited
+V_RATIO_CLOSE,DCL-SYS-004,Greater than or equal to 0.90,Nominal and corners,Use actual unsensed node values
+E_PRE,DCL-HW-002,Within selected resistor pulse-energy SOA,Nominal and corners,Requires supplier curve and thermal starting condition
+P_PRE_PEAK,DCL-HW-002,Within selected resistor transient power curve,Nominal and corners,Continuous rating is insufficient
+T_TO_60,DCL-SYS-008,Less than or equal to 5 s design target,Nominal and corners,System requirement remains less than 30 s
+VDC_5S,DCL-SYS-008,Less than 60 V,Nominal and faults,Discharge-open fault shall produce diagnostic expectation
+I_BAT_PEAK,DCL-SYS-002,Within source fuse and contactor protection allocation,Faults,Short-precharge fault requires controlled abort logic in MIL or HIL

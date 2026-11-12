@@ -1,0 +1,5 @@
+The input files use ngspice's ASCII raw format. A file may contain more than one plot. Each plot starts with header fields such as `Title:`, `Plotname:`, `Flags:`, `No. Variables:`, and `No. Points:` followed by `Variables:` and `Values:` sections. Select the last plot whose `Plotname` contains `Transient Analysis` case-insensitively.
+
+The `Variables:` section contains one indexed variable per line: index, name, and type. Variable order is not fixed. The `Values:` section contains `No. Points` records. A record starts with its point index and the first numeric value; remaining values may appear on continuation lines or on the same line. Whitespace and blank lines are insignificant. Values use ordinary or scientific notation.
+
+Reject a plot when counts do not match, a point has the wrong number of values, indices are inconsistent, any numeric value in the selected plot is non-finite, or no transient plot exists. Only real-valued plots are supported. Signal lookup is case-insensitive. Repeated timestamps are legal: retain the final record for each repeated timestamp, then sort by time before analysis.

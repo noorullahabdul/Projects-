@@ -1,0 +1,68 @@
+* 800 V DC-Link Gate 3 detailed precharge/discharge model
+* LTspice-compatible primitives only; supplier part numbers are design references.
+* Baseline references: TE EV200-class contactors, 95R pulse resistor bank,
+* 1.0 mF equivalent DC-link bank, 1 k active discharge path.
+* This is a simulation model, not a supplier-qualified component model.
+
+.param VPACK=800
+.param RBAT=35m LBAT=1u RHAR=12m LHAR=2u
+.param CDC=1000u CESR=8m CESL=100n RLEAK=100k
+.param RPRE25=92 TC_RPRE=100u TEMPAMB=25
+.param RPRE={RPRE25*(1+TC_RPRE*(TEMPAMB-25))}
+.param RCONT=0.35m LCONT=80n
+.param RACTIVE=1000 RDIS_SW=0.8
+.param T_WAKE=2m T_BOUNCE=4m T_MAIN=345m T_SHUT=1
+
+Vpack p0 0 {VPACK}
+Rbat p0 p1 {RBAT}
+Lbat p1 p2 {LBAT}
+Rhar p2 p3 {RHAR}
+Lhar p3 hvp {LHAR}
+
+Sneg hvn_r 0 neg_ctl 0 SW_CONT
+Rneg hvn hvn_r {RCONT}
+Lneg dcneg hvn {LCONT}
+
+Spos hvp pos_r pos_ctl 0 SW_CONT
+Rpos pos_r pos_l {RCONT}
+Lpos pos_l dcpos {LCONT}
+
+Spre hvp pre_r pre_ctl 0 SW_CONT
+Rpre pre_r pre_l {RPRE}
+Lpre pre_l dcpos 250n
+
+Lesl dcpos cap_esr {CESL}
+Resr cap_esr cap_node {CESR}
+Cdc cap_node dcneg {CDC} IC=0
+Rleak dcpos dcneg {RLEAK}
+
+Sdis dcpos dis_r dis_ctl 0 SW_DIS
+Rdis_sw dis_r dis_bank {RDIS_SW}
+Ractive dis_bank dcneg {RACTIVE}
+
+Vneg_ctl neg_ctl 0 PWL(0 0 {T_WAKE} 5 {T_SHUT} 5 {T_SHUT+50u} 0)
+Vpre_ctl pre_ctl 0 PWL(0 0 {T_WAKE+10m} 5 {T_BOUNCE+10m} 5
++ {T_BOUNCE+10.05m} 0 {T_BOUNCE+10.35m} 0 {T_BOUNCE+10.4m} 5
++ {T_MAIN+5m} 5 {T_MAIN+5.05m} 0)
+Vpos_ctl pos_ctl 0 PWL(0 0 {T_MAIN} 0 {T_MAIN+50u} 5 {T_SHUT} 5 {T_SHUT+50u} 0)
+Vdis_ctl dis_ctl 0 PWL(0 0 {T_SHUT+2m} 0 {T_SHUT+2.05m} 5 8 5)
+
+.model SW_CONT SW(Ron=0.5m Roff=1G Vt=2.5 Vh=0.25)
+.model SW_DIS  SW(Ron=0.2 Roff=1G Vt=2.5 Vh=0.25)
+.tran 0 6 0 5u UIC
+.options plotwinsize=0 reltol=0.001 abstol=1u vntol=100u
+
+.meas tran I_PRE_PEAK MAX abs(I(Rpre)) FROM={T_WAKE+10m} TO={T_MAIN}
+.meas tran VDC_AT_MAIN FIND V(dcpos,dcneg) AT={T_MAIN}
+.meas tran V_RATIO_MAIN PARAM VDC_AT_MAIN/VPACK
+.meas tran T_90 WHEN V(dcpos,dcneg)={0.9*VPACK} RISE=1
+.meas tran E_RPRE INTEG PARAM 'I(Rpre)*I(Rpre)*RPRE' FROM={T_WAKE+10m} TO={T_MAIN}
+.meas tran P_RPRE_PEAK MAX PARAM 'I(Rpre)*I(Rpre)*RPRE' FROM={T_WAKE+10m} TO={T_MAIN}
+.meas tran T_SAFE WHEN V(dcpos,dcneg)=60 FALL=1
+.meas tran VDC_5S FIND V(dcpos,dcneg) AT=5
+
+.step param VPACK list 600 800 850
+.step param CDC list 900u 1000u 1100u
+.step param RPRE25 list 89.24 92 94.76
+.step param TEMPAMB list -40 25 105
+.end

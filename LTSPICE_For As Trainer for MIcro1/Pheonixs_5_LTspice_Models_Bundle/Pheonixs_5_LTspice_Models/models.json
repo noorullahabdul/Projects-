@@ -1,0 +1,120 @@
+[
+  {
+    "id": "01_LT8584_Cell_Balancer",
+    "source": "BMS/LT8584.asc",
+    "title": "LT8584 active cell balancer",
+    "parts": [
+      "MMSD4148"
+    ],
+    "ics": [
+      "LT8584"
+    ],
+    "log": "BMS/LT8584.log",
+    "traces": [
+      "V(Vbatt)",
+      "V(Vpack)",
+      "I(L1)",
+      "I(L2)"
+    ],
+    "notes": [
+      "Native 4.2 V cell and 50 V pack source retained.",
+      "Original saved LTspice log has no stop/error marker; its raw data is included as historical simulation evidence."
+    ]
+  },
+  {
+    "id": "02_LTC3300_6Cell_Balancer",
+    "source": "BMS/3300-1.asc",
+    "title": "LTC3300-1 six-cell bidirectional balancer",
+    "parts": [
+      "1N5817",
+      "Si7368DP",
+      "Si7370DP"
+    ],
+    "ics": [
+      "LTC3300-1"
+    ],
+    "log": null,
+    "traces": [
+      "V(CELL1P)",
+      "V(CELL6P,CELL6N)",
+      "I(L1)",
+      "I(L2)"
+    ],
+    "notes": [
+      "Six 3.6 V cell sources and 43.2 V stack supply retained.",
+      "Vendor default commands are 0,1,2,3,0,1 for cells 1..6; this is not a full BMS or SOC controller.",
+      "Serial interface, watchdog and single-transformer behavior are not represented by this model, as stated in the original schematic."
+    ]
+  },
+  {
+    "id": "03_LT8304_Isolated_Flyback",
+    "source": "Draft1.asc",
+    "title": "LT8304 isolated dual-secondary flyback",
+    "parts": [
+      "1N5819"
+    ],
+    "ics": [
+      "LT8304"
+    ],
+    "log": "Draft1.log",
+    "traces": [
+      "V(IN)",
+      "V(VOUT_MAIN)",
+      "V(VOUT_AUX)",
+      "I(L1)"
+    ],
+    "notes": [
+      "Uses Draft1.asc, whose saved log completed, rather than the interrupted DC2393A or floating-driver variants.",
+      "48 V input, 20 uH primary, 11 uH and 1.2 uH secondaries and 200 ohm output loads are retained.",
+      "Output labels were added at the actual capacitor pins; rail voltages are not asserted from the filename."
+    ]
+  },
+  {
+    "id": "04_LTC7851_4Phase_VRM",
+    "source": "vrm_transient_core.asc",
+    "title": "LTC7851 four-phase VRM load transient",
+    "parts": [
+      "CMDSH2-3",
+      "PH2625L"
+    ],
+    "ics": [
+      "LTC7851",
+      "LTC4449"
+    ],
+    "log": "vrm_transient_core.log",
+    "traces": [
+      "V(OUT)",
+      "I(L1)",
+      "I(L2)",
+      "I(L3)",
+      "I(L4)",
+      "I(I1)"
+    ],
+    "notes": [
+      "12 V input and the existing four-phase power stage retained.",
+      "Removed the separate Iload Vout 0 directive; the connected I1 source still steps from 10 A to 100 A.",
+      "Replaced ambiguous capacitor multiplier X15 with an explicit 1500u value.",
+      "Measurement windows exclude startup; native LTspice rerun remains required."
+    ]
+  },
+  {
+    "id": "05_12bit_ADC_Sampling",
+    "source": "SRS_!.asc",
+    "title": "12-bit sample-and-hold / quantizer model",
+    "parts": [],
+    "ics": [],
+    "log": "SRS_!.log",
+    "traces": [
+      "V(VIN)",
+      "V(SH_OUT)",
+      "V(DGTL_OUT)",
+      "V(CLK)"
+    ],
+    "notes": [
+      "Behavioral acquisition and quantization model; no SAR register, comparator bit trial, or real ADC device is modeled.",
+      "Separated the clock from SH_OUT and joined the switch output to the hold capacitor.",
+      "Changed hold capacitor to 100p and leakage load to 1T; codes are clipped to 0..4095.",
+      "The original .four result is not a valid ENOB result; it is retained only in source evidence."
+    ]
+  }
+]

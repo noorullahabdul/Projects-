@@ -1,0 +1,248 @@
+[
+  {
+    "model": "01_LT8584_Cell_Balancer",
+    "static_status": "PASS",
+    "native_ltspice_executed_here": false,
+    "electrical_acceptance": "NOT_VERIFIED",
+    "component_count": 11,
+    "active_transient": [
+      ".tran 0 1.5m 0 100n startup"
+    ],
+    "checks": {},
+    "dependencies": [
+      {
+        "file": "LT8584.sub",
+        "sha256": "97610094ec3e97b8fabadd1fae5550e6e4773560da635783e0555ec1b1a17579",
+        "protected_vendor_model": true
+      }
+    ],
+    "issues": [],
+    "labels": {
+      "0": [
+        464,
+        400
+      ],
+      "vbatt": [
+        -96,
+        304
+      ],
+      "vpack": [
+        688,
+        -96
+      ]
+    }
+  },
+  {
+    "model": "02_LTC3300_6Cell_Balancer",
+    "static_status": "PASS",
+    "native_ltspice_executed_here": false,
+    "electrical_acceptance": "NOT_VERIFIED",
+    "component_count": 52,
+    "active_transient": [
+      ".tran 0 1m 0 100n startup"
+    ],
+    "checks": {},
+    "dependencies": [
+      {
+        "file": "LTC3300-1.sub",
+        "sha256": "43aef073ecbd1900ba90940132457f6404c2c154f0e2b0b1127feb925ae56b44",
+        "protected_vendor_model": true
+      }
+    ],
+    "issues": [],
+    "labels": {
+      "0": [
+        928,
+        -672
+      ],
+      "cell1n": [
+        928,
+        -672
+      ],
+      "cell1p": [
+        320,
+        864
+      ],
+      "cell2n": [
+        320,
+        864
+      ],
+      "cell2p": [
+        640,
+        864
+      ],
+      "cell3n": [
+        640,
+        864
+      ],
+      "cell3p": [
+        864,
+        256
+      ],
+      "cell4n": [
+        864,
+        256
+      ],
+      "cell4p": [
+        864,
+        -224
+      ],
+      "cell5n": [
+        864,
+        -224
+      ],
+      "cell5p": [
+        256,
+        -288
+      ],
+      "cell6n": [
+        256,
+        -288
+      ],
+      "cell6p": [
+        -224,
+        -288
+      ]
+    }
+  },
+  {
+    "model": "03_LT8304_Isolated_Flyback",
+    "static_status": "PASS",
+    "native_ltspice_executed_here": false,
+    "electrical_acceptance": "NOT_VERIFIED",
+    "component_count": 17,
+    "active_transient": [
+      ".tran 0 10m 0 20n startup"
+    ],
+    "checks": {},
+    "dependencies": [
+      {
+        "file": "LT8304.sub",
+        "sha256": "14237521cd852ed9382460e239633905319f8736fbdd8e05b6022fa093eff9eb",
+        "protected_vendor_model": true
+      }
+    ],
+    "issues": [],
+    "labels": {
+      "0": [
+        784,
+        208
+      ],
+      "in": [
+        -64,
+        96
+      ],
+      "vout_aux": [
+        784,
+        112
+      ],
+      "vout_main": [
+        -64,
+        96
+      ]
+    }
+  },
+  {
+    "model": "04_LTC7851_4Phase_VRM",
+    "static_status": "PASS",
+    "native_ltspice_executed_here": false,
+    "electrical_acceptance": "NOT_VERIFIED",
+    "component_count": 45,
+    "active_transient": [
+      ".tran 0 5m 0 100n startup"
+    ],
+    "checks": {
+      "I1_connected_between_OUT_and_ground": true,
+      "no_extra_Iload_directive": true,
+      "four_inductors_join_output": true,
+      "capacitor_bank_explicit": true
+    },
+    "dependencies": [
+      {
+        "file": "LTC7851.sub",
+        "sha256": "596c657fe100a1fcf6d1fb72695509ca08d4a4558fd6f4c645e1821588106e11",
+        "protected_vendor_model": true
+      },
+      {
+        "file": "LTC4449.sub",
+        "sha256": "5a196bfac29e466324a49f7cf51b73f4ef5322763bc081910fac8d5caf55b667",
+        "protected_vendor_model": true
+      },
+      {
+        "file": "LTC4449.sub",
+        "sha256": "5a196bfac29e466324a49f7cf51b73f4ef5322763bc081910fac8d5caf55b667",
+        "protected_vendor_model": true
+      },
+      {
+        "file": "LTC4449.sub",
+        "sha256": "5a196bfac29e466324a49f7cf51b73f4ef5322763bc081910fac8d5caf55b667",
+        "protected_vendor_model": true
+      },
+      {
+        "file": "LTC4449.sub",
+        "sha256": "5a196bfac29e466324a49f7cf51b73f4ef5322763bc081910fac8d5caf55b667",
+        "protected_vendor_model": true
+      }
+    ],
+    "issues": [],
+    "labels": {
+      "0": [
+        1184,
+        -288
+      ],
+      "in": [
+        736,
+        224
+      ],
+      "out": [
+        1136,
+        1488
+      ]
+    }
+  },
+  {
+    "model": "05_12bit_ADC_Sampling",
+    "static_status": "PASS",
+    "native_ltspice_executed_here": false,
+    "electrical_acceptance": "NOT_VERIFIED",
+    "component_count": 8,
+    "active_transient": [
+      ".tran 0 12m 0 50n"
+    ],
+    "checks": {
+      "clock_distinct_from_sample_node": true,
+      "switch_connects_input_to_hold_node": true,
+      "switch_control_is_clock_to_ground": true,
+      "hold_cap_on_sample_node": true,
+      "quantizer_output_to_ground": true
+    },
+    "dependencies": [],
+    "issues": [],
+    "labels": {
+      "0": [
+        784,
+        112
+      ],
+      "clk": [
+        272,
+        0
+      ],
+      "dgtl_out": [
+        784,
+        -32
+      ],
+      "sh_out": [
+        464,
+        64
+      ],
+      "vin": [
+        256,
+        48
+      ],
+      "vref": [
+        576,
+        208
+      ]
+    }
+  }
+]

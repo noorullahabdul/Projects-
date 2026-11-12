@@ -1,0 +1,4 @@
+* Selected vendor device definitions from the user-supplied LTspice installer.
+* Original manufacturer/ADI/Linear Technology rights retained; see vendor_reference/License.txt.
+.model CMDSH2-3 D(Is=210nA Rs=.5 N=1.09 Cjo=50p M=.5 Eg=.69 Xti=2 Iave=200m Vpk=30 mfg=Central type=Schottky)
+.model PH2625L VDMOS(Rg=3 Vto=1.5 Rd=1.1m Rs=.8m Rb=1m Kp=104.6 Cgdmax=1.3n Cgdmin=.32n Cgs=2.1n Cjo=.64n Is=64p ksubthres=.1 mfg=NXP Vds=25 Ron=2.7m Qg=32n)

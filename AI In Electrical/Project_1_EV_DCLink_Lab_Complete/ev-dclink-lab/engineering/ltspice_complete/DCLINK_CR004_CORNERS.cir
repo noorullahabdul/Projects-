@@ -1,0 +1,64 @@
+* CR-004 deterministic LTspice corner campaign: 3x3x3x3x2x2 = 324 runs.
+* Covers pack voltage, capacitance, resistance, temperature and opposing sensors.
+
+.param VPACK=800 CDC=1m RPRE25=92 TEMPAMB=25 EPACK=0 ELINK=0
+.param RSOURCE=47m RBATP={.55*RSOURCE} RBATN={.20*RSOURCE} LBAT=1u RHAR={.25*RSOURCE} LHAR=2u
+.param TCRPRE=100u RPRE={RPRE25*(1+TCRPRE*(TEMPAMB-25))}
+.param CESR=8m CESL=100n RLEAK=100k RCONT=850u LCONT=80n
+.param RDIS=1k RDISON=.8 THRESH=.93 TCMD=5m TNEG=2m TPRE=12m TSHUT=1 TDIS=1.002
+
+Vbat batt_p batt_n {VPACK}
+Rbatp batt_p bp1 {RBATP}
+Lbat bp1 bp2 {LBAT}
+Rhar bp2 bp3 {RHAR}
+Lhar bp3 HVP {LHAR}
+Rbatn batt_n HVN {RBATN}
+Rneg_sw HVN neg1 R={if(V(NEG_CMD)>2.5,0.5m,1G)}
+Rneg_c neg1 neg2 {RCONT}
+Lneg neg2 DCMINUS {LCONT}
+Rpos_sw HVP pos1 R={if(V(POS_CMD)>2.5,0.5m,1G)}
+Rpos_c pos1 pos2 {RCONT}
+Lpos pos2 DCPLUS {LCONT}
+Rpre_sw HVP pre1 R={if(V(PRE_CMD)>2.5,0.5m,1G)}
+Rpre pre1 pre2 {RPRE}
+Lpre pre2 DCPLUS 250n
+Lesl DCPLUS cap_esr {CESL}
+Resr cap_esr cap_node {CESR}
+Cdc cap_node DCMINUS {CDC} IC=0
+Rleak DCPLUS DCMINUS {RLEAK}
+Rdis_sw DCPLUS dis1 R={if(V(DIS_CMD)>2.5,RDISON,1G)}
+Ractive dis1 DCMINUS {RDIS}
+Bpack_sns VPACK_SNS 0 V=V(HVP,HVN)*(1+EPACK)
+Bdc_sns VDC_SNS 0 V=V(DCPLUS,DCMINUS)*(1+ELINK)
+Bneg_cmd NEG_CMD 0 V=if(time>=TNEG && time<TSHUT,5,0)
+Bpos_raw POS_RAW 0 V=if(time>=TPRE && time<TSHUT && V(VPACK_SNS)>100 && V(VDC_SNS)>=THRESH*V(VPACK_SNS),5,0)
+Rpos_delay POS_RAW POS_FILT 1k
+Cpos_delay POS_FILT 0 {TCMD/(1000*ln(2))}
+Bpos_cmd POS_CMD 0 V=if(V(POS_FILT)>2.5,5,0)
+Bpre_cmd PRE_CMD 0 V=if(time>=TPRE && time<TSHUT && V(POS_CMD)<2.5,5,0)
+Bdis_cmd DIS_CMD 0 V=if(time>=TDIS,5,0)
+Rcmd1 NEG_CMD 0 1G
+Rcmd2 POS_CMD 0 1G
+Rcmd3 PRE_CMD 0 1G
+Rcmd4 DIS_CMD 0 1G
+Rcmd5 POS_RAW 0 1G
+Rcmd6 POS_FILT 0 1G
+
+.tran 0 6 0 10u UIC
+.options plotwinsize=0 reltol=.002 abstol=1u vntol=100u method=gear
+.meas tran I_PRE_PEAK MAX abs(I(Rpre)) FROM={TPRE} TO={TSHUT}
+.meas tran T_MAIN WHEN V(POS_CMD)=2.5 RISE=1
+.meas tran VDC_CLOSE FIND V(DCPLUS,DCMINUS) WHEN V(POS_CMD)=2.5 RISE=1
+.meas tran VPACK_CLOSE FIND V(HVP,HVN) WHEN V(POS_CMD)=2.5 RISE=1
+.meas tran V_RATIO_CLOSE PARAM VDC_CLOSE/VPACK_CLOSE
+.meas tran T_TO_60 TRIG V(DIS_CMD) VAL=2.5 RISE=1 TARG V(DCPLUS,DCMINUS) VAL=60 FALL=1
+.meas tran VDC_5S FIND V(DCPLUS,DCMINUS) AT=5
+
+.step param VPACK list 600 800 850
+.step param CDC list 900u 1000u 1100u
+.step param RPRE25 list 89.24 92 94.76
+.step param TEMPAMB list -40 25 105
+.step param EPACK list -0.015 0.015
+.step param ELINK list -0.015 0.015
+.step param RSOURCE list 25m 47m 150m
+.end

@@ -1,0 +1,11 @@
+check_id,item,acceptance,status
+CHK-001,All model files open without missing symbol or library error,No error dialog,LOCAL_RUN_REQUIRED
+CHK-002,Nominal transient completes,No convergence or timestep failure,LOCAL_RUN_REQUIRED
+CHK-003,Nominal measurements present,No undefined nominal measure,LOCAL_RUN_REQUIRED
+CHK-004,Corner step count,972 completed runs,LOCAL_RUN_REQUIRED
+CHK-005,Corner limits,All applicable rows meet acceptance matrix,LOCAL_RUN_REQUIRED
+CHK-006,Fault step count,10 completed configurations,LOCAL_RUN_REQUIRED
+CHK-007,Fault adjudication,Each result linked to expected safe response,LOCAL_RUN_REQUIRED
+CHK-008,Waveform review,No unexplained spike oscillation or command overlap,LOCAL_RUN_REQUIRED
+CHK-009,Configuration record,LTspice version OS model hashes and timestamp archived,LOCAL_RUN_REQUIRED
+CHK-010,Independent review,Reviewer signs model assumptions and results,OPEN

@@ -1,0 +1,19 @@
+{
+  "pack_v": 800.0,
+  "pack_min_v": 600.0,
+  "pack_max_v": 850.0,
+  "capacitance_f": 0.001,
+  "precharge_ohm": 88,
+  "source_ohm": 0.047,
+  "discharge_ohm": 1000.0,
+  "command_ratio": 0.93,
+  "minimum_close_ratio": 0.9,
+  "maximum_current_a": 10.0,
+  "startup_limit_s": 0.35,
+  "contactor_delay_budget_s": 0.03,
+  "safe_voltage_v": 60.0,
+  "discharge_limit_s": 5.0,
+  "resistor_tolerance": 0.03,
+  "capacitor_tolerance": 0.1,
+  "sensor_tolerance": 0.015
+}

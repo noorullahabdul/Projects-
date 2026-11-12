@@ -1,0 +1,103 @@
+{
+  "title": "HV power-up inspector report",
+  "normative": true,
+  "top_level_key_order": [
+    "format",
+    "cases",
+    "aggregate"
+  ],
+  "case_key_order": [
+    "case_id",
+    "input_state",
+    "verdict",
+    "flags",
+    "metrics",
+    "evidence",
+    "messages"
+  ],
+  "metric_key_order": [
+    "precharge_start_ms",
+    "ready_at_ms",
+    "ready_delay_ms",
+    "ready_link_v",
+    "final_link_ratio",
+    "peak_abs_pack_a",
+    "max_link_slew_v_per_ms",
+    "tau_ms",
+    "aux_delay_ms",
+    "aux_edges"
+  ],
+  "aggregate_key_order": [
+    "case_count",
+    "ok_count",
+    "fault_count",
+    "verdict_histogram"
+  ],
+  "evidence_key_order": [
+    "code",
+    "time_ms",
+    "detail"
+  ],
+  "allowed_verdicts": [
+    "WELDED_CONTACTOR",
+    "UNSAFE_CLOSE",
+    "LOW_ISOLATION",
+    "REPEATED_PRECHARGE_FAILURE",
+    "BYPASS_OR_SHORT",
+    "OPEN_PRECHARGE",
+    "PRECHARGE_TIMEOUT",
+    "SENSOR_BIAS",
+    "RESIDUAL_LINK",
+    "CONTACT_BOUNCE",
+    "AUX_TIMEOUT",
+    "OK",
+    "BAD_INPUT"
+  ],
+  "example": {
+    "format": "hv-powerup-report/1",
+    "cases": [
+      {
+        "case_id": "example_case",
+        "input_state": "valid",
+        "verdict": "OK",
+        "flags": [],
+        "metrics": {
+          "precharge_start_ms": 20.0,
+          "ready_at_ms": 250.258509,
+          "ready_delay_ms": 230.258509,
+          "ready_link_v": 360.0,
+          "final_link_ratio": 0.97,
+          "peak_abs_pack_a": 7.8,
+          "max_link_slew_v_per_ms": 3.8,
+          "tau_ms": 100.0,
+          "aux_delay_ms": {
+            "neg": 15.0,
+            "pos": 10.0,
+            "pre": 10.0
+          },
+          "aux_edges": {
+            "neg": 1,
+            "pos": 1,
+            "pre": 1
+          }
+        },
+        "evidence": [
+          {
+            "code": "OK",
+            "time_ms": 400.0,
+            "detail": "power-up sequence satisfied all configured rules"
+          }
+        ],
+        "messages": []
+      }
+    ],
+    "aggregate": {
+      "case_count": 1,
+      "ok_count": 1,
+      "fault_count": 0,
+      "verdict_histogram": {
+        "OK": 1
+      }
+    }
+  }
+}

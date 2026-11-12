@@ -1,0 +1,12 @@
+refdes,category,description,key_rating,selection_status,validation_needed
+K1,Contactor,Main positive HV contactor,">=1000 VDC; current and interrupt rating TBD",Architecture candidate,"Coil economy; breaking capacity; life; weld behavior"
+K2,Contactor,Main negative HV contactor,">=1000 VDC; current and interrupt rating TBD",Architecture candidate,"Same as K1"
+K3,Contactor,Precharge contactor,">=1000 VDC; >=10 A pulse",Architecture candidate,"Make current; bounce; isolation; life"
+RPRE,Resistor,Precharge pulse resistor,"95 ohm nominal +/-5%; >=9.42 A initial; >=397 J worst event",Needs series/parallel design,"Pulse SOA; temperature; repetition; creepage"
+CDC,Capacitor,DC-link capacitor bank,"1000 uF effective; >=1000 VDC",Architecture candidate,"Ripple current; ESR/ESL; lifetime; fault mode"
+RDIS,Resistor,Passive discharge network,"Target below 9.3 kohm after tolerance review",Requires redesign,"Continuous power; voltage grading; open-circuit diagnostic"
+QDIS,Switch,Active discharge switch,"Voltage margin above maximum transient",Optional safety path,"SOA; thermal; diagnostic coverage"
+VS1,Sensor,Pack voltage isolated sensing,"0-1000 V input; redundant/plausible output",Concept,"Accuracy; bandwidth; isolation; fault response"
+VS2,Sensor,DC-link voltage isolated sensing,"0-1000 V input; redundant/plausible output",Concept,"Accuracy; bandwidth; isolation; fault response"
+IMD,Monitor,Insulation monitoring device,"Automotive HV compatible",Interface definition,"Startup time; diagnostic interface; thresholds"
+

@@ -1,0 +1,135 @@
+{
+  "verdict": "PASS",
+  "checks": [
+    {
+      "requirement": "DCL-001 sampling",
+      "status": "PASS",
+      "observed": 0.002000000000000668,
+      "limit": "maximum gap 0.020 s"
+    },
+    {
+      "requirement": "DCL-002 precharge current",
+      "status": "PASS",
+      "observed": 8.691212098167242,
+      "limit": "<= 10.0 A"
+    },
+    {
+      "requirement": "DCL-003 close ratio",
+      "status": "PASS",
+      "observed": 0.9393669952701131,
+      "limit": ">= 0.9"
+    },
+    {
+      "requirement": "DCL-004 startup",
+      "status": "PASS",
+      "observed": 0.284,
+      "limit": "<= 0.35 s from wake"
+    },
+    {
+      "requirement": "DCL-005 torque interlock",
+      "status": "PASS",
+      "observed": 0,
+      "limit": "zero unsafe samples"
+    },
+    {
+      "requirement": "DCL-006 isolated discharge",
+      "status": "PASS",
+      "observed": 0,
+      "limit": "zero connected discharge samples"
+    },
+    {
+      "requirement": "DCL-007 discharge",
+      "status": "PASS",
+      "observed": 2.5902673969791374,
+      "limit": "< 60.0 V within 5.0 s"
+    }
+  ],
+  "samples": 3001,
+  "duration_s": 6.0,
+  "diagnostics": [],
+  "fault_tests": [
+    {
+      "fault": "precharge_open",
+      "expected": "STARTUP_TIMEOUT",
+      "observed": "STARTUP_TIMEOUT",
+      "status": "PASS"
+    },
+    {
+      "fault": "precharge_short",
+      "expected": "PRE_OVERCURRENT",
+      "observed": "PRE_OVERCURRENT",
+      "status": "PASS"
+    },
+    {
+      "fault": "negative_open",
+      "expected": "NEG_TIMEOUT",
+      "observed": "NEG_TIMEOUT",
+      "status": "PASS"
+    },
+    {
+      "fault": "positive_open",
+      "expected": "POS_TIMEOUT",
+      "observed": "POS_TIMEOUT",
+      "status": "PASS"
+    },
+    {
+      "fault": "positive_weld",
+      "expected": "CONTACTOR_CLOSED_AT_START",
+      "observed": "CONTACTOR_CLOSED_AT_START",
+      "status": "PASS"
+    },
+    {
+      "fault": "precharge_weld",
+      "expected": "CONTACTOR_CLOSED_AT_START",
+      "observed": "CONTACTOR_CLOSED_AT_START",
+      "status": "PASS"
+    },
+    {
+      "fault": "sensor_bias",
+      "expected": "SENSOR_DISAGREEMENT",
+      "observed": "SENSOR_DISAGREEMENT",
+      "status": "PASS"
+    },
+    {
+      "fault": "hvil_open",
+      "expected": "HV_SAFETY_INPUT",
+      "observed": "HV_SAFETY_INPUT",
+      "status": "PASS"
+    },
+    {
+      "fault": "isolation_fault",
+      "expected": "HV_SAFETY_INPUT",
+      "observed": "HV_SAFETY_INPUT",
+      "status": "PASS"
+    },
+    {
+      "fault": "discharge_open",
+      "expected": "DISCHARGE_TIMEOUT",
+      "observed": "DISCHARGE_TIMEOUT",
+      "status": "PASS"
+    }
+  ],
+  "corner_count": 108,
+  "corner_failures": 6,
+  "source": "deterministic synthetic analytical plant",
+  "design": {
+    "pack_v": 800.0,
+    "pack_min_v": 600.0,
+    "pack_max_v": 850.0,
+    "capacitance_f": 0.001,
+    "precharge_ohm": 92.0,
+    "source_ohm": 0.047,
+    "discharge_ohm": 1000.0,
+    "command_ratio": 0.93,
+    "minimum_close_ratio": 0.9,
+    "maximum_current_a": 10.0,
+    "startup_limit_s": 0.35,
+    "contactor_delay_budget_s": 0.03,
+    "safe_voltage_v": 60.0,
+    "discharge_limit_s": 5.0,
+    "resistor_tolerance": 0.03,
+    "capacitor_tolerance": 0.1,
+    "sensor_tolerance": 0.015
+  },
+  "experiment_verified": true
+}
