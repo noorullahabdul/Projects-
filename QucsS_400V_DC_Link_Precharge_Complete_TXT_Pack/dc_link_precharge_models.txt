@@ -1,0 +1,43 @@
+* dc_link_precharge_models.txt
+* Qucs-S / ngspice switch-model library
+* File extension intentionally kept as .txt; ngspice accepts it through .include.
+*
+* Electrical contact models
+* Control terminals are the third and fourth nodes of each S-device.
+*
+.MODEL SW_PRECHARGE SW(
++ RON=20m
++ ROFF=1G
++ VT=2.5
++ VH=0.2
++)
+
+.MODEL SW_MAIN SW(
++ RON=20m
++ ROFF=1G
++ VT=2.5
++ VH=0.2
++)
+
+.MODEL SW_DISCHARGE SW(
++ RON=100m
++ ROFF=1G
++ VT=2.5
++ VH=0.2
++)
+
+.MODEL SW_SHORT_FAULT SW(
++ RON=20m
++ ROFF=1G
++ VT=2.5
++ VH=0.2
++)
+
+* Optional command-to-contact buffer.
+* IN is the controller command; OUT is the electrical control node.
+* Delay and bounce are intentionally implemented with PWL sources in each case,
+* because the basic ngspice SW model does not model mechanical travel or bounce.
+.SUBCKT CONTACT_BUFFER IN OUT
+EOUT OUT 0 VALUE={V(IN)}
+ROUT OUT 0 1G
+.ENDS CONTACT_BUFFER

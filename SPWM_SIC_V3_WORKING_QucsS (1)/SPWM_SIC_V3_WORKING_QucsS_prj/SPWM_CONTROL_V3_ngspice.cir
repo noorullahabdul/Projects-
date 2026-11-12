@@ -1,0 +1,31 @@
+* SPWM SIC V3 - DIRECT NGSPICE REFERENCE
+VDC DC_POS 0 750
+CDC DC_POS 0 2200u
+
+BREF_A VREF_A 0 V=0.85*sin(2*pi*50*time)
+BREF_B VREF_B 0 V=0.85*sin(2*pi*50*time-2*pi/3)
+BREF_C VREF_C 0 V=0.85*sin(2*pi*50*time+2*pi/3)
+BCARRIER VCARRIER 0 V=(2/pi)*asin(sin(2*pi*40k*time))
+
+BPWM_AH PWM_AH 0 V=2.5*(1+tanh(100*((V(VREF_A)-V(VCARRIER))-0.04)))
+BPWM_AL PWM_AL 0 V=2.5*(1+tanh(100*((V(VCARRIER)-V(VREF_A))-0.04)))
+BPWM_BH PWM_BH 0 V=2.5*(1+tanh(100*((V(VREF_B)-V(VCARRIER))-0.04)))
+BPWM_BL PWM_BL 0 V=2.5*(1+tanh(100*((V(VCARRIER)-V(VREF_B))-0.04)))
+BPWM_CH PWM_CH 0 V=2.5*(1+tanh(100*((V(VREF_C)-V(VCARRIER))-0.04)))
+BPWM_CL PWM_CL 0 V=2.5*(1+tanh(100*((V(VCARRIER)-V(VREF_C))-0.04)))
+
+BGH_A GH_A 0 V=V(VPOLE_A)+(-3.5+21.5*(0.5*(1+tanh(10*(V(PWM_AH)-2.5)))))
+BGL_A GL_A 0 V=-3.5+21.5*(0.5*(1+tanh(10*(V(PWM_AL)-2.5))))
+BGH_B GH_B 0 V=V(VPOLE_B)+(-3.5+21.5*(0.5*(1+tanh(10*(V(PWM_BH)-2.5)))))
+BGL_B GL_B 0 V=-3.5+21.5*(0.5*(1+tanh(10*(V(PWM_BL)-2.5))))
+BGH_C GH_C 0 V=V(VPOLE_C)+(-3.5+21.5*(0.5*(1+tanh(10*(V(PWM_CH)-2.5)))))
+BGL_C GL_C 0 V=-3.5+21.5*(0.5*(1+tanh(10*(V(PWM_CL)-2.5))))
+
+* The six power-stage B-current expressions are identical to the Qucs-S file.
+* Use the Qucs-S file for the complete power-stage run.
+
+.options method=gear reltol=1e-4 abstol=1p vntol=1u
+.tran 200n 2m 0 200n
+.plot tran V(VREF_A) V(VREF_B) V(VREF_C) V(VCARRIER)
+.plot tran V(PWM_AH) V(PWM_AL) V(PWM_BH) V(PWM_BL)
+.end

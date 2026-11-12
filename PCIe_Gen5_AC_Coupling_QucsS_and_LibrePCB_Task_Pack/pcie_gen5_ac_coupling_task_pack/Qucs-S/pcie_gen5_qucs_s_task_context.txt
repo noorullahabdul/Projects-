@@ -1,0 +1,17 @@
+Task Context
+
+Develop a reusable Qucs-S channel model for a PCI Express Gen 5 serial link operating at 32 GT/s NRZ.
+
+The baseline model represents one differential transmit direction from a transmitter package and PCB escape, through a 125 mm controlled-impedance board channel, two discrete AC-coupling capacitors, and a receiver package and termination. The differential reference impedance is 85 ohms. At 32 GT/s, the unit interval is 31.25 ps and the Nyquist frequency is 16 GHz.
+
+The model shall compare:
+
+- An ideal AC-coupling element
+- A 220 nF capacitor in an optimized 0201 land pattern
+- A 220 nF capacitor in a conventional 0402 land pattern
+- An optimized 0201 pattern with field-solver-derived reference-plane relief
+- Manufacturing and dielectric-loss tolerance cases
+
+Qucs-S shall be used for mixed-mode S-parameter analysis and Touchstone model integration. Ngspice-compatible transient or behavioral blocks may be used for step response, pulse-response convolution, PRBS eye synthesis, inter-symbol interference analysis, and multi-tap DFE emulation.
+
+The task is intended to evaluate capacitor-pad discontinuity, skin-effect and dielectric loss, mixed-mode conversion, time-domain reflections, and equalizer effectiveness. The numerical limits are project acceptance targets and shall be reconciled with the selected transmitter, receiver, package, connector, and licensed PCIe platform requirements before a compliance claim is made.

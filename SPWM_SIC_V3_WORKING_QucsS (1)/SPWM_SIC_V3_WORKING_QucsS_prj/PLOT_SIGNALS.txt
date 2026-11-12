@@ -1,0 +1,33 @@
+PLOT SIGNALS
+============
+
+CONTROL TEST
+  ngspice/tran.v(vref_a)
+  ngspice/tran.v(vref_b)
+  ngspice/tran.v(vref_c)
+  ngspice/tran.v(vcarrier)
+  ngspice/tran.v(pwm_ah)
+  ngspice/tran.v(pwm_al)
+
+GATE-TO-SOURCE
+  tran.v(gh_a)-tran.v(vpole_a)
+  tran.v(gl_a)
+  tran.v(gh_b)-tran.v(vpole_b)
+  tran.v(gl_b)
+  tran.v(gh_c)-tran.v(vpole_c)
+  tran.v(gl_c)
+
+BRIDGE
+  ngspice/tran.v(vpole_a)
+  ngspice/tran.v(vpole_b)
+  ngspice/tran.v(vpole_c)
+
+FILTERED PHASE OUTPUTS
+  tran.v(va_filt)-tran.v(n_float)
+  tran.v(vb_filt)-tran.v(n_float)
+  tran.v(vc_filt)-tran.v(n_float)
+
+LINE-LINE
+  tran.v(va_filt)-tran.v(vb_filt)
+  tran.v(vb_filt)-tran.v(vc_filt)
+  tran.v(vc_filt)-tran.v(va_filt)

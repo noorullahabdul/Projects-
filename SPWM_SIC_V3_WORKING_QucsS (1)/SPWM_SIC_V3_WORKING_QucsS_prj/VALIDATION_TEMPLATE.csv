@@ -1,0 +1,10 @@
+Check,Expected result,Observed result,Status
+Control source grounding,Every B source ends at node 0,,
+Unsupported function,No if() error,,
+Carrier,40 kHz triangular waveform,,
+References,"50 Hz, 120 degree separation",,
+PWM amplitude,Approximately 0 to 5 V,,
+Dead band,Approximately 500 ns total,,
+Gate drive,"+18 V on, -3.5 V off relative to source",,
+DC link,Approximately 750 V,,
+Three-phase balance,Matched filtered phase waveforms,,

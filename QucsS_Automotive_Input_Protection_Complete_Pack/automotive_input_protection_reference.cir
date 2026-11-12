@@ -1,0 +1,20 @@
+* automotive_input_protection_reference.cir
+* Complete reference design using the nominal 12 V source.
+*
+* For the other required tests, run:
+*   case_high_battery_16V.cir
+*   case_reverse_battery_minus14V.cir
+*   case_load_dump_60V.cir
+
+V_BAT_SRC BATSRC 0 DC 12
+R_SOURCE BATSRC VBAT 50m
+
+.include "./automotive_input_protection_core.inc"
+
+.tran 0 20m 0 10u
+
+.plot tran V(BATSRC) V(VOUT_PROT)
+.plot tran I(V_IIN) I(RLOAD) I(V_ITVS)
+.plot tran V(GATE,VOUT_PROT)
+
+.end

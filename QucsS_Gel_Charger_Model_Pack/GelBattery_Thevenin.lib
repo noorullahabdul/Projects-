@@ -1,0 +1,12 @@
+* Two-terminal gel-battery Thevenin model for Qucs-S / ngspice
+* SUBCKT order:
+*   Pin 1 = P  (battery positive)
+*   Pin 2 = N  (battery negative)
+*
+* VOC represents open-circuit voltage / state of charge.
+* RBAT represents battery internal resistance.
+*
+.SUBCKT GEL_BAT P N PARAMS: VOC=13.75 RBAT=0.2
+R_INT P BAT_INT {RBAT}
+V_OC BAT_INT N DC {VOC}
+.ENDS GEL_BAT

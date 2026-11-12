@@ -1,0 +1,42 @@
+QUCS-S PLOT SIGNALS
+===================
+
+Run F2 before creating the Cartesian diagram.
+
+REFERENCE AND CARRIER
+  ngspice/tran.v(vref_a)
+  ngspice/tran.v(vref_b)
+  ngspice/tran.v(vref_c)
+  ngspice/tran.v(vcarrier)
+
+PWM
+  ngspice/tran.v(pwm_ah)
+  ngspice/tran.v(pwm_al)
+  ngspice/tran.v(pwm_bh)
+  ngspice/tran.v(pwm_bl)
+  ngspice/tran.v(pwm_ch)
+  ngspice/tran.v(pwm_cl)
+
+BRIDGE POLES
+  ngspice/tran.v(vpole_a)
+  ngspice/tran.v(vpole_b)
+  ngspice/tran.v(vpole_c)
+
+FILTERED PHASE OUTPUTS
+  ngspice/tran.v(va_filt)
+  ngspice/tran.v(vb_filt)
+  ngspice/tran.v(vc_filt)
+  ngspice/tran.v(n_float)
+
+DIFFERENTIAL EXPRESSIONS
+  Phase A-N = tran.v(va_filt)-tran.v(n_float)
+  Phase B-N = tran.v(vb_filt)-tran.v(n_float)
+  Phase C-N = tran.v(vc_filt)-tran.v(n_float)
+
+  VAB = tran.v(va_filt)-tran.v(vb_filt)
+  VBC = tran.v(vb_filt)-tran.v(vc_filt)
+  VCA = tran.v(vc_filt)-tran.v(va_filt)
+
+GATE-TO-SOURCE
+  High A = tran.v(gh_a)-tran.v(vpole_a)
+  Low A  = tran.v(gl_a)-tran.v(dc_neg)

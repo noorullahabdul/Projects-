@@ -1,0 +1,25 @@
+* case_reverse_battery_minus14V.cir
+* Reverse-battery -14 V test.
+
+V_BAT_SRC BATSRC 0 DC -14
+R_SOURCE BATSRC VBAT 50m
+
+.include "./automotive_input_protection_core.inc"
+
+.tran 0 20m 0 10u
+
+.plot tran V(BATSRC) V(VIN_PROT) V(VOUT_PROT)
+.plot tran V(GATE,VOUT_PROT) I(V_IIN) I(RLOAD)
+
+.meas tran VOUT_REV_MAX MAX V(VOUT_PROT) FROM=15m TO=20m
+.meas tran VOUT_REV_MIN MIN V(VOUT_PROT) FROM=15m TO=20m
+.meas tran ILOAD_REV_MAX MAX I(RLOAD) FROM=15m TO=20m
+.meas tran ILOAD_REV_MIN MIN I(RLOAD) FROM=15m TO=20m
+.meas tran IIN_REV_MAX MAX I(V_IIN) FROM=15m TO=20m
+.meas tran IIN_REV_MIN MIN I(V_IIN) FROM=15m TO=20m
+.meas tran VGS_REV_MAX MAX V(GATE,VOUT_PROT) FROM=15m TO=20m
+.meas tran VGS_REV_MIN MIN V(GATE,VOUT_PROT) FROM=15m TO=20m
+.meas tran VDS_REV_MAX MAX V(VIN_PROT,VOUT_PROT) FROM=15m TO=20m
+.meas tran VDS_REV_MIN MIN V(VIN_PROT,VOUT_PROT) FROM=15m TO=20m
+
+.end

@@ -1,0 +1,78 @@
+* case_03_dc_link_short_fault.txt
+* DC-link short is present before precharge begins.
+* The controller aborts precharge after a documented timeout.
+*
+.param VCAP_IC=0
+
+.include "./dc_link_precharge_common_core.txt"
+
+V_CMD_PRE CMD_PRECHARGE 0 PWL(
++ 0       0
++ 10m     0
++ 10.1m   5
++ 100m    5
++ 100.1m  0
++ 200m    0
++)
+
+V_CMD_MAIN CMD_MAIN 0 0
+V_CMD_DIS CMD_DISCHARGE 0 0
+
+* Precharge contact closes after 20 ms with a short bounce sequence.
+* It opens 20 ms after the abort command.
+V_CONTACT_PRE CONTACT_PRECHARGE 0 PWL(
++ 0        0
++ 30m      0
++ 30.01m   5
++ 30.50m   5
++ 30.51m   0
++ 31m      0
++ 31.01m   5
++ 31.50m   5
++ 31.51m   0
++ 33m      0
++ 33.01m   5
++ 120m     5
++ 120.01m  0
++ 200m     0
++)
+
+V_CONTACT_MAIN CONTACT_MAIN 0 0
+V_CONTACT_DIS CONTACT_DISCHARGE 0 0
+
+* Short fault active before precharge and throughout the test.
+V_CONTACT_SHORT CONTACT_SHORT 0 5
+
+* Fault indication asserts when the controller aborts.
+V_PRE_FAULT PRECHARGE_FAULT 0 PWL(
++ 0       0
++ 100m    0
++ 100.1m  5
++ 200m    5
++)
+
+.tran 0 200m 0 2u UIC
+
+.plot tran V(CMD_PRECHARGE) V(CONTACT_PRECHARGE)
+.plot tran V(PRECHARGE_FAULT) V(VDC_LINK)
+.plot tran I(V_PRE_SNS) I(V_SHORT_SNS)
+.plot tran PAR('I(V_PRE_SNS)*I(V_PRE_SNS)*100')
+
+.meas tran I_PRE_FAULT_PEAK
++ MAX I(V_PRE_SNS) FROM=30m TO=120m
+
+.meas tran P_PRE_FAULT_PEAK
++ MAX PAR('I(V_PRE_SNS)*I(V_PRE_SNS)*100')
++ FROM=30m TO=120m
+
+.meas tran E_PRE_FAULT
++ INTEG PAR('I(V_PRE_SNS)*I(V_PRE_SNS)*100')
++ FROM=30m TO=120m
+
+.meas tran VLINK_FAULT_MAX
++ MAX V(VDC_LINK) FROM=30m TO=120m
+
+.meas tran T_ABORT_CONTACT_OPEN
++ WHEN V(CONTACT_PRECHARGE)=2.5 FALL=3
+
+.end

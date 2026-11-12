@@ -1,0 +1,11 @@
+Task Context ngspice/tran.v(v(g_ah)
+
+Develop a production-intent LibrePCB design for one PCI Express Gen 5 x1 host-board channel operating at 32 GT/s.
+
+The channel spans an exact PCIe Gen 5 root-complex, switch, retimer, or FPGA package to a PCIe CEM edge connector or approved board-to-board connector. The host transmit pair contains discrete AC-coupling capacitors. The host receive pair does not contain another series coupling capacitor because AC coupling belongs at the transmitting side of each link direction.
+
+The project focuses on the physical discontinuity created by the transmit AC-coupling capacitor and its land pattern. The baseline production footprint uses a 220 nF capacitor in an 0201 package. A separate characterization coupon shall compare 0201 and 0402 patterns. Alternate footprints shall not be placed in series or as branching DNP pads on the production lane.
+
+The final routing shall use 85-ohm differential impedance, controlled reference planes, symmetric transitions, smooth pad tapers, solver-driven local plane relief, short residual via stubs, and no permanent branch stubs.
+
+External field-solver and signal-integrity tools may be used to validate the completed LibrePCB geometry and to generate Touchstone, TDR, step-response, and eye results. The acceptance values are project targets and must be reconciled with the exact platform and licensed PCIe requirements before a compliance claim is made.

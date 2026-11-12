@@ -1,0 +1,21 @@
+* case_high_battery_16V.cir
+* High-battery 16 V test.
+
+V_BAT_SRC BATSRC 0 DC 16
+R_SOURCE BATSRC VBAT 50m
+
+.include "./automotive_input_protection_core.inc"
+
+.tran 0 20m 0 10u
+
+.plot tran V(BATSRC) V(VOUT_PROT) V(GATE,VOUT_PROT)
+.plot tran I(V_IIN) I(RLOAD) I(V_ITVS)
+
+.meas tran VOUT_HIGH AVG V(VOUT_PROT) FROM=15m TO=20m
+.meas tran IIN_HIGH AVG I(V_IIN) FROM=15m TO=20m
+.meas tran ILOAD_HIGH AVG I(RLOAD) FROM=15m TO=20m
+.meas tran ITVS_HIGH MAX I(V_ITVS) FROM=15m TO=20m
+.meas tran VGS_HIGH_MIN MIN V(GATE,VOUT_PROT) FROM=15m TO=20m
+.meas tran VDS_HIGH_MAX MAX V(VIN_PROT,VOUT_PROT) FROM=15m TO=20m
+
+.end

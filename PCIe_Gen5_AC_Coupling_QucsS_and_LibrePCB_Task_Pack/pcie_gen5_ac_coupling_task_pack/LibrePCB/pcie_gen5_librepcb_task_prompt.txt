@@ -1,0 +1,138 @@
+Subject: LibrePCB PCIe Gen 5 AC-Coupling Channel and Capacitor-Footprint Optimization
+
+Hi Team,
+
+Please create a complete native LibrePCB project for one PCIe Gen 5 x1 host-board channel operating at 32 GT/s. The design shall include one transmit differential pair and one receive differential pair between an exact active PCIe Gen 5 root complex, switch, retimer, or FPGA package and an approved PCIe CEM or board-to-board connector.
+
+Lock the exact active endpoint device, package, connector, and manufacturer high-frequency models before routing. A generic controller symbol or unverified connector footprint is not acceptable in the final project.
+
+Use these baseline constraints:
+
+- Data rate: 32 GT/s
+- Unit interval: 31.25 ps
+- Nyquist frequency: 16 GHz
+- Differential impedance: 85 ohms
+- Main-board channel length target: no more than 125 mm
+- Intra-pair length mismatch: no greater than 0.10 mm
+- Maximum signal-via transitions per conductor: two
+- Maximum residual via stub after backdrilling: 0.30 mm
+- Ground stitching-via distance from each signal transition: no greater than 1.0 mm
+- TX AC-coupling capacitance: 220 nF nominal per conductor
+- Production TX capacitor package: 0201
+- Comparison coupon packages: 0201 and 0402
+
+Implement the host-board channel correctly:
+
+- Place AC-coupling capacitors only in the host transmit pair.
+- Do not place another AC-coupling capacitor in the host receive pair.
+- Place the TX capacitors close to the transmitting package, with a project placement target of 25 mm or less from the package launch.
+- Use one capacitor per conductor.
+- Keep positive and negative capacitor footprints geometrically identical.
+- Orient both capacitors identically and preserve differential symmetry.
+- Do not place 0-ohm resistors, common-mode chokes, permanent test points, or alternate DNP footprints in the production high-speed path.
+- Put 0201 and 0402 comparison structures on separate characterization coupons.
+
+Use a fabricator-confirmed low-loss eight-layer or higher stack-up. Solve the production trace width, pair spacing, copper thickness, reference-plane distance, solder-mask effect, and dielectric parameters with a field solver. Route every PCIe pair adjacent to a continuous solid ground reference plane.
+
+Place and route the production TX capacitor pattern as one compact symmetric structure. Taper smoothly from the differential pair into the capacitor pads and back to the differential pair. Avoid abrupt width or spacing changes. Keep the pad-to-pad and conductor geometry identical. Use rounded or mitered transitions and preserve phase symmetry.
+
+Create local reference-plane relief beneath the capacitor pads only when a 3D field-solver comparison shows that it reduces excess pad capacitance. Document:
+
+- Relief length and width
+- Affected reference layers
+- Pad, solder-mask, and antipad dimensions
+- Before-and-after differential impedance
+- Before-and-after Sdd11
+- Before-and-after Scd21
+- Manufacturing tolerance
+
+Do not remove the reference plane beneath the trace beyond the minimum solver-approved capacitor region. Arbitrary plane voids are not permitted.
+
+Use symmetric layer transitions. Positive and negative conductors shall use the same via count, drill, pad, antipad, backdrill, and layer sequence. Place ground return vias within 1.0 mm of every signal-via transition. Avoid layer changes through the capacitor region. Backdrill or use blind/microvias where needed to keep residual stubs at or below 0.30 mm.
+
+Keep the PCIe pairs away from switching regulators, memory clocks, crystals, high-current power paths, board edges, mounting holes, connector shield discontinuities, and unrelated high-speed aggressors. Use at least 3W edge-to-edge spacing from unrelated high-speed traces unless crosstalk simulation approves a smaller distance.
+
+Create separate characterization coupons for:
+
+1. Conventional 0402 capacitor land pattern
+2. Optimized 0201 capacitor land pattern
+3. Optimized 0201 pattern with solver-approved reference-plane relief
+4. Through-line reference without a capacitor
+5. Calibration or de-embedding structures required by the selected extraction method
+
+The coupons shall use the same stack-up, routing layer, trace geometry, solder mask, and fabrication rules as the production channel. Include probe launches or connectors that can be de-embedded without introducing branch stubs into the production lane.
+
+Extract the final production and coupon geometry and submit Touchstone data from 10 MHz to at least 32 GHz. Include endpoint package, connector, capacitor, pad, via, and PCB models. Document port order, reference planes, reference impedance, and de-embedding.
+
+Validate:
+
+- Sdd21 insertion loss through 16 GHz
+- Sdd11 return loss through 16 GHz
+- Scd21 differential-to-common-mode conversion through 16 GHz
+- Differential TDR
+- Step response
+- Capacitor-region impedance deviation
+- 0201 versus 0402 pad discontinuity
+- Manufacturing tolerance
+- Equalized eye using the same documented transmitter and receiver assumptions as the Qucs-S task
+
+Project acceptance targets:
+
+- The routed production pairs are 85 ohms differential.
+- Distributed TDR remains between 80.75 ohms and 89.25 ohms outside identified package, connector, and capacitor discontinuities.
+- No intra-pair mismatch exceeds 0.10 mm.
+- The production 0201 channel has no more than 12 dB Sdd21 loss at 16 GHz.
+- Production-channel Sdd11 remains at or below -10 dB from 100 MHz to 16 GHz.
+- Production-channel Scd21 remains at or below -20 dB from 100 MHz to 16 GHz.
+- The optimized 0201 pattern reduces peak local TDR deviation by at least 30% relative to the conventional 0402 coupon.
+- The optimized 0201 pattern improves the worst local return-loss notch by at least 1.5 dB relative to the conventional 0402 coupon.
+- The extracted equalized production channel provides at least 100 mV eye height and 0.35 UI eye width under the documented assumptions.
+- No pair crosses a reference-plane split, void boundary, or unstitched layer transition.
+- No permanent high-speed branch stub is present.
+- ERC and DRC contain no unexplained errors.
+
+Organize the schematic into readable pages for:
+
+1. PCIe Gen 5 endpoint and power
+2. PCIe transmit pair and AC coupling
+3. PCIe receive pair
+4. Connector and sideband signals
+5. Characterization coupons
+6. Test, reset, clock, and power support
+
+Create every missing LibrePCB library element from the latest manufacturer data. Each symbol, package, and device shall include exact manufacturer and MPN attributes, verified pin mapping, pin-one indication, courtyard, mask and paste definitions, assembly outline, package-height data, lifecycle status, approved alternates, and a correctly oriented STEP model.
+
+Configure LibrePCB Output Jobs to generate:
+
+- Native .lpp project
+- .lppz project archive
+- Schematic PDF
+- Board and assembly PDFs
+- Fabrication drawing
+- Stack-up and impedance table
+- Gerber X2
+- Excellon drill files
+- IPC-D-356A netlist
+- BOM CSV
+- Pick-and-place CSV or Gerber X3
+- STEP model
+- Manufacturing ZIP
+- ERC and DRC reports
+
+Please also submit:
+
+- Fabricator-confirmed stack-up
+- Field-solver impedance report
+- Capacitor-land-pattern optimization report
+- Per-pair length and via report
+- Plane-relief drawing
+- TDR plots
+- Touchstone files
+- Sdd21, Sdd11, and Scd21 report
+- Step-response report
+- Eye report
+- Manufacturing-tolerance report
+- Model and de-embedding index
+- Design-review summary
+
+The task is complete when an independent reviewer can open the LibrePCB project, resolve all library elements, verify TX-only AC coupling, inspect the production and coupon geometries, run ERC and DRC, regenerate all manufacturing outputs, and reproduce the impedance, S-parameter, TDR, discontinuity, and eye evidence without manually repairing the project.

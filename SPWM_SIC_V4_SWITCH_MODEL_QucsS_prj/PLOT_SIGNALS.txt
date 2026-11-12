@@ -1,0 +1,39 @@
+PLOT SIGNALS
+============
+
+CONTROL
+  ngspice/tran.v(vref_a)
+  ngspice/tran.v(vref_b)
+  ngspice/tran.v(vref_c)
+  ngspice/tran.v(vcarrier)
+
+PWM
+  ngspice/tran.v(pwm_ah)
+  ngspice/tran.v(pwm_al)
+  ngspice/tran.v(pwm_bh)
+  ngspice/tran.v(pwm_bl)
+  ngspice/tran.v(pwm_ch)
+  ngspice/tran.v(pwm_cl)
+
+GATE-DRIVER OUTPUT LEVELS
+  ngspice/tran.v(vgs_ah)
+  ngspice/tran.v(vgs_al)
+  ngspice/tran.v(vgs_bh)
+  ngspice/tran.v(vgs_bl)
+  ngspice/tran.v(vgs_ch)
+  ngspice/tran.v(vgs_cl)
+
+POLES
+  ngspice/tran.v(vpole_a)
+  ngspice/tran.v(vpole_b)
+  ngspice/tran.v(vpole_c)
+
+PHASE-TO-NEUTRAL
+  tran.v(va_filt)-tran.v(n_float)
+  tran.v(vb_filt)-tran.v(n_float)
+  tran.v(vc_filt)-tran.v(n_float)
+
+LINE-TO-LINE
+  tran.v(va_filt)-tran.v(vb_filt)
+  tran.v(vb_filt)-tran.v(vc_filt)
+  tran.v(vc_filt)-tran.v(va_filt)

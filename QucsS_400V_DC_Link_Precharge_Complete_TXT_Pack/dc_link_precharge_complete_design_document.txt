@@ -1,0 +1,293 @@
+400 V DC-LINK PRECHARGE AND SAFE-DISCHARGE CIRCUIT
+Complete Qucs-S / ngspice Design Document
+=================================================
+
+1. APPLICATION
+--------------
+The circuit represents the DC-link charging and discharge path of an inverter,
+motor drive, charger, or industrial power converter.
+
+The model verifies:
+  - Controlled precharge of a 1,000 uF DC-link capacitor
+  - Main-contactor transfer after sufficient precharge
+  - Source, cable, switch, capacitor ESR, and capacitor ESL effects
+  - Mechanical contactor delay and contact bounce
+  - Safe discharge below 60 V
+  - DC-link short-circuit behavior during precharge
+  - Main-contactor weld behavior during shutdown
+
+2. NOMINAL VALUES
+-----------------
+Source voltage:                 400 V
+Source resistance:              250 mOhm
+Cable/source inductance:        2 uH
+Precharge resistor:             100 Ohm
+Precharge-contact resistance:   20 mOhm
+Main-contact resistance:        20 mOhm
+DC-link capacitance:            1,000 uF
+Capacitor ESR:                  25 mOhm
+Capacitor ESL:                  20 nH
+Discharge resistor:             4.7 kOhm
+Discharge-contact resistance:   100 mOhm
+Short-fault resistance:         50 mOhm
+
+3. TOPOLOGY
+-----------
+400 V source:
+  V_DC -> R_SOURCE -> L_SOURCE -> BUS_SRC
+
+Main path:
+  BUS_SRC -> S_MAIN -> V_MAIN_SNS -> VDC_LINK
+
+Precharge path:
+  BUS_SRC -> S_PRE -> V_PRE_SNS -> R_PRE -> VDC_LINK
+
+Capacitor path:
+  VDC_LINK -> L_ESL -> R_ESR -> C_DC -> GND
+
+Discharge path:
+  VDC_LINK -> S_DIS -> V_DIS_SNS -> R_DIS -> GND
+
+Short-fault path:
+  VDC_LINK -> S_SHORT -> V_SHORT_SNS -> R_SHORT -> GND
+
+4. NOMINAL CALCULATIONS
+-----------------------
+Initial precharge current:
+
+  I_PRE_0 = 400 / (100 + 0.25 + 0.02)
+          = approximately 3.99 A
+
+Initial precharge-resistor power:
+
+  P_PRE_0 = I_PRE_0^2 x 100
+          = approximately 1.59 kW
+
+Effective precharge time constant:
+
+  tau = (100 + 0.25 + 0.02) x 0.001
+      = approximately 0.10027 s
+
+Time to 90 percent:
+
+  t90 = -tau x ln(0.1)
+      = approximately 0.231 s
+
+Time to 95 percent:
+
+  t95 = -tau x ln(0.05)
+      = approximately 0.300 s
+
+Stored capacitor energy at 400 V:
+
+  E_CAP = 0.5 x 0.001 x 400^2
+        = 80 J
+
+Ideal total series-resistor energy during charging is approximately 80 J.
+The 100 Ohm precharge resistor receives nearly all of this energy because it
+dominates the total charging resistance.
+
+5. NOMINAL SEQUENCE
+-------------------
+Controller command:
+  CMD_PRECHARGE rises at 10 ms.
+
+Actual precharge contact:
+  Begins closing at 30 ms after 20 ms pull-in delay.
+  Bounces and becomes continuously closed at approximately 33 ms.
+
+Controller command:
+  CMD_MAIN rises at 340 ms.
+
+Actual main contact:
+  Begins closing at 360 ms after 20 ms pull-in delay.
+  Bounces and becomes continuously closed at approximately 365 ms.
+
+The expected DC-link voltage is above 380 V before first main-contact closure.
+
+CMD_PRECHARGE falls at 390 ms.
+The actual precharge contact opens at approximately 410 ms.
+
+6. WHY 4.7 kOhm IS REQUIRED
+----------------------------
+For a capacitor discharging from 400 V to 60 V:
+
+  t = R x C x ln(400 / 60)
+
+With R = 10 kOhm and C = 1,000 uF:
+
+  t = approximately 18.97 s
+
+This fails the 10 s requirement.
+
+With R = 4.7 kOhm:
+
+  t = approximately 8.92 s
+
+Initial discharge current:
+
+  I_DIS_0 = 400 / 4700
+          = approximately 85.1 mA
+
+Initial discharge-resistor power:
+
+  P_DIS_0 = 400^2 / 4700
+          = approximately 34.0 W
+
+The discharge resistor must tolerate approximately 34 W initially and nearly
+80 J of stored capacitor energy during a normal discharge event.
+
+7. CONTACTOR MODELLING
+----------------------
+The ngspice SW model represents the electrical contact only.
+
+Mechanical effects are represented by separate signals:
+  CMD_PRECHARGE and CONTACT_PRECHARGE
+  CMD_MAIN and CONTACT_MAIN
+  CMD_DISCHARGE and CONTACT_DISCHARGE
+
+PWL voltage sources implement:
+  - Pull-in delay
+  - Release delay
+  - Multiple contact-bounce transitions
+  - Final stable state
+
+The precharge switch must remain closed until CONTACT_MAIN is continuously
+closed, not merely until CMD_MAIN rises.
+
+8. NOMINAL ACCEPTANCE
+---------------------
+[ ] Peak precharge current <= 4.5 A
+[ ] VDC_LINK >= 360 V at first main-contact closure
+[ ] Preferred VDC_LINK >= 380 V at main closure
+[ ] Precharge contact opens after stable main closure
+[ ] Precharge current decays as the capacitor charges
+[ ] Peak precharge power is reported
+[ ] Precharge energy is close to 80 J
+[ ] Main-contact bounce is visible
+[ ] No repeated startup collapse occurs
+
+9. SAFE-DISCHARGE ACCEPTANCE
+----------------------------
+[ ] Source contactors remain open during discharge
+[ ] Discharge contact closes after shutdown
+[ ] VDC_LINK falls below 60 V within 10 s
+[ ] Peak discharge current is reported
+[ ] Peak discharge power is reported
+[ ] Discharge energy is reported
+
+10. DC-LINK SHORT FAULT
+-----------------------
+The 50 mOhm fault branch is active before precharge.
+
+Expected current:
+
+  I_FAULT approximately 400 / (100 + 0.25 + 0.02 + 0.05)
+          approximately 3.99 A
+
+Expected precharge-resistor power:
+
+  approximately 1.59 kW
+
+The example controller aborts the command at 100 ms and the mechanical
+precharge contact opens at 120 ms.
+
+Required result:
+  - Main contact remains open
+  - Precharge is aborted
+  - PRECHARGE_FAULT is asserted
+  - Peak current, peak power, and integrated resistor energy are reported
+
+The model cannot claim resistor survival without comparison against an actual
+resistor pulse-energy specification.
+
+11. MAIN-CONTACTOR WELD FAULT
+-----------------------------
+CONTACT_MAIN remains closed even though CMD_MAIN falls.
+
+When discharge is enabled:
+  - The source remains connected
+  - VDC_LINK remains near 400 V
+  - The 4.7 kOhm resistor dissipates approximately 34 W continuously
+  - Safe discharge cannot succeed
+
+Required result:
+  - MAIN_CONTACTOR_WELD is asserted
+  - Failure to reach 60 V is reported
+  - Continuous resistor power and accumulated energy are measured
+  - The event is reported as a fault, not a successful discharge
+
+12. Qucs-S COMPONENT MAPPING
+----------------------------
+Use native Qucs-S components for:
+  - Voltage sources
+  - Resistors
+  - Inductors
+  - Capacitors
+  - Controlled switches
+  - Ground
+  - Probes
+  - Transient simulation blocks
+  - Equations and display plots
+
+Load the switch models from:
+
+  .include "./dc_link_precharge_models.txt"
+
+Controlled-switch terminal mapping:
+
+  Power terminal 1
+  Power terminal 2
+  Control positive
+  Control negative
+
+The control negative terminal is connected to GND.
+
+13. PLOT EXPRESSIONS
+--------------------
+Precharge current:
+  I(V_PRE_SNS)
+
+Main current:
+  I(V_MAIN_SNS)
+
+Discharge current:
+  I(V_DIS_SNS)
+
+Short-fault current:
+  I(V_SHORT_SNS)
+
+Precharge power:
+  I(V_PRE_SNS)^2 x 100
+
+Discharge power:
+  I(V_DIS_SNS)^2 x 4700
+
+Capacitor stored energy:
+  0.5 x 0.001 x V(CAP_CORE_NODE)^2
+
+14. FILES
+---------
+dc_link_precharge_models.txt
+dc_link_precharge_common_core.txt
+case_01_precharge_sequence.txt
+case_02_safe_discharge.txt
+case_03_dc_link_short_fault.txt
+case_04_main_contactor_weld_fault.txt
+dc_link_precharge_complete_design_document.txt
+dc_link_precharge_results_summary_template.txt
+
+All files must remain in the same directory so the relative include paths work.
+
+15. LIMITATIONS
+---------------
+The model does not validate:
+  - Real contactor coil dynamics
+  - Contact arc formation
+  - Contact erosion
+  - Fuse opening
+  - Resistor temperature rise
+  - Resistor pulse-energy survival
+  - Capacitor tolerance and temperature dependence
+  - Insulation and creepage requirements
+  - Hardware high-voltage safety certification

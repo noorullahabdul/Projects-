@@ -1,0 +1,30 @@
+LM317 GEL CHARGER - NODE AND PROBE MAP
+======================================
+
+Actual electrical net labels
+----------------------------
+vin_in             Input supply positive and LM317 IN
+vout_bat_pos       LM317 OUT, output capacitor positive, battery positive
+adj_ctrl           LM317 ADJ, R4 lower node, R_POT upper node, red LED anode
+pot_r3_junction    Junction between R_POT and R3
+green_led_anode    Junction between R1 and green LED D1
+bat_return         Battery negative, output capacitor return, R3 return, Q1 base
+red_led_cathode    Junction between red LED D2 and PR_RED
+red_probe_out      Junction between PR_RED and R_RED
+lim_collector      Junction between R_RED and Q1 collector
+sense_res_top      Junction between PR_CHG and the 1 ohm current-sense resistor
+0                  Circuit ground, LM317 reference return, Q1 emitter return
+
+Dedicated current probes
+------------------------
+PR_CHG              Total charge-return current through R_SENSE
+PR_RED              Red-LED/current-limit branch current
+
+Cartesian vectors
+-----------------
+ngspice/tran.v(vin_in)
+ngspice/tran.v(vout_bat_pos)
+ngspice/tran.v(adj_ctrl)
+ngspice/tran.v(bat_return)
+ngspice/tran.i(pr_chg)
+ngspice/tran.i(pr_red)

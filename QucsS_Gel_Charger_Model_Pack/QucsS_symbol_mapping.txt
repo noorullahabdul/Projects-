@@ -1,0 +1,106 @@
+Qucs-S MODEL AND SYMBOL MAPPING GUIDE
+=====================================
+
+1) LM317T
+---------
+Model file:
+  LM317T_QucsS_DC.lib
+
+Use:
+  Components -> File Components -> SPICE Library Device
+
+Select:
+  Subcircuit = LM317T
+
+Recommended symbol:
+  Custom rectangular regulator symbol with IN on the left,
+  OUT on the right, and ADJ at the bottom.
+
+IMPORTANT pin mapping:
+  Symbol pin 1 / ADJ  -> SUBCKT port 1 / ADJ
+  Symbol pin 2 / OUT  -> SUBCKT port 2 / OUT
+  Symbol pin 3 / IN   -> SUBCKT port 3 / IN
+
+Physical TO-220 assignment:
+  Pin 1 = ADJ
+  Pin 2 = OUT
+  Pin 3 = IN
+
+Suggested instance parameters for the rubric-compatible DC verification:
+  VREF=1.25 IADJ=50u VDROP=1.0 ROUT=0.03
+
+Suggested sensitivity run:
+  VDROP=2.0
+This conservative case will demonstrate that 15 V input is marginal for a
+13.8 V LM317 output.
+
+2) 2N2222A
+----------
+Model file:
+  2N2222A_ONsemi.lib
+
+Model name:
+  Q2n2222a
+
+Use a native NPN BJT symbol, not a three-pin rectangular block.
+
+SPICE transistor terminal order:
+  C B E
+
+Symbol mapping:
+  Collector -> C
+  Base      -> B
+  Emitter   -> E
+
+For the ON Semiconductor TO-18 2N2222A package:
+  Physical pin 3 = Collector
+  Physical pin 2 = Base
+  Physical pin 1 = Emitter
+
+Charger connection:
+  Collector -> red LED cathode
+  Base      -> BAT_NEG
+  Emitter   -> GND_IN
+
+3) Gel battery
+--------------
+Preferred visible implementation:
+  Use the native battery/DC-source symbol plus a separate series resistor.
+
+Connect:
+  VOUT -> RBAT (0.2 ohm) -> battery positive terminal
+  battery negative terminal -> BAT_NEG
+
+Set:
+  VBAT_OC = 13.75 V for the nominal near-full-charge test
+  Sweep VBAT_OC from 10.5 V to 13.8 V for the state-of-charge test
+
+Alternative subcircuit:
+  GelBattery_Thevenin.lib
+  Subcircuit = GEL_BAT
+
+Symbol mapping:
+  Battery + terminal -> SUBCKT port 1 / P
+  Battery - terminal -> SUBCKT port 2 / N
+
+Example parameters:
+  VOC=13.75 RBAT=0.2
+
+4) Mandatory return-node wiring
+-------------------------------
+  GND_IN = global input-supply negative / node 0
+  BAT_NEG = battery negative and current-sense node
+  RSENSE = 1 ohm between BAT_NEG and GND_IN
+
+Do not place a ground symbol on BAT_NEG, because that would short RSENSE and
+disable current sensing.
+
+5) Correct charger measurements
+-------------------------------
+  VFLOAT  = V(VOUT) - V(BAT_NEG)
+  VSENSE  = V(BAT_NEG) - V(GND_IN)
+  ICHARGE = current entering the battery positive terminal
+
+At current limiting:
+  VSENSE should approach approximately 0.6 to 0.7 V
+  ICHARGE should plateau near approximately 0.6 A

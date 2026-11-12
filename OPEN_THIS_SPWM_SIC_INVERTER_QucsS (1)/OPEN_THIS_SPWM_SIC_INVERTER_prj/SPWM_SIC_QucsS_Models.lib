@@ -1,0 +1,133 @@
+* =====================================================================
+* CLEAN 3-PHASE SPWM SIC INVERTER MODELS FOR QUCS-S / NGSPICE
+* File: SPWM_SIC_QucsS_Models.lib
+*
+* SUBCIRCUIT PIN ORDER
+*   SPWM_3PH_QS
+*     VSS PWM_AH PWM_AL PWM_BH PWM_BL PWM_CH PWM_CL
+*     REF_A REF_B REF_C CARRIER
+*
+*   SIC_DUAL_GATE_DRIVER
+*     HIN LIN EN COM GH SH GL SL
+*
+*   UF3C120040K4S_QS
+*     D G S KS
+*
+* The SiC switch below is a functional ngspice-compatible surrogate.
+* Replace it with the manufacturer's full macro-model when available.
+* =====================================================================
+
+
+* ---------------------------------------------------------------------
+* THREE-PHASE SPWM GENERATOR
+*
+* Outputs:
+*   PWM_AH/PWM_AL = phase-A high/low logic
+*   PWM_BH/PWM_BL = phase-B high/low logic
+*   PWM_CH/PWM_CL = phase-C high/low logic
+*   REF_A/REF_B/REF_C and CARRIER are exposed for plotting
+* ---------------------------------------------------------------------
+.SUBCKT SPWM_3PH_QS VSS PWM_AH PWM_AL PWM_BH PWM_BL PWM_CH PWM_CL
++ REF_A REF_B REF_C CARRIER
++ PARAMS: FOUT=50 FSW=40K MA=0.85 ACAR=1 VLOGIC=5 TDEAD=500N ROUT=10
+
+BREF_A REF_A VSS V={MA*ACAR*SIN(2*PI*FOUT*TIME)}
+BREF_B REF_B VSS V={MA*ACAR*SIN(2*PI*FOUT*TIME-2*PI/3)}
+BREF_C REF_C VSS V={MA*ACAR*SIN(2*PI*FOUT*TIME+2*PI/3)}
+
+BTRI CARRIER VSS V={ACAR*(2/PI)*ASIN(SIN(2*PI*FSW*TIME))}
+
+BAH AHI VSS V={IF(V(REF_A,CARRIER)>2*ACAR*FSW*TDEAD,VLOGIC,0)}
+BAL ALI VSS V={IF(V(CARRIER,REF_A)>2*ACAR*FSW*TDEAD,VLOGIC,0)}
+
+BBH BHI VSS V={IF(V(REF_B,CARRIER)>2*ACAR*FSW*TDEAD,VLOGIC,0)}
+BBL BLI VSS V={IF(V(CARRIER,REF_B)>2*ACAR*FSW*TDEAD,VLOGIC,0)}
+
+BCH CHI VSS V={IF(V(REF_C,CARRIER)>2*ACAR*FSW*TDEAD,VLOGIC,0)}
+BCL CLI VSS V={IF(V(CARRIER,REF_C)>2*ACAR*FSW*TDEAD,VLOGIC,0)}
+
+RAH AHI PWM_AH {ROUT}
+RAL ALI PWM_AL {ROUT}
+RBH BHI PWM_BH {ROUT}
+RBL BLI PWM_BL {ROUT}
+RCH CHI PWM_CH {ROUT}
+RCL CLI PWM_CL {ROUT}
+
+RPD_AH PWM_AH VSS 100MEG
+RPD_AL PWM_AL VSS 100MEG
+RPD_BH PWM_BH VSS 100MEG
+RPD_BL PWM_BL VSS 100MEG
+RPD_CH PWM_CH VSS 100MEG
+RPD_CL PWM_CL VSS 100MEG
+.ENDS SPWM_3PH_QS
+
+
+* ---------------------------------------------------------------------
+* FLOATING DUAL SIC GATE DRIVER
+*
+* High-side output is referenced to SH.
+* Low-side output is referenced to SL.
+* ---------------------------------------------------------------------
+.SUBCKT SIC_DUAL_GATE_DRIVER HIN LIN EN COM GH SH GL SL
++ PARAMS: VON=18 VOFF=-3.5 VINTH=2.5 ENTH=2.5
++ RG_H=5 RG_L=5 RGS=10K TPD=80N
+
+RHIN HIN COM 1MEG
+RLIN LIN COM 1MEG
+REN  EN  COM 1MEG
+
+RHD HIN HCTRL 100
+CHD HCTRL COM {TPD/100}
+RLD LIN LCTRL 100
+CLD LCTRL COM {TPD/100}
+RED EN  ECTRL 100
+CED ECTRL COM {TPD/100}
+
+BHDRV NHDRV SH V={IF(V(ECTRL,COM)>ENTH,
++ IF(V(HCTRL,COM)>VINTH,VON,VOFF),VOFF)}
+
+BLDRV NLDRV SL V={IF(V(ECTRL,COM)>ENTH,
++ IF(V(LCTRL,COM)>VINTH,VON,VOFF),VOFF)}
+
+RGH NHDRV GH {RG_H}
+RGL NLDRV GL {RG_L}
+
+RGSH GH SH {RGS}
+RGSL GL SL {RGS}
+
+RISO_H SH COM 1G
+RISO_L SL COM 1G
+.ENDS SIC_DUAL_GATE_DRIVER
+
+
+* ---------------------------------------------------------------------
+* FUNCTIONAL 1200-V-CLASS SIC SWITCH SURROGATE
+*
+* Pin order: D G S KS
+* KS is the Kelvin-source/control reference.
+* ---------------------------------------------------------------------
+.MODEL SIC_SW SW(RON=0.040 ROFF=100MEG VT=4 VH=1)
+.MODEL SIC_BODY D(
++ IS=1N
++ N=1.2
++ RS=0.020
++ CJO=300P
++ TT=20N
++ BV=1200
++ IBV=1M
++)
+
+.SUBCKT UF3C120040K4S_QS D G S KS
+RKS KS S 1M
+SDS D S G KS SIC_SW
+DBODY S D SIC_BODY
+CGS G KS 2N
+CGD G D 120P
+CDS D S 180P
+RGS G KS 100MEG
+RDSLEAK D S 100MEG
+.ENDS UF3C120040K4S_QS
+
+* =====================================================================
+* END OF LIBRARY
+* =====================================================================

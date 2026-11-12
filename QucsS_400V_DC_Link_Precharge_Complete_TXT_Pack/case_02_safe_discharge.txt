@@ -1,0 +1,61 @@
+* case_02_safe_discharge.txt
+* Safe-discharge verification with the DC-link capacitor initially at 400 V.
+*
+.param VCAP_IC=400
+
+.include "./dc_link_precharge_common_core.txt"
+
+* Source contactors remain open.
+V_CMD_PRE CMD_PRECHARGE 0 0
+V_CMD_MAIN CMD_MAIN 0 0
+V_CONTACT_PRE CONTACT_PRECHARGE 0 0
+V_CONTACT_MAIN CONTACT_MAIN 0 0
+
+* Discharge command at 20 ms; actual contact closes after 10 ms.
+V_CMD_DIS CMD_DISCHARGE 0 PWL(
++ 0      0
++ 20m    0
++ 20.1m  5
++ 11s    5
++)
+
+V_CONTACT_DIS CONTACT_DISCHARGE 0 PWL(
++ 0      0
++ 30m    0
++ 30.01m 5
++ 11s    5
++)
+
+V_CONTACT_SHORT CONTACT_SHORT 0 0
+
+.tran 0 11s 0 500u UIC
+
+.plot tran V(CMD_DISCHARGE) V(CONTACT_DISCHARGE)
+.plot tran V(VDC_LINK) V(CAP_CORE_NODE)
+.plot tran I(V_DIS_SNS)
+.plot tran PAR('I(V_DIS_SNS)*I(V_DIS_SNS)*4700')
+
+.meas tran T_DIS_START
++ WHEN V(CONTACT_DISCHARGE)=2.5 RISE=1
+
+.meas tran T_LINK_60
++ WHEN V(VDC_LINK)=60 FALL=1
+
+.meas tran T_DIS_TO_60
++ PARAM='T_LINK_60-T_DIS_START'
+
+.meas tran I_DIS_PEAK
++ MAX I(V_DIS_SNS) FROM=30m TO=11s
+
+.meas tran P_DIS_PEAK
++ MAX PAR('I(V_DIS_SNS)*I(V_DIS_SNS)*4700')
++ FROM=30m TO=11s
+
+.meas tran E_DIS
++ INTEG PAR('I(V_DIS_SNS)*I(V_DIS_SNS)*4700')
++ FROM=30m TO=11s
+
+.meas tran VLINK_10S
++ FIND V(VDC_LINK) AT=10.03s
+
+.end

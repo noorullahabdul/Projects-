@@ -1,0 +1,33 @@
+* LM317 gel-battery charger transient support models for Qucs-S 26.1 / ngspice
+* Behavioral engineering models; not vendor transistor-level models.
+
+* VIN_PROFILE pins: POS NEG
+* 15 V nominal, stepping to 18 V at 3 ms to demonstrate line regulation.
+.SUBCKT VIN_PROFILE POS NEG
+VPROFILE POS NEG PWL(0 15 2.90m 15 3.00m 18 8.00m 18)
+RPROFILE_LEAK POS NEG 100MEG
+.ENDS VIN_PROFILE
+
+* GEL_BAT_PROFILE pins: POS NEG
+* Battery starts near full charge, steps to a deep-discharge state, then recovers.
+* The 0.2 ohm series resistor represents battery internal resistance.
+.SUBCKT GEL_BAT_PROFILE POS NEG
+RBAT_INT POS NINT 0.2
+VBAT_PROFILE NINT NEG PWL(0 13.78 0.90m 13.78 1.00m 12.00 4.90m 12.00 5.00m 13.78 8.00m 13.78)
+.ENDS GEL_BAT_PROFILE
+
+* LM317T_QS pins: IN OUT ADJ
+* VSET is the requested regulated voltage. RLOOP/CLOOP add a visible finite response.
+.SUBCKT LM317T_QS IN OUT ADJ PARAMS: VREF=1.25 IADJ=50u VDROP=1.0 ROUT=0.03
+BSET VSET 0 V={MIN(MAX(V(ADJ)+VREF,0),MAX(V(IN)-VDROP,0))}
+RLOOP VSET NREG 100
+CLOOP NREG 0 1u
+ROUT_INT NREG OUT {ROUT}
+IADJ_SRC OUT ADJ DC {IADJ}
+RIN_LEAK IN 0 100MEG
+RADJ_LEAK ADJ 0 100MEG
+.ENDS LM317T_QS
+
+.MODEL LED_GREEN_D D(IS=1e-20 N=2.05 RS=18 CJO=15p BV=5 IBV=10u)
+.MODEL LED_RED_D D(IS=2e-20 N=1.90 RS=12 CJO=20p BV=5 IBV=10u)
+.MODEL Q2N2222A_NPN NPN(IS=1e-14 BF=180 VAF=80 IKF=0.30 ISE=2e-13 NE=1.5 BR=6 VAR=20 IKR=0.10 RB=10 RC=0.6 RE=0.25 CJE=25p CJC=8p TF=0.35n TR=50n)

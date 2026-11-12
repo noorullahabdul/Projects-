@@ -1,0 +1,67 @@
+* case_04_main_contactor_weld_fault.txt
+* Main contact is forced closed during shutdown.
+* The discharge resistor fights the still-connected 400 V source.
+*
+.param VCAP_IC=400
+
+.include "./dc_link_precharge_common_core.txt"
+
+* Controller command requests main opening at 100 ms.
+V_CMD_MAIN CMD_MAIN 0 PWL(
++ 0       5
++ 100m    5
++ 100.1m  0
++ 2s      0
++)
+
+* Weld fault: actual main contact remains closed.
+V_CONTACT_MAIN CONTACT_MAIN 0 5
+
+V_CMD_PRE CMD_PRECHARGE 0 0
+V_CONTACT_PRE CONTACT_PRECHARGE 0 0
+
+* Discharge is commanded after shutdown.
+V_CMD_DIS CMD_DISCHARGE 0 PWL(
++ 0       0
++ 110m    0
++ 110.1m  5
++ 2s      5
++)
+
+V_CONTACT_DIS CONTACT_DISCHARGE 0 PWL(
++ 0       0
++ 120m    0
++ 120.01m 5
++ 2s      5
++)
+
+V_CONTACT_SHORT CONTACT_SHORT 0 0
+
+V_WELD_FAULT MAIN_CONTACTOR_WELD 0 5
+
+.tran 0 2s 0 100u UIC
+
+.plot tran V(CMD_MAIN) V(CONTACT_MAIN)
+.plot tran V(CMD_DISCHARGE) V(MAIN_CONTACTOR_WELD)
+.plot tran V(VDC_LINK)
+.plot tran I(V_DIS_SNS)
+.plot tran PAR('I(V_DIS_SNS)*I(V_DIS_SNS)*4700')
+
+.meas tran VLINK_WELD_MIN
++ MIN V(VDC_LINK) FROM=120m TO=2s
+
+.meas tran I_DIS_WELD_AVG
++ AVG I(V_DIS_SNS) FROM=200m TO=2s
+
+.meas tran P_DIS_WELD_MAX
++ MAX PAR('I(V_DIS_SNS)*I(V_DIS_SNS)*4700')
++ FROM=120m TO=2s
+
+.meas tran E_DIS_WELD
++ INTEG PAR('I(V_DIS_SNS)*I(V_DIS_SNS)*4700')
++ FROM=120m TO=2s
+
+.meas tran I_MAIN_WELD_AVG
++ AVG I(V_MAIN_SNS) FROM=200m TO=2s
+
+.end

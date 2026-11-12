@@ -1,0 +1,119 @@
+* automotive_protection_models.lib
+* Functional Qucs-S/ngspice models for a 12 V automotive input-protection front end.
+*
+* IMPORTANT
+* These models are engineering approximations for topology, transient-clamp,
+* reverse-polarity, and first-order stress verification. They are not
+* manufacturer production macromodels and do not validate thermal performance,
+* surge-energy capability, SOA, statistical spread, or exact switching behavior.
+*
+* ============================================================================
+* PMOS_REV_60V — high-side P-channel reverse-polarity MOSFET
+* Port order: D G S
+*
+* Intended circuit orientation:
+*   D -> VIN_PROT
+*   S -> VOUT_PROT
+*   G -> GATE
+*
+* The body diode is oriented from D to S. With positive battery voltage it
+* initially charges VOUT and creates negative VGS; with reverse battery it blocks.
+* ============================================================================
+
+.SUBCKT PMOS_REV_60V D G S
+
+* Voltage-controlled low-resistance channel.
+* The switch turns on when V(S)-V(G) exceeds approximately 2.2 V.
+SDS D S S G SW_PMOS_60V
+
+* Intrinsic body diode: anode at drain, cathode at source.
+DBODY D S D_PMOS_BODY_60V
+
+* First-order terminal capacitances.
+CGS G S 600p
+CGD G D 120p
+CDS D S 120p
+
+* Numerical leakage.
+RDS_LEAK D S 1G
+
+.ENDS PMOS_REV_60V
+
+.MODEL SW_PMOS_60V SW(
++ RON=35m
++ ROFF=1G
++ VT=2.2
++ VH=0.2
++)
+
+.MODEL D_PMOS_BODY_60V D(
++ IS=1e-12
++ N=1.15
++ RS=40m
++ CJO=250p
++ VJ=0.70
++ M=0.45
++ TT=30n
++ BV=60
++ IBV=100u
++)
+
+* ============================================================================
+* TVS_BIDIR_24V — bidirectional load-dump TVS approximation
+* Port order: P N
+*
+* Built as two unidirectional avalanche diodes connected cathode-to-cathode.
+* Approximate positive clamp:
+*   about 27 V avalanche + forward diode drop + dynamic-resistance rise
+*   typically around 30 V to 34 V for the intended simulation current range.
+* ============================================================================
+
+.SUBCKT TVS_BIDIR_24V P N
+DTVS_A P MID D_TVS_24V
+DTVS_B N MID D_TVS_24V
+R_TVS_LEAK P N 1G
+.ENDS TVS_BIDIR_24V
+
+.MODEL D_TVS_24V D(
++ IS=1e-9
++ N=1.20
++ RS=250m
++ CJO=2n
++ VJ=0.70
++ M=0.35
++ TT=100n
++ BV=26.5
++ IBV=1m
++)
+
+* ============================================================================
+* ZENER12V — MOSFET gate-to-source clamp
+*
+* Connection:
+*   Anode   -> GATE
+*   Cathode -> VOUT_PROT / PMOS source
+*
+* It limits negative PMOS VGS during high battery and load dump.
+* ============================================================================
+
+.MODEL ZENER12V D(
++ IS=1e-10
++ N=1.15
++ RS=5
++ CJO=150p
++ VJ=0.70
++ M=0.35
++ TT=20n
++ BV=12
++ IBV=100u
++)
+
+* ============================================================================
+* Optional simple fuse-resistance subcircuit
+* Port order: P N
+* This represents only fuse/contact resistance; it does not simulate fuse blow.
+* ============================================================================
+
+.SUBCKT FUSE_5A_R P N PARAMS: RF=50m
+RFUSE P N {RF}
+.ENDS FUSE_5A_R

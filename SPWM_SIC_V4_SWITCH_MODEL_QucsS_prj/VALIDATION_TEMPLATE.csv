@@ -1,0 +1,10 @@
+Check,Expected,Observed,Status
+Control simulation,Completes without singular matrix,,
+Carrier,Approximately 40 kHz triangular,,
+References,50 Hz and 120 degree separation,,
+PWM,0 V to 5 V with dead band,,
+DC link,Approximately 750 V,,
+VGS indication,+18 V on and -3.5 V off,,
+Bridge poles,PWM switching between rails,,
+Filtered phases,Three balanced 50 Hz outputs,,
+Neutral,Stable through 1 MOhm reference,,

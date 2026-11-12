@@ -5,3 +5,4 @@ Pheonix/Pheonixs/LT8304_DC2393A.raw filter=lfs diff=lfs merge=lfs -text
 Pheonix/Pheonixs/LTspice64[[:space:]](4).msi filter=lfs diff=lfs merge=lfs -text
 Pheonix/Pheonixs.rar filter=lfs diff=lfs merge=lfs -text
 Pheonix/Pheonixs.zip filter=lfs diff=lfs merge=lfs -text
+Pheonix/Pheonixs/LTspice64[[:space:]](4).msi filter=lfs diff=lfs merge=lfs -text

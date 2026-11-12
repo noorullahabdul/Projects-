@@ -1,0 +1,17 @@
+* LM317T functional DC model for Qucs-S / ngspice
+* Purpose: operating-point and DC-sweep verification of the gel charger task
+* Physical TO-220 pin order and SUBCKT order:
+*   Pin 1 = ADJ
+*   Pin 2 = OUT
+*   Pin 3 = IN
+*
+* Default VDROP=1.0 V is an optimistic functional value selected so the
+* mandated 15 V input / 13.8 V output test can regulate.
+* For a conservative headroom sensitivity check, instantiate with VDROP=2.0.
+*
+.SUBCKT LM317T ADJ OUT IN PARAMS: VREF=1.25 IADJ=50u VDROP=1.0 ROUT=0.03
+BREG NREG ADJ V={MAX(0,MIN(VREF,V(IN,ADJ)-VDROP))}
+ROUT_SER NREG OUT {ROUT}
+IADJ_SRC IN ADJ DC {IADJ}
+RLEAK OUT ADJ 100MEG
+.ENDS LM317T

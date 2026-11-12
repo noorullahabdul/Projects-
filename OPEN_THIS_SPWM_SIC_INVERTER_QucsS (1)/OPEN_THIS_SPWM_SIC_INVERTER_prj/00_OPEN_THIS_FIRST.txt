@@ -1,0 +1,21 @@
+OPEN THIS FILE IN QUCS-S
+========================
+
+OPEN:
+  OPEN_THIS_SPWM_SIC_INVERTER.sch
+
+DO NOT OPEN:
+  BUCK_Converter_V1_REAL_SYMBOLS.sch
+
+This project is the three-phase SPWM SiC inverter:
+  750 V DC link
+  40 kHz SPWM
+  50 Hz output
+  Three dual gate drivers
+  Six SiC switches
+  Three-phase LC filter and star load
+
+Run:
+  1. Select ngspice.
+  2. Open OPEN_THIS_SPWM_SIC_INVERTER.sch.
+  3. Press F2.

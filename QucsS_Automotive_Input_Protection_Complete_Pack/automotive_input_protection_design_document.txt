@@ -1,0 +1,224 @@
+AUTOMOTIVE 12 V INPUT-PROTECTION FRONT END
+Complete Design Document
+=========================================
+
+1. Purpose
+----------
+This design protects a low-power automotive electronic module from:
+  - Normal 12 V battery operation
+  - 16 V high-battery operation
+  - -14 V reverse battery
+  - 60 V load dump
+
+The circuit includes a fuse resistance, bidirectional TVS clamp, L-C-L input
+filter, high-side P-channel MOSFET reverse-polarity stage, gate-source zener,
+100 uF bulk capacitor, 10 uF high-frequency output capacitor, and 12 ohm load.
+
+2. Final topology
+-----------------
+Battery source
+  -> source impedance
+  -> 50 mOhm fuse resistance
+  -> VIN_RAW
+
+At VIN_RAW:
+  -> bidirectional 24 V-class TVS to GND
+  -> L1, 10 uH with 20 mOhm DCR
+
+VIN_FILT:
+  -> CIN, 2.2 uF to GND
+  -> L2, 10 uH with 20 mOhm DCR
+
+VIN_PROT:
+  -> Q1 drain
+
+Q1:
+  Drain  -> VIN_PROT
+  Source -> VOUT_PROT
+  Gate   -> GATE
+
+Gate network:
+  RSG  = 1 MegOhm from VOUT_PROT to GATE
+  RGND = 100 kOhm from GATE to GND
+  DZGS = 12 V zener, anode at GATE and cathode at VOUT_PROT
+
+At VOUT_PROT:
+  -> CBULK, 100 uF / 50 V with 80 mOhm ESR
+  -> COUT, 10 uF / 50 V with 30 mOhm ESR
+  -> RLOAD, 12 Ohm to GND
+
+3. Why the PMOS orientation is correct
+--------------------------------------
+The PMOS body diode is oriented from VIN_PROT to VOUT_PROT.
+
+Positive battery:
+  The body diode initially charges the output.
+  The source voltage rises while the gate remains low.
+  VGS becomes negative and Q1 turns on with low resistance.
+
+Reverse battery:
+  The body diode is reverse biased.
+  VOUT_PROT remains near ground through the load.
+  GATE also remains near ground.
+  VGS remains near 0 V, so Q1 remains off.
+
+4. Gate-network calculation
+---------------------------
+Before the zener conducts:
+
+  VGATE = VSOURCE x RGND / (RSG + RGND)
+
+With:
+  RSG = 1 MegOhm
+  RGND = 100 kOhm
+
+  VGATE = 0.0909 x VSOURCE
+
+At VSOURCE = 12 V:
+
+  VGATE approximately 1.09 V
+  VGS = VGATE - VSOURCE
+      approximately -10.91 V
+
+At VSOURCE = 16 V, the divider would request:
+
+  VGS approximately -14.55 V
+
+The 12 V zener therefore begins clamping and prevents excessive negative VGS.
+
+During reverse battery:
+
+  VSOURCE approximately 0 V
+  VGATE approximately 0 V
+  VGS approximately 0 V
+
+5. Load calculations
+--------------------
+At 12 V:
+
+  ILOAD = 12 V / 12 Ohm = 1.0 A
+  PLOAD = 12^2 / 12 = 12 W
+
+At 16 V:
+
+  ILOAD = 16 V / 12 Ohm = 1.33 A
+  PLOAD = 16^2 / 12 = 21.33 W
+
+The load resistor is an ideal simulation load unless a power rating is added
+for documentation.
+
+6. Filter calculation
+---------------------
+For either 10 uH inductor with the 2.2 uF shunt capacitor:
+
+  f0 = 1 / [2*pi*sqrt(L*C)]
+     approximately 33.9 kHz
+
+Explicit 20 mOhm inductor DCR and capacitor ESR provide first-order damping.
+This simulation does not validate a complete automotive conducted-EMI filter.
+
+7. TVS model and load-dump assumption
+-------------------------------------
+The TVS is a functional bidirectional 24 V-class subcircuit.
+
+Approximate behavior:
+  Stand-off region: negligible current at 12 V, 16 V, and -14 V
+  Avalanche begins near 26.5 V plus the forward diode drop
+  Dynamic resistance: approximately 250 mOhm per avalanche element
+  Intended clamp range: approximately 30 V to 34 V in the simulated surge range
+
+Load-dump source:
+  Initial voltage: 12 V
+  Peak voltage: 60 V
+  Rise time: 1 ms
+  Hold time: 100 ms
+  Decay time: 100 ms
+  Source resistance: 1 Ohm
+
+The TVS electrical clamp can be validated, but the functional model does not
+prove real-device pulse-energy survival.
+
+8. Capacitor ratings
+--------------------
+CBULK:
+  100 uF / 50 V
+
+COUT:
+  10 uF / 50 V
+
+The 50 V rating is required because the protected rail may approach the
+30 V to 36 V clamp region during load dump.
+
+9. Expected results
+-------------------
+Nominal 12 V:
+  VOUT_PROT should be at least 11 V.
+  TVS current should be negligible.
+  PMOS VGS should be negative and within the zener-clamped limit.
+
+High battery 16 V:
+  VOUT_PROT should remain functional.
+  TVS current should remain negligible.
+  Gate-source zener may begin limiting VGS.
+
+Reverse battery -14 V:
+  VOUT_PROT magnitude should remain below 1 V.
+  Load current should remain negligible.
+  PMOS VGS should remain near 0 V.
+
+Load dump 60 V:
+  VIN_RAW and VOUT_PROT should clamp below 36 V.
+  TVS current and power should rise during the pulse.
+  PMOS VGS should remain limited by DZGS.
+
+10. Measurement expressions
+----------------------------
+VGS:
+  V(GATE,VOUT_PROT)
+
+VDS:
+  V(VIN_PROT,VOUT_PROT)
+
+Input current:
+  I(V_IIN)
+
+Load current:
+  I(RLOAD)
+
+TVS current:
+  I(V_ITVS)
+
+TVS power:
+  V(VIN_RAW) x I(V_ITVS)
+
+11. Required simulation files
+-----------------------------
+case_nominal_12V.cir
+case_high_battery_16V.cir
+case_reverse_battery_minus14V.cir
+case_load_dump_60V.cir
+
+12. Acceptance criteria
+-----------------------
+[ ] VOUT_PROT >= 11 V at 12 V input
+[ ] Functional output at 16 V input
+[ ] |VOUT_PROT| <= 1 V at -14 V input
+[ ] Reverse load current is negligible
+[ ] Load-dump VOUT_PROT peak < 36 V
+[ ] Peak ITVS is measured
+[ ] Peak PTVS is measured
+[ ] PMOS VGS remains within the documented clamp range
+[ ] PMOS VDS remains below 60 V
+[ ] No fatal convergence error occurs
+
+13. Limitations
+---------------
+This model does not validate:
+  - Actual fuse opening
+  - TVS pulse-energy survival
+  - MOSFET thermal impedance or SOA
+  - ISO 7637-2 certification waveforms
+  - Wiring-harness inductance
+  - PCB parasitic inductance
+  - EMC compliance
+  - Component tolerance and temperature corners

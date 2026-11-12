@@ -1,0 +1,22 @@
+* case_nominal_12V.cir
+* Nominal 12 V automotive battery test.
+
+V_BAT_SRC BATSRC 0 DC 12
+R_SOURCE BATSRC VBAT 50m
+
+.include "./automotive_input_protection_core.inc"
+
+.tran 0 20m 0 10u
+
+.plot tran V(BATSRC) V(VOUT_PROT) V(GATE,VOUT_PROT)
+.plot tran I(V_IIN) I(RLOAD) I(V_ITVS)
+
+.meas tran VOUT_NOM AVG V(VOUT_PROT) FROM=15m TO=20m
+.meas tran IIN_NOM AVG I(V_IIN) FROM=15m TO=20m
+.meas tran ILOAD_NOM AVG I(RLOAD) FROM=15m TO=20m
+.meas tran ITVS_NOM MAX I(V_ITVS) FROM=15m TO=20m
+.meas tran VGS_NOM AVG V(GATE,VOUT_PROT) FROM=15m TO=20m
+.meas tran VDROP_PATH AVG V(VBAT,VOUT_PROT) FROM=15m TO=20m
+.meas tran VDS_NOM AVG V(VIN_PROT,VOUT_PROT) FROM=15m TO=20m
+
+.end

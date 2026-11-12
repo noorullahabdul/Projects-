@@ -1,0 +1,39 @@
+VCU220 Rev A2 - Final Technical Hardening
+Technical baseline: JAN-2026
+Hardening review: 14-Aug-2026
+
+Key corrections:
+- Central ECU design reference raised to 70 W nominal / 130 W sustained peak with 150 W short electrical input envelope.
+- Cold crank handled by wide-input/buck-boost front end; only the independent safety domain receives credited hold-up energy.
+- SG-01 unintended/excess torque resolved as ASIL-D target; authoritative safety MCU + independent torque monitor/inhibit retained.
+- E2E and SecOC remain separate mechanisms; SecOC is TARA-driven and may remain on 10 ms motion PDUs if required and schedulable.
+- Driver-mode acknowledgement <=50 ms separated from 200-500 ms jerk-bounded map blending.
+- Track mode uses market/variant/user/chassis prerequisites; geofence is optional support, not sole control.
+- Added IOMMU/DMA/resource-QoS, independent power/reset/clock, guest crash containment, safety-ready boot independence and common-cause analysis.
+- Added context-dependent safe-state matrix, safety-telltale fallback, 30s pre/post event recorder, SBOM/update/crypto/privacy governance.
+- Updated compliance/watchlist for current 2026 program execution.
+
+Controlled counts:
+RA 68
+SYS.1 58
+SYS.2 115
+HARA 48
+Safety Goals 12
+FSR 32
+SYS.3 246
+HSR 70
+SW Safety 72
+HW Functional 60
+SW Functional 60
+DFMEA 120
+TARA 40
+ICD 38
+BOM 45
+DVP 492
+Validation 50
+RTM 246
+
+Rendered page counts:
+DOC1 66
+DOC2 78
+DOC3 85

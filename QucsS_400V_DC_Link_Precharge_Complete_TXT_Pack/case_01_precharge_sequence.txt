@@ -1,0 +1,134 @@
+* case_01_precharge_sequence.txt
+* Nominal precharge, main-contactor transfer, and contact-bounce verification.
+*
+.param VCAP_IC=0
+
+.include "./dc_link_precharge_common_core.txt"
+
+* ---------------------------------------------------------------------------
+* Controller command signals
+* ---------------------------------------------------------------------------
+* Precharge command rises at 10 ms and falls at 390 ms.
+V_CMD_PRE CMD_PRECHARGE 0 PWL(
++ 0       0
++ 10m     0
++ 10.1m   5
++ 390m    5
++ 390.1m  0
++ 500m    0
++)
+
+* Main command rises only after the DC link should exceed 380 V.
+V_CMD_MAIN CMD_MAIN 0 PWL(
++ 0       0
++ 340m    0
++ 340.1m  5
++ 500m    5
++)
+
+* Discharge remains disabled in this case.
+V_CMD_DIS CMD_DISCHARGE 0 0
+
+* ---------------------------------------------------------------------------
+* Actual mechanical contact states
+* ---------------------------------------------------------------------------
+* Precharge contact: 20 ms pull-in delay plus bounce; stable at 33 ms.
+* Release occurs 20 ms after the command falls.
+V_CONTACT_PRE CONTACT_PRECHARGE 0 PWL(
++ 0        0
++ 30m      0
++ 30.01m   5
++ 30.50m   5
++ 30.51m   0
++ 31.00m   0
++ 31.01m   5
++ 31.50m   5
++ 31.51m   0
++ 32.00m   0
++ 32.01m   5
++ 32.50m   5
++ 32.51m   0
++ 33.00m   0
++ 33.01m   5
++ 410m     5
++ 410.01m  0
++ 500m     0
++)
+
+* Main contact: 20 ms pull-in delay plus bounce; stable at 365 ms.
+V_CONTACT_MAIN CONTACT_MAIN 0 PWL(
++ 0        0
++ 360m     0
++ 360.01m  5
++ 360.60m  5
++ 360.61m  0
++ 361.20m  0
++ 361.21m  5
++ 361.90m  5
++ 361.91m  0
++ 362.50m  0
++ 362.51m  5
++ 363.20m  5
++ 363.21m  0
++ 365m     0
++ 365.01m  5
++ 500m     5
++)
+
+V_CONTACT_DIS CONTACT_DISCHARGE 0 0
+V_CONTACT_SHORT CONTACT_SHORT 0 0
+
+* Fine timestep resolves source inductance, capacitor ESL, and contact bounce.
+.tran 0 500m 0 200n UIC
+
+* ---------------------------------------------------------------------------
+* Plots
+* ---------------------------------------------------------------------------
+.plot tran V(CMD_PRECHARGE) V(CONTACT_PRECHARGE)
+.plot tran V(CMD_MAIN) V(CONTACT_MAIN)
+.plot tran V(VDC_LINK) V(CAP_CORE_NODE)
+.plot tran I(V_PRE_SNS) I(V_MAIN_SNS)
+.plot tran PAR('I(V_PRE_SNS)*I(V_PRE_SNS)*100')
+
+* ---------------------------------------------------------------------------
+* Measurements
+* ---------------------------------------------------------------------------
+.meas tran I_PRE_INITIAL FIND I(V_PRE_SNS) AT=33.05m
+.meas tran I_PRE_PEAK MAX I(V_PRE_SNS) FROM=30m TO=410m
+
+.meas tran T_LINK_360 WHEN V(VDC_LINK)=360 RISE=1
+.meas tran T_LINK_380 WHEN V(VDC_LINK)=380 RISE=1
+
+.meas tran T_MAIN_FIRST
++ WHEN V(CONTACT_MAIN)=2.5 RISE=1
+
+.meas tran T_MAIN_STABLE
++ WHEN V(CONTACT_MAIN)=2.5 RISE=4
+
+.meas tran VLINK_MAIN_FIRST
++ FIND V(VDC_LINK) AT=360.01m
+
+.meas tran VLINK_MAIN_STABLE
++ FIND V(VDC_LINK) AT=365.01m
+
+.meas tran T_PRE_OPEN
++ WHEN V(CONTACT_PRECHARGE)=2.5 FALL=4
+
+.meas tran MAIN_PRE_OVERLAP
++ PARAM='T_PRE_OPEN-T_MAIN_STABLE'
+
+.meas tran P_PRE_PEAK
++ MAX PAR('I(V_PRE_SNS)*I(V_PRE_SNS)*100')
++ FROM=30m TO=410m
+
+.meas tran E_PRE
++ INTEG PAR('I(V_PRE_SNS)*I(V_PRE_SNS)*100')
++ FROM=30m TO=410m
+
+.meas tran VLINK_MAX MAX V(VDC_LINK) FROM=0 TO=500m
+.meas tran I_MAIN_PEAK MAX I(V_MAIN_SNS) FROM=350m TO=400m
+
+.meas tran ECAP_FINAL
++ PARAM='0.5*0.001*400*400'
+
+.end

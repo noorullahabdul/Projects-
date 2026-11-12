@@ -1,0 +1,62 @@
+* dc_link_precharge_common_core.txt
+* Common power-stage circuit for all nominal and fault simulations.
+*
+* Parameters VCAP_IC and ENABLE_SHORT are declared by each case file.
+*
+.include "./dc_link_precharge_models.txt"
+
+* ---------------------------------------------------------------------------
+* 400 V source with practical source and cable impedance
+* ---------------------------------------------------------------------------
+V_DC VDC_SRC 0 DC 400
+R_SOURCE VDC_SRC SRC_R 250m
+L_SOURCE SRC_R BUS_SRC 2u
+
+* ---------------------------------------------------------------------------
+* Main contactor path
+* ---------------------------------------------------------------------------
+S_MAIN BUS_SRC MAIN_SW_OUT CONTACT_MAIN 0 SW_MAIN
+V_MAIN_SNS MAIN_SW_OUT VDC_LINK 0
+
+* ---------------------------------------------------------------------------
+* Precharge path
+* ---------------------------------------------------------------------------
+S_PRE BUS_SRC PRE_SW_OUT CONTACT_PRECHARGE 0 SW_PRECHARGE
+V_PRE_SNS PRE_SW_OUT PRE_R_IN 0
+R_PRE PRE_R_IN VDC_LINK 100
+
+* ---------------------------------------------------------------------------
+* Realistic DC-link capacitor
+* ---------------------------------------------------------------------------
+L_ESL VDC_LINK CAP_ESL_NODE 20n
+R_ESR CAP_ESL_NODE CAP_CORE_NODE 25m
+C_DC CAP_CORE_NODE 0 1000u IC={VCAP_IC}
+
+* High-value leakage provides a defined DC path when all switches are open.
+R_LINK_LEAK VDC_LINK 0 100Meg
+
+* ---------------------------------------------------------------------------
+* Safe-discharge path
+* ---------------------------------------------------------------------------
+S_DIS VDC_LINK DIS_SW_OUT CONTACT_DISCHARGE 0 SW_DISCHARGE
+V_DIS_SNS DIS_SW_OUT DIS_R_IN 0
+R_DIS DIS_R_IN 0 4.7k
+
+* ---------------------------------------------------------------------------
+* Optional DC-link short-circuit fault path
+* ---------------------------------------------------------------------------
+S_SHORT VDC_LINK SHORT_SW_OUT CONTACT_SHORT 0 SW_SHORT_FAULT
+V_SHORT_SNS SHORT_SW_OUT SHORT_R_IN 0
+R_SHORT SHORT_R_IN 0 50m
+
+* ---------------------------------------------------------------------------
+* Measurement definitions / polarity
+* ---------------------------------------------------------------------------
+* I_PRECHARGE = I(V_PRE_SNS), positive from source into DC link
+* I_MAIN      = I(V_MAIN_SNS), positive from source into DC link
+* I_DISCHARGE = I(V_DIS_SNS), positive from DC link into discharge resistor
+* I_SHORT     = I(V_SHORT_SNS), positive from DC link into short fault
+*
+* P_PRECHARGE = I(V_PRE_SNS)^2 * 100
+* P_DISCHARGE = I(V_DIS_SNS)^2 * 4700
+* E_CAP       = 0.5 * 0.001 * V(CAP_CORE_NODE)^2

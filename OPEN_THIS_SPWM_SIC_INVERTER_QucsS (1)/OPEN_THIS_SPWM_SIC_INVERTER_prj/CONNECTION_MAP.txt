@@ -1,0 +1,53 @@
+CONNECTION MAP
+==============
+
+CONTROL
+  XSPWM.VSS       -> DC_NEG
+  XSPWM.PWM_AH    -> XDRV_A.HIN
+  XSPWM.PWM_AL    -> XDRV_A.LIN
+  XSPWM.PWM_BH    -> XDRV_B.HIN
+  XSPWM.PWM_BL    -> XDRV_B.LIN
+  XSPWM.PWM_CH    -> XDRV_C.HIN
+  XSPWM.PWM_CL    -> XDRV_C.LIN
+
+DRIVERS
+  All EN pins      -> ENABLE_5V
+  All COM pins     -> DC_NEG
+
+PHASE A
+  XDRV_A.GH -> QAH.G
+  XDRV_A.SH -> VPOLE_A
+  XDRV_A.GL -> QAL.G
+  XDRV_A.SL -> DC_NEG
+  QAH.D     -> DC_POS
+  QAH.S/KS  -> VPOLE_A
+  QAL.D     -> VPOLE_A
+  QAL.S/KS  -> DC_NEG
+
+PHASE B
+  XDRV_B.GH -> QBH.G
+  XDRV_B.SH -> VPOLE_B
+  XDRV_B.GL -> QBL.G
+  XDRV_B.SL -> DC_NEG
+  QBH.D     -> DC_POS
+  QBH.S/KS  -> VPOLE_B
+  QBL.D     -> VPOLE_B
+  QBL.S/KS  -> DC_NEG
+
+PHASE C
+  XDRV_C.GH -> QCH.G
+  XDRV_C.SH -> VPOLE_C
+  XDRV_C.GL -> QCL.G
+  XDRV_C.SL -> DC_NEG
+  QCH.D     -> DC_POS
+  QCH.S/KS  -> VPOLE_C
+  QCL.D     -> VPOLE_C
+  QCL.S/KS  -> DC_NEG
+
+FILTER/LOAD PER PHASE
+  VPOLE_X -> 2 mH -> VX_FILT
+  VX_FILT -> 20 Ohm -> N_FLOAT
+  VX_FILT -> 2 Ohm -> 10 uF -> N_FLOAT
+
+NEUTRAL
+  N_FLOAT -> 100 MOhm -> DC_NEG

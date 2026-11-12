@@ -1,0 +1,45 @@
+* case_load_dump_60V.cir
+* 12 V baseline with a 60 V load-dump pulse.
+*
+* The source is represented as a Thevenin source with 1 ohm impedance.
+* Pulse:
+*   0 to 20 ms:    12 V
+*   20 to 21 ms:   rise from 12 V to 60 V
+*   21 to 121 ms:  hold at 60 V
+*   121 to 221 ms: decay to 12 V
+*   221 to 300 ms: recovery at 12 V
+
+V_BAT_SRC BATSRC 0 PWL(
++ 0       12
++ 20m     12
++ 21m     60
++ 121m    60
++ 221m    12
++ 300m    12
++)
+
+R_SOURCE BATSRC VBAT 1
+
+.include "./automotive_input_protection_core.inc"
+
+.tran 0 300m 0 10u
+
+.plot tran V(BATSRC) V(VIN_RAW) V(VOUT_PROT)
+.plot tran I(V_IIN) I(V_ITVS) I(RLOAD)
+.plot tran V(GATE,VOUT_PROT)
+
+.meas tran VOUT_DUMP_PEAK MAX V(VOUT_PROT) FROM=20m TO=221m
+.meas tran VIN_RAW_PEAK MAX V(VIN_RAW) FROM=20m TO=221m
+.meas tran IIN_DUMP_PEAK MAX I(V_IIN) FROM=20m TO=221m
+.meas tran ITVS_PEAK MAX I(V_ITVS) FROM=20m TO=221m
+.meas tran PTVS_PEAK MAX PAR('V(VIN_RAW)*I(V_ITVS)') FROM=20m TO=221m
+
+.meas tran VGS_DUMP_MIN MIN V(GATE,VOUT_PROT) FROM=20m TO=221m
+.meas tran VGS_DUMP_MAX MAX V(GATE,VOUT_PROT) FROM=20m TO=221m
+
+.meas tran VDS_DUMP_MIN MIN V(VIN_PROT,VOUT_PROT) FROM=20m TO=221m
+.meas tran VDS_DUMP_MAX MAX V(VIN_PROT,VOUT_PROT) FROM=20m TO=221m
+
+.meas tran ILOAD_DUMP_PEAK MAX I(RLOAD) FROM=20m TO=221m
+
+.end
