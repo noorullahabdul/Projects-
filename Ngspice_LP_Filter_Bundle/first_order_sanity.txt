@@ -1,0 +1,5 @@
+Set A first-order check
+Passband edge = 1000 Hz; allowed loss = 1.5 dB
+Derived cutoff = 1556.93 Hz
+Attenuation at 10 kHz relative to low-frequency gain = 16.26 dB
+This misses both 30 dB base and 45 dB G2 stopband targets.

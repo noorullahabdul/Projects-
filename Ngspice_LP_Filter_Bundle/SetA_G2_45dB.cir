@@ -1,0 +1,52 @@
+* Set A low-pass filter - SetA_G2_45dB
+* Signal: 0 to 3.3 V; Rs=1 kohm; RL=100 kohm; 3.3 V supply.
+* R=10 kohm and C=3.3 nF per buffered RC section.
+* AC response is normalized to low-frequency gain.
+Vsig SRC 0 DC 1.65 AC 1
+Rsrc SRC NIN 1k
+VDD 3V3 0 DC 3.3
+R1 NIN N1 10k
+C1 N1 0 3.3n
+XU1 N1 3V3 0 B1 OPBUF
+R2 B1 N2 10k
+C2 N2 0 3.3n
+XU2 N2 3V3 0 B2 OPBUF
+R3 B2 N3 10k
+C3 N3 0 3.3n
+XU3 N3 3V3 0 B3 OPBUF
+R4 B3 N4 10k
+C4 N4 0 3.3n
+XU4 N4 3V3 0 B4 OPBUF
+R5 B4 N5 10k
+C5 N5 0 3.3n
+XU5 N5 3V3 0 B5 OPBUF
+R6 B5 N6 10k
+C6 N6 0 3.3n
+XU6 N6 3V3 0 B6 OPBUF
+R7 B6 N7 10k
+C7 N7 0 3.3n
+XU7 N7 3V3 0 B7 OPBUF
+Rload B7 0 100k
+* Generic rail-clamped op-amp buffer model; 10 MHz gain-bandwidth, 10 ohm output resistance.
+* Simplified educational model, not a manufacturer-qualified macromodel.
+.subckt OPBUF INP VDD VSS OUT
+EOL NRAW 0 INP OUT 100000
+RDOM NRAW NCOMP 1k
+CDOM NCOMP 0 1.59u
+ROUT NCOMP OUT 10
+DHI OUT VDD DRAIL
+DLO VSS OUT DRAIL
+.model DRAIL D(Is=1e-12 N=1)
+.ends OPBUF
+
+.control
+set noaskquit
+ac dec 100 1 1Meg
+let gain_db = 20*log10(mag(v(B7)/v(SRC)))
+let low_gain = gain_db[0]
+let relative_db = gain_db - low_gain
+wrdata SetA_G2_45dB_ac.csv frequency gain_db relative_db
+print low_gain
+quit
+.endc
+.end
