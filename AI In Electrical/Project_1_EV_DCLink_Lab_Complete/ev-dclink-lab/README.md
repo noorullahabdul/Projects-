@@ -5,7 +5,7 @@ calculations, component and sensor corners, contactor sequencing, fault
 injection, imported telemetry diagnostics, and reproducible reports.
 
 Built from Noorullah Abdul Khadar's independent powertrain design studies,
-with a new tested software core and ChatGPT assistance. This is a technical
+with a new tested software core . This is a technical
 software project for continuing development, not a tutorial or a hardware release.
 
 ## Run in two commands
